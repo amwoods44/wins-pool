@@ -1,0 +1,26 @@
+{
+  "name": "Wins Pool 2026",
+  "short_name": "Wins Pool",
+  "description": "Live MLB wins pool dashboard — 8 Players, 24 Teams, 162 Games",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a1a",
+  "theme_color": "#cc0000",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["sports", "entertainment"],
+  "lang": "en-US"
+}

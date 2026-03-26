@@ -13,7 +13,12 @@
 <meta name="twitter:title" content="Wins Pool 2026">
 <meta name="twitter:description" content="8 Players. 24 Teams. 162 Games. Live MLB wins pool tracker.">
 <meta name="theme-color" content="#cc0000">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wins Pool">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 
 <style>
 
@@ -1824,5 +1829,15 @@ function initTimers(){
 refreshData(true);
 setInterval(()=>refreshData(false),REFRESH_MS);
 
+
+
+// PWA SERVICE WORKER REGISTRATION
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg=>console.log('SW registered, scope:',reg.scope))
+      .catch(err=>console.log('SW registration failed:',err));
+  });
+}
 </script>
 </html>
