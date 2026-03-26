@@ -63,13 +63,13 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
 .hp-pct{font-family:var(--fm);font-size:12px;font-weight:700;color:var(--y);min-width:40px;text-align:right}
 .hp-games{font-family:var(--fd);font-size:11px;font-weight:500;color:var(--t3);letter-spacing:1px;white-space:nowrap}
 
-/* ═══ BREAKING NEWS ═══ */
-.breaking{max-width:1440px;margin:20px auto 0;padding:0 28px}
-.breaking-bar{display:flex;align-items:stretch;background:var(--g2);border:1px solid var(--g5);border-radius:6px;overflow:hidden}
-.breaking-tag{flex-shrink:0;background:var(--r);color:white;padding:10px 18px;font-family:var(--fd);font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;display:flex;align-items:center;animation:breakFlash 3s infinite}
-@keyframes breakFlash{0%,100%{background:var(--r)}50%{background:var(--rd)}}
-.breaking-text{flex:1;padding:10px 20px;font-family:var(--fd);font-size:16px;font-weight:600;color:var(--t2);display:flex;align-items:center;letter-spacing:.5px}
-.breaking-text b{color:var(--y);margin:0 4px}
+/* ═══ BREAKING NEWS — TICKER TAKEOVER ═══ */
+.bl-break{position:absolute;inset:0;display:flex;align-items:center;background:linear-gradient(90deg,#1a0a0a,#111 30%);opacity:0;pointer-events:none;transition:opacity .4s ease;z-index:10}
+.bl-break.active{opacity:1;pointer-events:auto}
+.bl-break-tag{flex-shrink:0;background:var(--r);color:white;padding:0 18px;height:100%;display:flex;align-items:center;font-family:var(--fd);font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 100%,0 100%);padding-right:24px;animation:breakFlash 1.5s infinite}
+@keyframes breakFlash{0%,100%{background:var(--r)}50%{background:#ff1a1a}}
+.bl-break-text{flex:1;padding:0 20px;font-family:var(--fd);font-size:13px;font-weight:600;color:var(--t2);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bl-break-text b{color:var(--y);margin:0 3px}
 
 /* ═══ NAV ═══ */
 .nav-bar{background:var(--g2);border-bottom:1px solid var(--g5);position:sticky;top:59px;z-index:900}
@@ -286,24 +286,23 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
 .dbtv{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--y)}
 .dbts{font-size:9px;color:var(--t4)}
 
-/* ═══ BOTTOMLINE ═══ */
-.bl{position:fixed;bottom:0;left:0;right:0;z-index:2000;display:flex;flex-direction:column;box-shadow:0 -4px 20px rgba(0,0,0,.5)}
-.bl-t{height:30px;display:flex;align-items:center;background:var(--g2);border-top:2px solid var(--r);overflow:hidden}
-.bl-tag{flex-shrink:0;background:var(--r);color:white;padding:0 14px;height:100%;display:flex;align-items:center;font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
-.bl-sw{flex:1;overflow:hidden;height:100%;display:flex;align-items:center}
-.bl-s{display:flex;align-items:center;white-space:nowrap;animation:tk1 var(--td1,45s) linear infinite}
+/* ═══ BOTTOMLINE — SINGLE PREMIUM TICKER ═══ */
+.bl{position:fixed;bottom:0;left:0;right:0;z-index:2000;box-shadow:0 -4px 24px rgba(0,0,0,.6)}
+.bl-t{height:36px;display:flex;align-items:center;background:linear-gradient(180deg,#1a1a1a,#111);border-top:2px solid var(--r);overflow:hidden;position:relative}
+.bl-tag{flex-shrink:0;background:var(--r);color:white;padding:0 18px;height:100%;display:flex;align-items:center;font-family:var(--fd);font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 100%,0 100%);padding-right:24px}
+.bl-sw{flex:1;overflow:hidden;height:100%;display:flex;align-items:center;mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent)}
+.bl-s{display:flex;align-items:center;white-space:nowrap;animation:tk1 var(--td1,60s) linear infinite}
+.bl-s:hover{animation-play-state:paused}
 @keyframes tk1{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.bl-b{height:26px;display:flex;align-items:center;background:var(--g1);border-top:1px solid var(--g5);overflow:hidden}
-.bl-btag{flex-shrink:0;background:var(--g4);color:var(--t3);padding:0 12px;height:100%;display:flex;align-items:center;font-family:var(--fd);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase}
-.bl-bsw{flex:1;overflow:hidden;height:100%;display:flex;align-items:center}
-.bl-bs{display:flex;align-items:center;white-space:nowrap;animation:tk2 var(--td2,55s) linear infinite}
-@keyframes tk2{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.tki{display:flex;align-items:center;gap:6px;padding:0 16px;flex-shrink:0}
-.tkt{font-family:var(--fd);font-size:12px;font-weight:600;color:var(--t2);letter-spacing:.5px}
-.tkt b{color:white}.tkt .hl{color:var(--y);font-weight:700}
-.tks{color:var(--r);font-size:8px;padding:0 2px;flex-shrink:0}
-.tkt2{font-family:var(--fd);font-size:11px;font-weight:500;color:var(--t3);letter-spacing:.5px}
-.tkt2 b{color:var(--t2)}.tkt2 .hl{color:var(--y);font-weight:600}
+.tki{display:flex;align-items:center;gap:8px;padding:0 20px;flex-shrink:0}
+.tkt{font-family:var(--fd);font-size:13px;font-weight:600;color:var(--t2);letter-spacing:.5px}
+.tkt b{color:white;font-weight:700}.tkt .hl{color:var(--y);font-weight:800}
+.tkt .sub{color:var(--t4);font-weight:400;font-size:11px;margin-left:4px}
+.tks{color:var(--r);font-size:5px;padding:0 4px;flex-shrink:0;opacity:.6}
+.tk-stat{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--y);letter-spacing:.5px}
+.tk-leader{display:flex;align-items:center;gap:6px;padding:0 24px;flex-shrink:0;border-left:1px solid rgba(204,0,0,.3);border-right:1px solid rgba(204,0,0,.3);margin:0 4px}
+.tk-leader .tkt{font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--t4)}
+.tk-leader .tk-stat{font-size:15px}
 
 /* ═══ UNDRAFTED TEAMS ═══ */
 .undrafted-row td{opacity:.65}
@@ -397,11 +396,9 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
   .hp-pct{font-size:11px!important}
   .hp-games{font-size:9px!important}
 
-  /* BREAKING — stacked, clean */
-  .breaking{padding:0 12px!important;margin-top:12px!important;position:relative!important;z-index:5!important}
-  .breaking-bar{flex-direction:column!important;border-radius:6px!important;overflow:hidden!important}
-  .breaking-tag{padding:8px 12px!important;font-size:10px!important;letter-spacing:2px!important;justify-content:center!important}
-  .breaking-text{padding:10px 14px!important;font-size:12px!important;text-align:center!important;line-height:1.5!important;display:block!important;word-break:break-word!important;overflow-wrap:break-word!important}
+  /* BREAKING TAKEOVER — mobile */
+  .bl-break-tag{font-size:9px!important;letter-spacing:2px!important;padding:0 10px!important;padding-right:14px!important;clip-path:none!important}
+  .bl-break-text{font-size:11px!important;padding:0 10px!important;white-space:normal!important;line-height:1.3!important}
 
   /* NAV — larger touch targets */
   .nav-bar{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;top:48px!important}
@@ -431,17 +428,19 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
   .prk{padding:12px 0!important}
   .prk-n{font-size:18px!important}
   .pcbar{width:3px!important}
-  .pinfo{padding:12px 10px!important;gap:8px!important;flex-wrap:wrap!important;min-width:0!important}
-  .plogos{gap:6px!important}
-  .plogos .lbox{width:28px!important;height:28px!important;padding:2px!important;border-width:1.5px!important;border-radius:5px!important}
-  .plogos .lbox img{width:22px!important;height:22px!important}
-  .pname{font-size:16px!important;white-space:normal!important;line-height:1.2!important}
+  /* Stack logos above name — no clashing */
+  .pinfo{padding:10px 12px!important;gap:0!important;flex-direction:column!important;min-width:0!important;flex-wrap:nowrap!important}
+  .plogos{gap:6px!important;margin-bottom:6px!important}
+  .plogos .lbox{width:26px!important;height:26px!important;padding:2px!important;border-width:1.5px!important;border-radius:5px!important}
+  .plogos .lbox img{width:20px!important;height:20px!important}
+  .pname{font-size:17px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;line-height:1.2!important}
   .psub{font-size:10px!important;margin-top:2px!important}
-  .pnums{grid-column:1/-1!important;padding:10px 12px!important;gap:16px!important;border-top:1px solid var(--g5)!important;justify-content:center!important;flex-wrap:wrap!important;background:rgba(0,0,0,.15)!important}
-  .pnb{min-width:48px!important}
-  .pnv.w{font-size:18px!important}.pnv.p{font-size:22px!important}.pnv.o{font-size:16px!important}
+  /* Stats row — fixed grid, never wraps */
+  .pnums{grid-column:1/-1!important;display:grid!important;grid-template-columns:1fr 1fr 1fr 28px!important;padding:10px 0!important;gap:0!important;border-top:1px solid var(--g5)!important;background:rgba(0,0,0,.15)!important;flex-wrap:nowrap!important}
+  .pnb{text-align:center!important;min-width:0!important;padding:0 4px!important}
+  .pnv.w{font-size:18px!important}.pnv.p{font-size:22px!important}.pnv.o{font-size:15px!important}
   .pnl{font-size:8px!important;letter-spacing:1.5px!important;margin-top:3px!important}
-  .parr{padding:0 8px!important;font-size:10px!important}
+  .parr{display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;font-size:10px!important}
   .pcard.open .pdet{max-height:800px!important}
 
   /* Expanded team detail cards */
@@ -556,15 +555,15 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
   .mu-nm{font-size:20px!important}
   .mu-pj{font-size:16px!important}
 
-  /* BOTTOM TICKER — slim, functional */
-  .bl-t{height:26px!important}
-  .bl-tag{font-size:9px!important;letter-spacing:2px!important;padding:0 8px!important}
-  .bl-b{height:22px!important}
-  .bl-btag{font-size:8px!important;padding:0 8px!important}
-  .tki{padding:0 10px!important}
-  .tkt{font-size:10px!important}
-  .tkt2{font-size:9px!important}
-  body{padding-bottom:48px!important}
+  /* BOTTOM TICKER — single, compact */
+  .bl-t{height:30px!important}
+  .bl-tag{font-size:9px!important;letter-spacing:2px!important;padding:0 10px 0 10px!important;padding-right:16px!important;clip-path:none!important}
+  .tki{padding:0 12px!important}
+  .tkt{font-size:11px!important}
+  .tks{padding:0 2px!important}
+  .tk-leader{padding:0 14px!important;margin:0 2px!important}
+  .tk-leader .tk-stat{font-size:13px!important}
+  body{padding-bottom:30px!important}
 }
 
 /* ═══ SMALL PHONE (380px) ═══ */
@@ -598,7 +597,6 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
   <div class="hdr-right"><div class="nfl-cd" id="nfl-countdown"></div><div class="live-badge"><span class="live-dot"></span><span class="live-txt">LIVE</span></div><div class="espn-date" id="bar-date"></div></div>
 </div></div>
 <div class="hero" id="hero-area"></div>
-<div class="breaking" id="breaking-area"></div>
 <div class="nav-bar"><div class="nav-in" id="nav-area"></div></div>
 <div class="main">
   <div class="sstrip" id="sstrip-area" style="margin-top:24px"></div>
@@ -1010,9 +1008,6 @@ updateNFLCountdown();setInterval(updateNFLCountdown,60000);
 document.getElementById("hero-area").innerHTML=`<div class="hero-c"><div class="hero-ey">Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">'26</span></div><div class="hero-tag"><b>8</b> Players &bull; <b>24</b> Teams &bull; <b>162</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${gp>0?'Game '+gp+' of 162':'Opening Day Tomorrow'}</div></div></div>`;
 updateCountdown();setInterval(updateCountdown,1000);
 
-// Breaking
-document.getElementById("breaking-area").innerHTML=`<div class="breaking-bar"><div class="breaking-tag">Breaking</div><div class="breaking-text">${getBreaking()}</div></div>`;
-
 // Nav
 document.getElementById("nav-area").innerHTML=["Standings","Players","All Teams","Draft Board","History"].map((t,i)=>`<button class="nav-btn${i===0?' active':''}" onclick="switchTab(${i})">${t}</button>`).join('');
 
@@ -1164,12 +1159,36 @@ POOL.pastSeasons.forEach(season=>{
 
 document.getElementById("tab-history").innerHTML=t5;
 
-// ═══ BOTTOMLINE ═══
-let b1='';R.forEach(p=>{const logos=p.teams.map(t=>`<span class="lbox mini"><img src="${L(t.abbr)}"></span>`).join('');b1+=`<div class="tki">${logos}<span class="tkt"><b>${p.name}</b> <span class="hl">${p.s.proj}</span> proj (${p.s.wins}W)</span></div><div class="tks">\u25C6</div>`});
-b1+=`<div class="tki"><span class="tkt">LEADER: <b>${leader.name}</b> <span class="hl">${leader.s.proj}</span></span></div><div class="tks">\u25C6</div>`;
-b1+=`<div class="tki"><span class="tkt">SPREAD: <span class="hl">${spread.toFixed(0)}</span> wins</span></div><div class="tks">\u25C6</div>`;
-let b2='';sT.forEach(t=>{const ds=t.dv>0?'+'+t.dv.toFixed(0):t.dv<0?t.dv.toFixed(0):'E';b2+=`<div class="tki"><span class="lbox mini"><img src="${L(t.abbr)}"></span><span class="tkt2"><b>${shortN(t.name)}</b> <span class="hl">${t.pv}</span> pace (${ds}) \u2014 ${t.owner}</span></div><div class="tks" style="color:var(--g6)">\u25C6</div>`});
-document.getElementById("bl-area").innerHTML=`<div class="bl-t"><div class="bl-tag">WINS POOL</div><div class="bl-sw"><div class="bl-s" style="--td1:${Math.max(30,R.length*5)}s">${b1+b1}</div></div></div><div class="bl-b"><div class="bl-btag">TEAMS</div><div class="bl-bsw"><div class="bl-bs" style="--td2:${Math.max(40,sT.length*3)}s">${b2+b2}</div></div></div>`;
+// ═══ BOTTOMLINE — SINGLE PREMIUM TICKER ═══
+const tkLogos=(p)=>p.teams.map(t=>`<span class="lbox mini"><img src="${L(t.abbr)}"></span>`).join('');
+
+let tk='';
+// Every player — consistent 3-logo format, clean white text
+R.forEach(p=>{
+  tk+=`<div class="tki">${tkLogos(p)}<span class="tkt"><b>${p.name}</b> <span class="hl">${p.s.proj}</span> proj<span class="sub">${p.s.wins}W</span></span></div><div class="tks">\u25C6</div>`;
+});
+// Leader + spread callouts with leader's 3 logos
+tk+=`<div class="tk-leader">${tkLogos(leader)}<span class="tkt">LEADER</span><span class="tk-stat">${leader.name} ${leader.s.proj}</span></div><div class="tks">\u25C6</div>`;
+tk+=`<div class="tk-leader"><span class="tkt">SPREAD</span><span class="tk-stat">${spread.toFixed(0)}W</span></div><div class="tks">\u25C6</div>`;
+// Best/worst team — owner's 3 logos
+const bestT=sT[0],worstT=sT[sT.length-1];
+if(bestT){const own=POOL.players.find(p=>p.teams.some(t=>t.abbr===bestT.abbr));if(own)tk+=`<div class="tki">${tkLogos(own)}<span class="tkt"><b>${shortN(bestT.name)}</b> leads at <span class="hl">${bestT.pv}</span> pace</span></div><div class="tks">\u25C6</div>`}
+if(worstT){const own=POOL.players.find(p=>p.teams.some(t=>t.abbr===worstT.abbr));if(own)tk+=`<div class="tki">${tkLogos(own)}<span class="tkt"><b>${shortN(worstT.name)}</b> trails at <span class="hl">${worstT.pv}</span> pace</span></div><div class="tks">\u25C6</div>`}
+const tkDur=Math.max(50,R.length*7);
+document.getElementById("bl-area").innerHTML=`<div class="bl-t"><div class="bl-tag">LIVE</div><div class="bl-sw"><div class="bl-s" style="--td1:${tkDur}s">${tk+tk}</div></div><div class="bl-break" id="bl-break"><div class="bl-break-tag">Breaking</div><div class="bl-break-text" id="bl-break-text"></div></div></div>`;
+
+// Breaking news takeover — flashes every 45s for 6s
+const breakingMsg=getBreaking();
+function flashBreaking(){
+  const el=document.getElementById('bl-break');
+  const txt=document.getElementById('bl-break-text');
+  if(!el||!txt)return;
+  txt.innerHTML=breakingMsg;
+  el.classList.add('active');
+  setTimeout(()=>{el.classList.remove('active')},6000);
+}
+// First flash after 8s, then every 45s
+setTimeout(()=>{flashBreaking();setInterval(flashBreaking,45000)},8000);
 }
 
 function switchTab(idx){
