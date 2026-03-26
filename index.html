@@ -253,7 +253,7 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
 .psub{font-family:var(--fd);font-size:14px;font-weight:400;color:var(--t3);margin-top:2px;letter-spacing:1px}
 .pnums{display:flex;align-items:center;gap:24px;padding:16px 24px;flex-shrink:0}
 .pnb{text-align:center;min-width:48px}
-.pnv{font-family:var(--fb);font-weight:800;line-height:1;letter-spacing:-.3px;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.pnv{font-family:var(--fd);font-weight:800;line-height:1;letter-spacing:-.5px;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 .pnv.w{font-size:38px;min-width:48px;display:inline-block;text-align:center}
 .pnv.p{font-size:20px;color:var(--y)}
 .pnv.o{font-size:20px;color:var(--t3)}
@@ -1885,21 +1885,34 @@ if('serviceWorker' in navigator){
   var dismissed=sessionStorage.getItem('install-dismissed');
   if(dismissed)return;
   var deferredPrompt=null;
+  var bannerShown=false;
   window.addEventListener('beforeinstallprompt',function(e){
     e.preventDefault();
     deferredPrompt=e;
-    showBanner('chrome');
+    if(!bannerShown)showBanner('chrome');
   });
-  var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
-  var isSafari=/Safari/.test(navigator.userAgent)&&!/Chrome|CriOS|FxiOS/.test(navigator.userAgent);
-  if(isIOS&&isSafari){setTimeout(function(){showBanner('ios')},2000)}
+  // Always show banner on mobile after 2s if beforeinstallprompt hasn't fired
+  var isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  if(isMobile){
+    setTimeout(function(){
+      if(!bannerShown){
+        var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+        showBanner(isIOS?'ios':'android');
+      }
+    },2000);
+  }
   function showBanner(type){
+    bannerShown=true;
+    var msg='';
+    if(type==='ios') msg='Tap <b>Share</b> ↗ then <b>Add to Home Screen</b>';
+    else if(type==='chrome') msg='Tap <b>Install</b> for instant access';
+    else msg='Tap ⋮ menu then <b>Add to Home Screen</b>';
     var b=document.createElement('div');
     b.className='install-banner';
-    b.innerHTML='<img class="install-banner-icon" src="/apple-touch-icon.png" alt="App"><div class="install-banner-text"><div class="install-banner-title">Add Wins Pool to Home Screen</div><div class="install-banner-sub">'+(type==='ios'?'Tap <b>Share</b> then <b>Add to Home Screen</b>':'Get instant access like a native app')+'</div></div>'+(type==='chrome'?'<button class="install-banner-btn" id="pwa-install-btn">Install</button>':'')+'<button class="install-banner-close" id="pwa-close-btn">&times;</button>';
+    b.innerHTML='<img class="install-banner-icon" src="/apple-touch-icon.png" alt="App"><div class="install-banner-text"><div class="install-banner-title">Add Wins Pool to Home Screen</div><div class="install-banner-sub">'+msg+'</div></div>'+(deferredPrompt?'<button class="install-banner-btn" id="pwa-install-btn">Install</button>':'')+'<button class="install-banner-close" id="pwa-close-btn">×</button>';
     document.body.appendChild(b);
     document.getElementById('pwa-close-btn').onclick=function(){b.remove();sessionStorage.setItem('install-dismissed','1')};
-    if(type==='chrome'){
+    if(deferredPrompt&&document.getElementById('pwa-install-btn')){
       document.getElementById('pwa-install-btn').onclick=function(){
         if(!deferredPrompt)return;
         deferredPrompt.prompt();
