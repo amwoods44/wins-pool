@@ -18,7 +18,7 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
 .hdr-in{max-width:1440px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:56px}
-.hdr-logo{font-family:var(--fd);font-weight:800;font-style:italic;font-size:34px;color:var(--r);text-shadow:0 0 30px rgba(204,0,0,.4)}
+.hdr-espn-logo{height:28px;width:auto;flex-shrink:0}
 .hdr-div{width:2px;height:32px;background:var(--g5);margin:0 14px;transform:skewX(-12deg);display:inline-block;vertical-align:middle}
 .hdr-sub{font-family:var(--fd);font-weight:600;font-size:16px;letter-spacing:4px;text-transform:uppercase;color:var(--t3);vertical-align:middle}
 .hdr-right{display:flex;align-items:center;gap:20px}
@@ -385,7 +385,7 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
 
   /* HEADER — clean, compact */
   .hdr-in{padding:0 12px!important;height:48px!important}
-  .hdr-logo{font-size:22px!important}
+  .hdr-espn-logo{height:22px!important}
   .hdr-div,.hdr-sub{display:none!important}
   .hdr-right{gap:8px!important}
   .nfl-cd{padding:4px 8px!important;gap:4px!important;border-radius:4px!important}
@@ -625,7 +625,7 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
 </head>
 <body>
 <div class="hdr"><div class="hdr-in">
-  <div><span class="hdr-logo">ESPN</span><span class="hdr-div"></span><span class="hdr-sub">Wins Pool 2026</span></div>
+  <div style="display:flex;align-items:center"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKQAAAAoCAYAAABwx1HiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA7dJREFUeNrsXdFR4zAQtTP5xx3EVICvAkIHuQoIFRAqOK6CXAfJVUCowL4KzlQQ04E7MKsbmdEoMsSSsnni9GY0MEk8s+w+Pb9d2yFNNHRdN6cfZYKDXZqm301vUKw5/binVdCaJ/83WloVrWfK13boQ5Sz8sy5qkWMtLYUZ6O/OTEckIMl+sWQ1IzWhn7d01pFMv5DRmtBa0O52dMqBj537vqKuH6I2lGMqxAJ2WpkLCQRl5GDgxA1LAdIiVTfNcW4/oyQM7Dk1topupRqEPG5Yj4ZLA4aVtImBqmQm0jGcUpJxV4C17bHfTCEJONbK81W9Irjca2pJiKCUUhVHW8jt6z9pNpQQNoL0ageELJ/EdE/Ap9uQsIFcGyFSSHRdlBrkvUIt6KDojUREk0hXyKHvHfekOh7hSAUUh0LRDjZngI92FTzkDmYV6tp57TS2xaRW1Zo+kt0wBu77RUyIiIiIiIiIgikin8UPm0F5n22Mrblmb2t8DeV8LNDH0C9kkQxP8r4FjY+vD/+GMgeZGkR5uGtaCKhHRaelNhQsBm6eECvP3Z42CvxlS7HH0lI2xy8b5QJ8IwKcQYpdv/QvYYzwHgbx/o2TCpemwiJfJUGCaKwpUEpc8BYXWeQYwl57VpnlZAXwMmsAUm5DoCQr0p/YH08Y52DUUjEoekiAELuHGs7ViHnjnXG9ZDa5P434qm795Kgd2LvlM41YyKkc6+AqpCtRs5KjAZA/SSiOor83Xmo7dGEdLgseaiQ4PdB9qQUCf4F2uggEVJs3kttZmrVH5geUz11rachddiUoAfaPOL0fZtgPYudnzlXtVzP8myig6PD9qKQU0ePcTOQgFN7S69NjvSCfx1298zyb0mZrQWaf9R7hXcPydWFoSKzTGbroJCcuUOdQR5gEoDHQD3luj7vw5I78BlkNUTIAnyHIxKyDYGQjGc/L32Ii4fM5BcXncJX3MjdvUx4Hn+1IdQfGaNtQ/PKREiuGWRmm0NfXXZ2oi5XfxYbpZMeijNnKjisQn7wxVbjPWQIM0hQ1MwKZAuO/sA2B0YPiTyDLAIgJPqEgqM/8KeQCfZ9kKjPETfKyAd9QsExg7QdmwWhkN59yQmwY1YgdIW88qmQaPdBVuDqKJTxJ7MC2W5qrhlk5lDnMBQSOK4H7cYFZIUMagYJ6SEVX4GokHfqF8qDXwXhnAB4mUGiK+QVUCxik3wz/HeDr9hh97bkLF5/CuofERSykrt4+0FHjD6DtD1LjZkFe5tBCrwJMADOg2IEMOOZEQAAAABJRU5ErkJggg==" alt="ESPN" class="hdr-espn-logo"><span class="hdr-div"></span><span class="hdr-sub">Wins Pool 2026</span></div>
   <div class="hdr-right"><div class="nfl-cd" id="nfl-countdown"></div><div class="live-badge"><span class="live-dot"></span><span class="live-txt">LIVE</span></div><div class="espn-date" id="bar-date"></div></div>
 </div></div>
 <div class="hero" id="hero-area"></div>
@@ -735,7 +735,8 @@ const NTC={ARI:["#97233F","#000"],ATL:["#A71930","#000"],BAL:["#241773","#000"],
 
 // Sport-aware logo builder
 const stc=(sport,abbr,i=0)=>{const map=sport==='NFL'?NTC:TC;return(map[abbr]||["#333","#666"])[i]};
-const SLB=(sport,abbr,sz='md')=>{const key=sport==='NFL'?'NFL_'+abbr:abbr;const src=L(key);const color=stc(sport,abbr,0);return `<div class="lbox ${sz}" style="--acc:${color}"><img src="${src}" alt="${abbr}"></div>`};
+const stcBest=(sport,abbr)=>{const map=sport==='NFL'?NTC:TC;return bestC(map[abbr]||["#333","#666"],abbr)};
+const SLB=(sport,abbr,sz='md')=>{const key=sport==='NFL'?'NFL_'+abbr:abbr;const src=L(key);const color=stcBest(sport,abbr);return `<div class="lbox ${sz}" style="--acc:${color}"><img src="${src}" alt="${abbr}"></div>`};
 
 const PCOL=["#cc0000","#ffcc00","#448aff","#00cc66","#ff6b35","#b388ff","#00bcd4","#ff4081"];
 
@@ -852,13 +853,18 @@ const POOL={
 const pace=(w,l)=>(w+l)===0?null:Math.round((w/(w+l))*162);
 const pOU=(t)=>{const p=pace(t.w,t.l);return p!==null?p:t.ou};
 function pStats(p){let w=0,ls=0,ou=0,proj=0,gp=0,live=false;p.teams.forEach(t=>{w+=t.w;ls+=t.l;ou+=t.ou;const pc=pace(t.w,t.l);if(pc!==null){proj+=pc;live=true;gp=Math.max(gp,t.w+t.l)}else{proj+=t.ou}});return{wins:w,losses:ls,ou,proj,gp,live,delta:proj-ou}}
-const shortN=(n)=>n.replace(/^(Los Angeles|New York|San Diego|San Francisco|Kansas City|Tampa Bay|St\. Louis) /,"");
+const shortN=(n)=>n.replace(/^(Los Angeles|New York|San Diego|San Francisco|Kansas City|Tampa Bay|St\. Louis|Toronto|Chicago|Boston|Detroit|Oakland|Atlanta|Arizona|Seattle|Cleveland|Cincinnati|Baltimore|Pittsburgh|Houston|Colorado|Milwaukee|Minnesota|Washington|Philadelphia|Miami|Texas|Buffalo|Carolina|Denver|Green Bay|Indianapolis|Jacksonville|Las Vegas|New England|New Orleans|Tennessee|Dallas) /,"");
 const ordinal=(n)=>{const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
 const getRanked=()=>POOL.players.map(p=>({...p,s:pStats(p)})).sort((a,b)=>b.s.proj-a.s.proj||b.s.wins-a.s.wins);
 const tc=(a,i=0)=>(TC[a]||["#333","#666"])[i];
+// Pick the lighter/higher-contrast color from a team's palette for borders on dark bg
+const lum=(hex)=>{let h=hex.replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];const r=parseInt(h.substr(0,2),16)/255,g=parseInt(h.substr(2,2),16)/255,b=parseInt(h.substr(4,2),16)/255;const s=c=>c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);return 0.2126*s(r)+0.7152*s(g)+0.0722*s(b)};
+// Override map: teams where identity color > pure contrast
+const BORDER_OV={LAD:'#005A9C',NYY:'#003087',DET:'#0C2340',ARI:'#00A6A0',SEA:'#005C5C',KC:'#004687',TOR:'#134A8E'};
+const bestC=(colors,abbr)=>{if(BORDER_OV[abbr])return BORDER_OV[abbr];if(!colors||colors.length<2)return(colors||["#666"])[0];return lum(colors[0])>=lum(colors[1])?colors[0]:colors[1]};
 
 // Logo builder: white bg for ALL logos, team color on BORDER only
-const LB=(a,sz='md')=>`<div class="lbox ${sz}" style="--acc:${tc(a,0)}"><img src="${L(a)}" alt="${a}"></div>`;
+const LB=(a,sz='md')=>`<div class="lbox ${sz}" style="--acc:${bestC(TC[a]||["#333","#666"],a)}"><img src="${L(a)}" alt="${a}"></div>`;
 
 // ═══ COUNTDOWN ═══
 function updateCountdown(){
@@ -1031,15 +1037,15 @@ function renderCompare(aIdx,bIdx){
 // Images go in the /img/ folder of the GitHub repo
 const REPO_IMG = "https://raw.githubusercontent.com/amwoods44/wins-pool/main/img/";
 const CAST = [
-  { img: "hayden.png", label: "Hayden" },
   { img: "chuck.png", label: "Chuck" },
-  { img: "kyle.png", label: "Kyle" },
-  { img: "nash.png", label: "Nash" },
-  { img: "winnie.png", label: "Winnie" },
-  { img: "landon.png", label: "Landon" },
+  { img: "mcvay.png", label: "McVay" },
   { img: "lincecum.png", label: "HOF?" },
+  { img: "rodgers.png", label: "Rodgers" },
   { img: "browning.png", label: "Elite" },
-  { img: "banner.png", label: "Chuck's Pool" },
+  { img: "harbaugh.png", label: "Harbaugh" },
+  { img: "dipp.png", label: "Dipp" },
+  { img: "murphy.png", label: "Murph" },
+  { img: "banner.png", label: "The Pool" },
 ];
 
 // ═══ RENDER ═══
@@ -1075,7 +1081,7 @@ document.getElementById("sstrip-area").innerHTML=`<div class="ss feat"><div clas
 let t1=`<div class="bh"><div class="bh-tag">Power Rankings</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${gp>0?'Through Game '+gp:'Pre-Season Projections'}</span></div></div><div class="plist">`;
 R.forEach((p,i)=>{
   const rk=i+1,gb=leader.s.wins-p.s.wins;
-  let cards='';p.teams.forEach(t=>{const tp=pOU(t),d=tp-t.ou,ds=d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=d>0?'ov':d<0?'un':'ev',rec=(t.w+t.l)>0?t.w+'-'+t.l:'0-0';cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${tc(t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec} <span class="dbadge ${dc}">${ds}</span></div><div class="ptc-pace">Pace: ${tp}</div></div></div>`});
+  let cards='';p.teams.forEach(t=>{const tp=pOU(t),d=tp-t.ou,ds=d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=d>0?'ov':d<0?'un':'ev',rec=(t.w+t.l)>0?t.w+'-'+t.l:'0-0';cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${bestC(TC[t.abbr]||["#333","#666"],t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec} <span class="dbadge ${dc}">${ds}</span></div><div class="ptc-pace">Pace: ${tp}</div></div></div>`});
   t1+=`<div class="pcard${rk<=3?' r'+rk:''}" onclick="this.classList.toggle('open')"><div class="prk"><div class="prk-n">${rk}</div></div><div class="pcbar" style="background:linear-gradient(180deg,${tc(p.teams[0].abbr)},${tc(p.teams[1].abbr)},${tc(p.teams[2].abbr)})"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' \u2022 '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${p.s.ou.toFixed(1)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
 });
 t1+=`</div>`;
@@ -1123,7 +1129,7 @@ const undraftedMapped=UNDRAFTED.map(t=>({...t,owner:"Undrafted",pv:pace(t.w,t.l)
 const allTeams=[...sT,...undraftedMapped].sort((a,b)=>b.pv-a.pv);
 
 let t3=`<div class="bh"><div class="bh-tag">All 30 Teams</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Ranked by Pace &bull; 24 Drafted + 6 Undrafted</span></div></div><div class="tw"><table class="ttbl"><thead><tr><th style="width:36px;text-align:center">#</th><th>Team</th><th>Owner</th><th class="r">Record</th><th class="r">Pace</th><th class="r">O/U</th><th class="r">Delta</th></tr></thead><tbody>`;
-allTeams.forEach((t,i)=>{const ds=t.dv>0?'+'+t.dv.toFixed(0):t.dv<0?t.dv.toFixed(0):'E',dc=t.dv>0?'ov':t.dv<0?'un':'ev',rec=(t.w+t.l)>0?t.w+'-'+t.l:'0-0';const isUndrafted=t.owner==='Undrafted';t3+=`<tr${isUndrafted?' class="undrafted-row"':''}><td style="text-align:center;font-family:var(--fd);font-weight:700;color:var(--t4)">${i+1}</td><td><div class="ttc"><div style="width:3px;height:28px;border-radius:2px;background:${tc(t.abbr)};flex-shrink:0"></div>${LB(t.abbr,'xs')}<div class="ttn">${t.name}</div></div></td><td class="tto">${isUndrafted?'<span class="undrafted-tag">Undrafted</span>':'<span class="owner-tag">'+t.owner+'</span>'}</td><td class="r ttm">${rec}</td><td class="r ttm">${t.pv}</td><td class="r ttm" style="color:var(--t4)">${t.ou}</td><td class="r"><span class="dbadge ${dc}">${ds}</span></td></tr>`});
+allTeams.forEach((t,i)=>{const ds=t.dv>0?'+'+t.dv.toFixed(0):t.dv<0?t.dv.toFixed(0):'E',dc=t.dv>0?'ov':t.dv<0?'un':'ev',rec=(t.w+t.l)>0?t.w+'-'+t.l:'0-0';const isUndrafted=t.owner==='Undrafted';t3+=`<tr${isUndrafted?' class="undrafted-row"':''}><td style="text-align:center;font-family:var(--fd);font-weight:700;color:var(--t4)">${i+1}</td><td><div class="ttc"><div style="width:3px;height:28px;border-radius:2px;background:${bestC(TC[t.abbr]||["#333","#666"],t.abbr)};flex-shrink:0"></div>${LB(t.abbr,'xs')}<div class="ttn">${t.name}</div></div></td><td class="tto">${isUndrafted?'<span class="undrafted-tag">Undrafted</span>':'<span class="owner-tag">'+t.owner+'</span>'}</td><td class="r ttm">${rec}</td><td class="r ttm">${t.pv}</td><td class="r ttm" style="color:var(--t4)">${t.ou}</td><td class="r"><span class="dbadge ${dc}">${ds}</span></td></tr>`});
 t3+=`</tbody></table></div>`;document.getElementById("tab-teams").innerHTML=t3;
 
 // ═══ TAB 4: DRAFT ═══
@@ -1217,7 +1223,7 @@ POOL.pastSeasons.forEach(season=>{
 document.getElementById("tab-history").innerHTML=t5;
 
 // ═══ BOTTOMLINE — SINGLE PREMIUM TICKER ═══
-const tkLogos=(p)=>p.teams.map(t=>`<span class="lbox mini"><img src="${L(t.abbr)}"></span>`).join('');
+const tkLogos=(p)=>p.teams.map(t=>`<span class="lbox mini" style="--acc:${bestC(TC[t.abbr]||["#333","#666"],t.abbr)}"><img src="${L(t.abbr)}"></span>`).join('');
 
 let tk='';
 // Every player — 3 logos + name + projected wins + team abbrs for context
