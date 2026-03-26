@@ -1104,32 +1104,56 @@ function getHighlights(){
   const sT=allT.map(t=>{const tg=t.w+t.l;const tWae=tg>0?t.w-(t.ou*tg/162):null;return{...t,pv:pOU(t),dv:pOU(t)-t.ou,wae:tWae}}).sort((a,b)=>b.pv-a.pv);
   const items=[];
   const gp=R[0].s.gp;
+  const seasonStarted=gp>0;
 
-  // Closest race
-  let minGap=999;let closeA,closeB;
-  for(let i=0;i<R.length-1;i++){const g=R[i].s.proj-R[i+1].s.proj;if(g<minGap){minGap=g;closeA=R[i];closeB=R[i+1]}}
-  if(closeA&&closeB) items.push({icon:"\u{1F525}",text:`Closest matchup: <b>${closeA.name}</b> vs <b>${closeB.name}</b> separated by just <b>${minGap.toFixed(0)}</b> projected wins.`});
+  if(seasonStarted){
+    // LIVE SEASON HEADLINES
 
-  // Best team
-  const best=sT[0];
-  const bestWaeStr=best.wae!==null&&(best.w+best.l)>0?' — <b>'+(best.wae>=0?'+':'')+best.wae.toFixed(1)+'</b> vs expected':'';
-  items.push({icon:"\u{1F3C6}",text:`Top performing team: <b>${shortN(best.name)}</b> (${best.owner}) pacing at <b>${best.pv}</b> wins${bestWaeStr}. `});
+    // Closest race - compare ACTUAL wins across ALL player pairs
+    let minGap=999;let closeA,closeB;
+    for(let i=0;i<R.length;i++){for(let j=i+1;j<R.length;j++){const g=Math.abs(R[i].s.wins-R[j].s.wins);if(g<minGap){minGap=g;closeA=R[i];closeB=R[j]}}}
+    if(closeA&&closeB){
+      if(minGap===0) items.push({icon:"\u{1F525}",text:"Closest matchup: <b>"+closeA.name+"</b> and <b>"+closeB.name+"</b> are tied at <b>"+closeA.s.wins+"</b> win"+(closeA.s.wins===1?"":"s")+" through Game "+gp+"."});
+      else items.push({icon:"\u{1F525}",text:"Closest matchup: <b>"+closeA.name+"</b> vs <b>"+closeB.name+"</b> separated by just <b>"+minGap+"</b> win"+(minGap===1?"":"s")+" through Game "+gp+"."});
+    }
 
-  // Worst team
-  const worst=sT[sT.length-1];
-  const worstWaeStr=worst.wae!==null&&(worst.w+worst.l)>0?' — <b class="red">'+(worst.wae>=0?'+':'')+worst.wae.toFixed(1)+'</b> vs expected':'';
-  items.push({icon:"\u{1F4C9}",text:`Anchor watch: <b>${shortN(worst.name)}</b> (${worst.owner}) pacing at <b>${worst.pv}</b> wins${worstWaeStr}.`});
+    // Best performing team by pace
+    const best=sT[0];
+    const bestWaeStr=(best.w+best.l)>0&&best.wae!==null?" \u2014 <b>"+(best.wae>=0?"+":"")+best.wae.toFixed(1)+"</b> vs expected":"";
+    items.push({icon:"\u{1F3C6}",text:"Top performing team: <b>"+shortN(best.name)+"</b> ("+best.owner+") pacing at <b>"+best.pv+"</b> wins"+bestWaeStr+"."});
 
-  // Biggest WAE overperformer
-  const overT=sT.filter(t=>t.wae!==null&&t.wae>0).sort((a,b)=>b.wae-a.wae)[0];
-  if(overT) items.push({icon:"\u{1F4C8}",text:`Biggest value: <b>${shortN(overT.name)}</b> is <b>+${overT.wae.toFixed(1)}</b> wins above expected through ${overT.w+overT.l} games — huge for <b>${overT.owner}</b>.`});
+    // Anchor watch
+    const worst=sT[sT.length-1];
+    const worstWaeStr=(worst.w+worst.l)>0&&worst.wae!==null?" \u2014 <b class=\"red\">"+(worst.wae>=0?"+":"")+worst.wae.toFixed(1)+"</b> vs expected":"";
+    items.push({icon:"\u{1F4C9}",text:"Anchor watch: <b>"+shortN(worst.name)+"</b> ("+worst.owner+") pacing at <b>"+worst.pv+"</b> wins"+worstWaeStr+"."});
 
-  // Biggest WAE underperformer
-  const underT=sT.filter(t=>t.wae!==null&&t.wae<0).sort((a,b)=>a.wae-b.wae)[0];
-  if(underT) items.push({icon:"\u26A0\uFE0F",text:`Biggest drag: <b>${shortN(underT.name)}</b> is <b class="red">${underT.wae.toFixed(1)}</b> wins below expected through ${underT.w+underT.l} games — costing <b>${underT.owner}</b>.`});
+    // Biggest WAE overperformer
+    const overT=sT.filter(t=>t.wae!==null&&t.wae>0).sort((a,b)=>b.wae-a.wae)[0];
+    if(overT) items.push({icon:"\u{1F4C8}",text:"Biggest value: <b>"+shortN(overT.name)+"</b> is <b>+"+overT.wae.toFixed(1)+"</b> wins above expected through "+(overT.w+overT.l)+" games \u2014 huge for <b>"+overT.owner+"</b>."});
 
-  // Pre-season note
-  if(gp===0) items.push({icon:"\u{1F4CB}",text:`All projections are based on pre-season O/U lines. Once games start, pace projections replace O/U values automatically.`});
+    // Biggest WAE underperformer
+    const underT=sT.filter(t=>t.wae!==null&&t.wae<0).sort((a,b)=>a.wae-b.wae)[0];
+    if(underT) items.push({icon:"\u26A0\uFE0F",text:"Biggest drag: <b>"+shortN(underT.name)+"</b> is <b class=\"red\">"+underT.wae.toFixed(1)+"</b> wins below expected through "+(underT.w+underT.l)+" games \u2014 costing <b>"+underT.owner+"</b>."});
+
+  } else {
+    // PRE-SEASON HEADLINES
+    const high=R[0],low=R[R.length-1];
+    const spread=(high.s.ou-low.s.ou).toFixed(1);
+
+    items.push({icon:"\u{1F3B0}",text:"Vegas favorite: <b>"+high.name+"</b> holds the highest combined O/U at <b>"+high.s.ou.toFixed(1)+"</b> wins \u2014 a <b>"+spread+"</b>-win edge over <b>"+low.name+"</b> ("+low.s.ou.toFixed(1)+")."});
+
+    const bestT=sT[0];
+    items.push({icon:"\u{1F3C6}",text:"Highest O/U team: <b>"+shortN(bestT.name)+"</b> ("+bestT.owner+") at <b>"+bestT.ou+"</b> projected wins \u2014 the crown jewel of this draft."});
+
+    const worstT=sT[sT.length-1];
+    items.push({icon:"\u{1F4C9}",text:"Lowest O/U team: <b>"+shortN(worstT.name)+"</b> ("+worstT.owner+") at <b>"+worstT.ou+"</b> projected wins \u2014 the anchor weight."});
+
+    let minOUGap=999;let gapA,gapB;
+    for(let i=0;i<R.length;i++){for(let j=i+1;j<R.length;j++){const g=Math.abs(R[i].s.ou-R[j].s.ou);if(g<minOUGap){minOUGap=g;gapA=R[i];gapB=R[j]}}}
+    if(gapA&&gapB) items.push({icon:"\u{1F525}",text:"Tightest O/U gap: <b>"+gapA.name+"</b> ("+gapA.s.ou.toFixed(1)+") vs <b>"+gapB.name+"</b> ("+gapB.s.ou.toFixed(1)+") \u2014 separated by just <b>"+minOUGap.toFixed(1)+"</b> projected wins. This one could go either way."});
+
+    items.push({icon:"\u{1F4CB}",text:"All projections based on pre-season Vegas O/U lines. Headlines update automatically once games begin."});
+  }
 
   return items;
 }
