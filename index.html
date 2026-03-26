@@ -375,6 +375,7 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
   .live-badge{padding:2px 6px!important}
   .live-txt{font-size:8px!important;letter-spacing:1px!important}
   .live-dot{width:4px!important;height:4px!important}
+  .espn-date{display:none!important}
 
   /* HERO */
   .hero{padding:16px 12px 12px!important}
@@ -397,10 +398,10 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
   .hp-games{font-size:8px!important}
 
   /* BREAKING — stack vertically to prevent overlap */
-  .breaking{padding:0 8px!important;margin-top:8px!important}
-  .breaking-bar{flex-direction:column!important;border-radius:4px!important}
+  .breaking{padding:0 8px!important;margin-top:8px!important;position:relative!important;z-index:5!important}
+  .breaking-bar{flex-direction:column!important;border-radius:4px!important;overflow:hidden!important}
   .breaking-tag{padding:6px 10px!important;font-size:9px!important;letter-spacing:2px!important;justify-content:center!important}
-  .breaking-text{padding:8px 10px!important;font-size:11px!important;text-align:center!important;line-height:1.4!important;display:block!important;word-wrap:break-word!important}
+  .breaking-text{padding:8px 10px!important;font-size:11px!important;text-align:center!important;line-height:1.4!important;display:block!important;word-break:break-word!important;overflow-wrap:break-word!important}
 
   /* NAV — horizontal scroll */
   .nav-bar{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;top:44px!important}
@@ -413,9 +414,9 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
   /* STAT STRIP — 2 cols only */
   .sstrip{grid-template-columns:repeat(2,1fr)!important;margin-bottom:14px!important}
   .sstrip .ss:nth-child(n+3){display:none!important}
-  .ss{padding:10px 8px!important}
+  .ss{padding:10px 8px!important;overflow:hidden!important}
   .ss-l{font-size:9px!important;letter-spacing:1px!important;margin-bottom:4px!important}
-  .ss-v{font-size:18px!important}
+  .ss-v{font-size:18px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
   .ss-sub{font-size:8px!important}
 
   /* BROADCAST HEADERS */
@@ -1183,10 +1184,15 @@ function applyLiveData(csv){
   return true;
 }
 
-// Try live fetch, fall back to hardcoded data
-fetch(GVIZ).then(r=>r.text()).then(csv=>{
-  applyLiveData(csv);
+// Only fetch live data AFTER Opening Day (prevents 2025 leftover data in sheet)
+const seasonStarted = new Date() >= POOL.openingDay;
+if(seasonStarted){
+  fetch(GVIZ).then(r=>r.text()).then(csv=>{
+    applyLiveData(csv);
+    render();
+  }).catch(()=>{render()});
+} else {
   render();
-}).catch(()=>{render()});
+}
 </script>
 </body></html>
