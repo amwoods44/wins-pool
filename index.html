@@ -1194,11 +1194,19 @@ function pStats(p){
 }
 const shortN=(n)=>n.replace(/^(Los Angeles|New York|San Diego|San Francisco|Kansas City|Tampa Bay|St\. Louis|Toronto|Chicago|Boston|Detroit|Oakland|Sacramento|Atlanta|Arizona|Seattle|Cleveland|Cincinnati|Baltimore|Pittsburgh|Houston|Colorado|Milwaukee|Minnesota|Washington|Philadelphia|Miami|Texas|Buffalo|Carolina|Denver|Green Bay|Indianapolis|Jacksonville|Las Vegas|New England|New Orleans|Tennessee|Dallas) /,"");
 const ordinal=(n)=>{const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
+// League tiebreaker (per Chuck's rules): tied total wins → whoever has the single team
+// with the most wins; still tied → compare 2nd teams, then 3rd. Returns <0 if a wins.
+const tbCmp=(a,b)=>{
+  const aw=a.teams.map(t=>t.w).sort((x,y)=>y-x);
+  const bw=b.teams.map(t=>t.w).sort((x,y)=>y-x);
+  for(let i=0;i<Math.max(aw.length,bw.length);i++){const d=(bw[i]||0)-(aw[i]||0);if(d!==0)return d}
+  return 0;
+};
 const getRanked=()=>{
   const mapped=POOL.players.map(p=>({...p,s:pStats(p)}));
   const anyGames=mapped.some(p=>p.s.gp>0);
-  // In season: actual wins, then projection. Pre-season: projected (= O/U) as a preview.
-  if(anyGames) return mapped.sort((a,b)=>b.s.wins-a.s.wins||b.s.proj-a.s.proj);
+  // In season: actual wins → official tiebreaker → projection. Pre-season: projected (= O/U).
+  if(anyGames) return mapped.sort((a,b)=>b.s.wins-a.s.wins||tbCmp(a,b)||b.s.proj-a.s.proj);
   return mapped.sort((a,b)=>b.s.proj-a.s.proj);
 };
 // All drafted teams with owner + derived stats. In season, "best" = record (win%, then wins, then WAE).
@@ -1530,13 +1538,13 @@ const ranks=[];
 R.forEach((p,i)=>{
   if(i===0){ranks.push({rk:1,tied:false})}
   else{
-    const sameWins=started?R[i].s.wins===R[i-1].s.wins:R[i].s.proj===R[i-1].s.proj;
+    const sameWins=started?(R[i].s.wins===R[i-1].s.wins&&tbCmp(R[i],R[i-1])===0):R[i].s.proj===R[i-1].s.proj;
     if(sameWins){ranks.push({rk:ranks[i-1].rk,tied:true});ranks[i-1].tied=true}
     else{ranks.push({rk:i+1,tied:false})}
   }
 });
 const earlyCut=SPORT==='NFL'?3:10; // games before we start showing pace/WAE badges
-let t1=`<div class="bh"><div class="bh-tag">Power Rankings</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${started?'Through '+POOL.unit(sp.unit):'Pre-Season Projections'}</span></div></div><div class="plist">`;
+let t1=`<div class="bh"><div class="bh-tag">Power Rankings</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${started?'Through '+POOL.unit(sp.unit)+' &bull; Ties broken by best team':'Pre-Season Projections'}</span></div></div><div class="plist">`;
 R.forEach((p,i)=>{
   const rkInfo=ranks[i],rk=rkInfo.rk,rkLabel=rkInfo.tied?'T'+rk:String(rk),gb=leader.s.wins-p.s.wins;
   let cards='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),d=tp-t.ou,earlyS=tg<earlyCut,ds=earlyS?'':d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=earlyS?'ev':d>0?'ov':d<0?'un':'ev',rec=recStr(t),lgb=gameBadge(t.abbr);cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${tcb(t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec}${ds?' <span class="dbadge '+dc+'">'+ds+'</span>':''}</div><div class="ptc-pace">${earlyS?'':'Pace: '+tp}</div></div></div>`});
@@ -2160,7 +2168,17 @@ const NFL_BASE_PICKS=[
   {player:"Brady",slot:0,abbr:"DET"},   // #6  Lions — Brady
   {player:"Troy",slot:0,abbr:"SF"},     // #7  Niners — Troy (Sweeney)
   {player:"Max",slot:0,abbr:"HOU"},     // #8  Texans — Max
-  {player:"Winnie",slot:0,abbr:"KC"}    // #9  Chiefs — Winnie
+  {player:"Winnie",slot:0,abbr:"KC"},   // #9  Chiefs — Winnie
+  {player:"Landon",slot:0,abbr:"GB"},   // #10 Packers — Landon
+  {player:"Hayden",slot:1,abbr:"PHI"},  // #11 Eagles — Hayden
+  {player:"Woods",slot:1,abbr:"NE"},    // #12 Patriots — Woodsy
+  {player:"Chuck",slot:1,abbr:"DAL"},   // #13 Cowboys — Chuck
+  {player:"Kyle",slot:1,abbr:"DEN"},    // #14 Broncos — Kyle
+  {player:"Nash",slot:1,abbr:"CHI"},    // #15 Bears — Nash
+  {player:"Brady",slot:1,abbr:"LAC"},   // #16 Chargers — Brady
+  {player:"Troy",slot:1,abbr:"JAX"},    // #17 Jags — Troy
+  {player:"Max",slot:1,abbr:"PIT"},     // #18 Steelers — Max
+  {player:"Winnie",slot:1,abbr:"TB"}    // #19 Bucs — Winnie (Winfield)
 ];
 const DRAFT_KEY='wp-nfl-draft-'+SPORTS.NFL.season+'-v2';
 // {order:[{player,slot,abbr}], names:{oldName:newName}}
