@@ -20,9 +20,9 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 
-<style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap"><style>
 
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap');
+
 
 /* ═══ LOADING SCREEN ═══ */
 .loading-screen{position:fixed;inset:0;z-index:9999;background:var(--g1);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
@@ -45,7 +45,7 @@
 :root{
   --r:#cc0000;--rd:#990000;--rb:#e60000;--y:#ffcc00;
   --g1:#0c0c0c;--g2:#141414;--g3:#1c1c1c;--g4:#262626;--g5:#333;--g6:#444;
-  --t1:#fff;--t2:#d4d4d4;--t3:#999;--t4:#666;
+  --t1:#fff;--t2:#d4d4d4;--t3:#a3a3a3;--t4:#7f7f7f;
   --grn:#17b169;--grn-bg:rgba(23,177,105,.12);--red-t:#ff4444;--red-bg:rgba(255,68,68,.12);
   --fd:'Oswald',sans-serif;--fb:'Inter',sans-serif;--fm:'JetBrains Mono',monospace;
 }
@@ -220,6 +220,19 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(1100px
 .hero-wm{left:auto;right:-70px;top:50%;transform:translateY(-50%) rotate(-6deg);width:min(380px,42vw);opacity:.04;mask-image:linear-gradient(90deg,transparent,#000 35%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 35%)}
 @media(max-width:600px){.hero-wm{display:none}}
 .tb-chip{display:inline-block;margin-left:10px;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--y);background:rgba(255,204,0,.1);border:1px solid rgba(255,204,0,.35);border-radius:4px;padding:2px 7px;vertical-align:middle}
+/* ═══ A11Y PASS ═══ */
+.dr-slotwrap{position:relative;display:inline-flex;flex:1;min-width:0}
+.dr-slotwrap .dr-slot{flex:1}
+.dr-x{position:absolute;top:-7px;right:-7px;width:18px;height:18px;border-radius:50%;background:var(--r);color:#fff;font-size:13px;line-height:16px;text-align:center;display:none;border:none;cursor:pointer;padding:0}
+.dr-slotwrap:hover .dr-x,.dr-x:focus-visible{display:block}
+.dp-team:focus-visible,.dp-close:focus-visible,.dr-x:focus-visible{outline:2px solid var(--y);outline-offset:2px}
+h1.hero-h,h2.bh-tag{margin:0;font-weight:inherit}
+.ss.feat .ss-l{color:#ff5c5c}
+/* Reduced motion: stop everything that moves on its own */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+}
 
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
@@ -973,7 +986,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(1100px
 
 <div class="hero" id="hero-area" role="region" aria-label="Season Overview"></div>
 <div class="cast" id="cast-strip" role="complementary" aria-label="Cast of Characters"></div>
-<nav class="nav-bar" role="navigation" aria-label="Dashboard tabs"><div class="nav-in" id="nav-area"></div></nav>
+<nav class="nav-bar" aria-label="Dashboard tabs"><div class="nav-in" id="nav-area" role="tablist"></div></nav>
 <main class="main" id="main-content">
   <div class="sstrip" id="sstrip-area" role="region" aria-label="Key Statistics" style="margin-top:24px"></div>
   <section class="panel active" id="tab-standings" role="tabpanel" aria-label="Standings"></section>
@@ -1584,7 +1597,7 @@ document.title=`Wins Pool ${POOL.season} — ${SPORT}`;
 // Hero
 const startStr=POOL.start.toLocaleDateString('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric'});
 const heroSub=started?sp.label:POOL.startLabel+' '+startStr;
-document.getElementById("hero-area").innerHTML=`<img class="hero-wm" src="${L(SPORT==='NFL'?'NFL_SHIELD':'MLB_SHIELD')}" alt="" aria-hidden="true"><div class="hero-c"><div class="hero-ey">${SPORT} Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">${POOL.yr}</span></div><div class="hero-tag"><b>${nP()}</b> Players &bull; <b>${POOL.draftPending?nP()*3:nT()}</b> Teams &bull; <b>${G()}</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${heroSub}</div></div>${POOL.draftPending?`<div class="draft-pending">🏈 Draft in progress — ${(SPORTS.NFL.effPicks||[]).length} of 30 picks in</div>`:''}</div>`;
+document.getElementById("hero-area").innerHTML=`<img class="hero-wm" src="${L(SPORT==='NFL'?'NFL_SHIELD':'MLB_SHIELD')}" alt="" aria-hidden="true"><div class="hero-c"><div class="hero-ey">${SPORT} Season Tracker</div><h1 class="hero-h">WINS POOL <span class="acc">${POOL.yr}</span></h1><div class="hero-tag"><b>${nP()}</b> Players &bull; <b>${POOL.draftPending?nP()*3:nT()}</b> Teams &bull; <b>${G()}</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${heroSub}</div></div>${POOL.draftPending?`<div class="draft-pending">🏈 Draft in progress — ${(SPORTS.NFL.effPicks||[]).length} of 30 picks in</div>`:''}</div>`;
 updateCountdown();
 
 // Cast strip
@@ -1632,7 +1645,7 @@ R.forEach((p,i)=>{
   }
 });
 const earlyCut=SPORT==='NFL'?3:10; // games before we start showing pace/WAE badges
-let t1=`<div class="bh"><div class="bh-tag">Power Rankings</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${started?'Through '+POOL.unit(sp.unit):'Pre-Season Projections'}</span></div></div><div class="plist">`;
+let t1=`<div class="bh"><h2 class="bh-tag">Power Rankings</h2><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${started?'Through '+POOL.unit(sp.unit):'Pre-Season Projections'}</span></div></div><div class="plist">`;
 R.forEach((p,i)=>{
   const rkInfo=ranks[i],rk=rkInfo.rk,rkLabel=rkInfo.tied?'T'+rk:String(rk),gb=leader.s.wins-p.s.wins;
   let cards='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),d=tp-t.ou,earlyS=tg<earlyCut,ds=earlyS?'':d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=earlyS?'ev':d>0?'ov':d<0?'un':'ev',rec=recStr(t),lgb=gameBadge(t.abbr);cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${tcb(t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec}${ds?' <span class="dbadge '+dc+'">'+ds+'</span>':''}</div><div class="ptc-pace">${earlyS?'':'Pace: '+tp}</div></div></div>`});
@@ -1645,29 +1658,29 @@ t1+=`</div>`;
 // Narrative
 const hl=getHighlights();
 t1+=renderOddsBlock();
-t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Headlines</div><div class="bh-acc"></div><div class="bh-line"></div></div><div class="narrative"><div class="nar-items">${hl.map(h=>`<div class="nar-item"><div class="nar-icon">${h.icon}</div><div class="nar-text">${h.text}</div></div>`).join('')}</div></div>`;
+t1+=`<div class="bh" style="margin-top:36px"><h2 class="bh-tag">Headlines</h2><div class="bh-acc"></div><div class="bh-line"></div></div><div class="narrative"><div class="nar-items">${hl.map(h=>`<div class="nar-item"><div class="nar-icon">${h.icon}</div><div class="nar-text">${h.text}</div></div>`).join('')}</div></div>`;
 
 // Race Chart
 const names=POOL.players.map(p=>p.name);
 const raceData=getRaceData();
 const hasHistory=raceData.length>=1;
 let legend=names.map((n,i)=>`<div class="rc-leg${raceHidden[n]?' dim':''}" role="checkbox" tabindex="0" aria-checked="${!raceHidden[n]}" aria-label="Toggle ${n}" onclick="toggleRace('${n}',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="rc-dot" style="background:${PCOL[i]}"></div><div class="rc-ln">${n}</div></div>`).join('');
-t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Season Race</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SPORT==='NFL'?'Weeks 1-'+POOL.weeks:'Games 1-'+G()}</span></div></div>`;
-const modeBtns=`<div class="rc-modes" role="tablist" aria-label="Chart mode"><button class="rc-mode-btn${raceMode==='rank'?' active':''}" data-mode="rank" onclick="setRaceMode('rank')">Rank</button><button class="rc-mode-btn${raceMode==='wins'?' active':''}" data-mode="wins" onclick="setRaceMode('wins')">Wins</button></div>`;
+t1+=`<div class="bh" style="margin-top:36px"><h2 class="bh-tag">Season Race</h2><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SPORT==='NFL'?'Weeks 1-'+POOL.weeks:'Games 1-'+G()}</span></div></div>`;
+const modeBtns=`<div class="rc-modes" role="group" aria-label="Chart mode"><button class="rc-mode-btn${raceMode==='rank'?' active':''}" data-mode="rank" onclick="setRaceMode('rank')">Rank</button><button class="rc-mode-btn${raceMode==='wins'?' active':''}" data-mode="wins" onclick="setRaceMode('wins')">Wins</button></div>`;
 t1+=`<div class="rc-wrap"><div class="rc-hdr"><div class="rc-title">Who Led When?</div>${hasHistory?modeBtns:''}${hasHistory?`<div class="rc-legend">${legend}</div>`:''}</div>`;
-if(hasHistory){t1+=`<div class="rc-body"><div class="rc-cw"><canvas id="raceCanvas"></canvas><div class="rc-tt" id="rc-tt"></div></div></div>`}
+if(hasHistory){t1+=`<div class="rc-body"><div class="rc-cw"><canvas id="raceCanvas" role="img" aria-label="Season race chart"></canvas><div class="rc-tt" id="rc-tt"></div></div></div>`}
 else{t1+=`<div class="rc-empty"><b>Chart Activates Once Games Begin</b>Builds itself automatically from every ${SPORT} result of the season.<br>X-axis: ${SPORT==='NFL'?'Week 1 through Week '+POOL.weeks:'Game 1 through Game '+G()} &bull; Y-axis: Cumulative combined wins</div>`}
 t1+=`</div>`;
 
 // Comparison tool
-t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Compare</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Head to Head</span></div></div>`;
-t1+=`<div class="compare-wrap"><div class="cmp-hdr"><div class="cmp-label">Player</div><select class="cmp-select" id="cmpA" onchange="renderCompare(+this.value,+document.getElementById('cmpB').value)">${POOL.players.map((p,i)=>`<option value="${i}"${i===(keepA<POOL.players.length?keepA:0)?' selected':''}>${p.name}</option>`).join('')}</select><div class="cmp-vs">VS</div><select class="cmp-select" id="cmpB" onchange="renderCompare(+document.getElementById('cmpA').value,+this.value)">${POOL.players.map((p,i)=>`<option value="${i}"${i===(keepB<POOL.players.length?keepB:1)?' selected':''}>${p.name}</option>`).join('')}</select></div><div class="cmp-body"><div style="display:grid;grid-template-columns:1fr 80px 1fr;margin-bottom:8px"><div class="cmp-col-name" id="cmp-name-a"></div><div></div><div class="cmp-col-name" id="cmp-name-b"></div></div><div id="cmp-body"></div></div></div>`;
+t1+=`<div class="bh" style="margin-top:36px"><h2 class="bh-tag">Compare</h2><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Head to Head</span></div></div>`;
+t1+=`<div class="compare-wrap"><div class="cmp-hdr"><div class="cmp-label">Player</div><select class="cmp-select" id="cmpA" aria-label="Compare: first player" onchange="renderCompare(+this.value,+document.getElementById('cmpB').value)">${POOL.players.map((p,i)=>`<option value="${i}"${i===(keepA<POOL.players.length?keepA:0)?' selected':''}>${p.name}</option>`).join('')}</select><div class="cmp-vs">VS</div><select class="cmp-select" id="cmpB" aria-label="Compare: second player" onchange="renderCompare(+document.getElementById('cmpA').value,+this.value)">${POOL.players.map((p,i)=>`<option value="${i}"${i===(keepB<POOL.players.length?keepB:1)?' selected':''}>${p.name}</option>`).join('')}</select></div><div class="cmp-body"><div style="display:grid;grid-template-columns:1fr 80px 1fr;margin-bottom:8px"><div class="cmp-col-name" id="cmp-name-a"></div><div></div><div class="cmp-col-name" id="cmp-name-b"></div></div><div id="cmp-body"></div></div></div>`;
 
 document.getElementById("tab-standings").innerHTML=t1;
 setTimeout(()=>{if(hasHistory){drawRace()}renderCompare(keepA<POOL.players.length?keepA:0,keepB<POOL.players.length?keepB:1)},50);
 
 // ═══ TAB 2: PLAYERS ═══
-let t2=`<div class="bh"><div class="bh-tag">Player Cards</div><div class="bh-acc"></div><div class="bh-line"></div></div><div class="cg">`;
+let t2=`<div class="bh"><h2 class="bh-tag">Player Cards</h2><div class="bh-acc"></div><div class="bh-line"></div></div><div class="cg">`;
 R.forEach((p,i)=>{const rkInfo=ranks[i],rk=rkInfo.rk,rC=rk===1?'r1':'rn',gb=leader.s.wins-p.s.wins;let tR='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),earlyS=tg<earlyCut,tWae=waeOf(t),ds=earlyS||tWae===null?'':(tWae>=0?'+':'')+tWae.toFixed(1),dc=tWae===null||earlyS?'ev':tWae>=0?'ov':'un',rec=recStr(t),lgb=gameBadge(t.abbr);tR+=`<div class="pc-tr">${LB(t.abbr,'sm')}<div style="flex:1"><div class="pc-trn">${shortN(t.name)}</div><div class="pc-trm">Rd ${t.round} &bull; O/U ${t.ou} &bull; Pace ${tp}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right"><div class="pc-trr">${rec}</div>${ds?'<span class="dbadge '+dc+'" style="margin-top:2px;display:inline-block">'+ds+'</span>':''}</div></div>`});
 const waeVal=p.s.gp>0?p.s.wae:null;
 const waeStr=waeVal!==null?(waeVal>=0?'+':'')+waeVal.toFixed(1):'—';
@@ -1680,7 +1693,7 @@ t2+=`</div>`;document.getElementById("tab-players").innerHTML=t2;
 const allTeams=rankedTeams(true);
 const nAll=allTeams.length,nUnd=POOL.undrafted.length;
 const deltaHdr=started?'vs Exp':'Delta';
-let t3=`<div class="bh"><div class="bh-tag">All ${nAll} Teams</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Ranked by ${started?'Record':'O/U'} &bull; ${nT()} Drafted + ${nUnd} Undrafted</span></div></div><div class="tw"><table class="ttbl"><thead><tr><th style="width:36px;text-align:center">#</th><th>Team</th><th>Owner</th><th class="r">Record</th><th class="r">Pace</th><th class="r">O/U</th><th class="r">${deltaHdr}</th>${started?'<th class="r lg-col">Last</th>':''}</tr></thead><tbody>`;
+let t3=`<div class="bh"><h2 class="bh-tag">All ${nAll} Teams</h2><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Ranked by ${started?'Record':'O/U'} &bull; ${nT()} Drafted + ${nUnd} Undrafted</span></div></div><div class="tw"><table class="ttbl"><thead><tr><th style="width:36px;text-align:center">#</th><th>Team</th><th>Owner</th><th class="r">Record</th><th class="r">Pace</th><th class="r">O/U</th><th class="r">${deltaHdr}</th>${started?'<th class="r lg-col">Last</th>':''}</tr></thead><tbody>`;
 allTeams.forEach((t,i)=>{const tWae=t.wae;const useWae=started&&tWae!==null;const ds=useWae?((tWae>=0?'+':'')+tWae.toFixed(1)):(t.dv>0?'+'+t.dv.toFixed(0):t.dv<0?t.dv.toFixed(0):'E');const dc=useWae?(tWae>=0?'ov':tWae<0?'un':'ev'):(t.dv>0?'ov':t.dv<0?'un':'ev');const rec=recStr(t),lgb=gameBadge(t.abbr);const isUndrafted=t.owner==='Undrafted';t3+=`<tr${isUndrafted?' class="undrafted-row"':''}><td style="text-align:center;font-family:var(--fd);font-weight:700;color:var(--t4)">${i+1}</td><td><div class="ttc"><div style="width:3px;height:28px;border-radius:2px;background:${tcb(t.abbr)};flex-shrink:0"></div>${LB(t.abbr,'xs')}<div class="ttn">${t.name}</div></div></td><td class="tto">${isUndrafted?'<span class="undrafted-tag">Undrafted</span>':'<span class="owner-tag">'+t.owner+'</span>'}</td><td class="r ttm">${rec}</td><td class="r ttm">${t.pv}</td><td class="r ttm" style="color:var(--t4)">${t.ou}</td><td class="r"><span class="dbadge ${dc}">${ds}</span></td>${started?'<td class="r lg-col">'+(lgb||'<span style="color:var(--t4)">—</span>')+'</td>':''}</tr>`});
 t3+=`</tbody></table></div>`;document.getElementById("tab-teams").innerHTML=t3;
 
@@ -1690,7 +1703,7 @@ const dFlow=POOL.draftFlow;
 const pm={};POOL.players.forEach(p=>{p.teams.forEach(t=>{pm[p.name+'_'+t.round]=t})});
 const flowLabel=dFlow.map(f=>f.note.charAt(0)+f.note.slice(1).toLowerCase()).join(' / ');
 let t4=renderDraftRoom();
-t4+=`<div class="bh"><div class="bh-tag">Draft Board</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${flowLabel} &bull; ${nP()} Players</span></div></div><div class="db" style="--dbn:${dNames.length}"><div class="dbg"><div class="dbh"></div>`;
+t4+=`<div class="bh"><h2 class="bh-tag">Draft Board</h2><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${flowLabel} &bull; ${nP()} Players</span></div></div><div class="db" style="--dbn:${dNames.length}"><div class="dbg"><div class="dbh"></div>`;
 dNames.forEach(n=>{t4+=`<div class="dbh">${n}</div>`});t4+=`</div>`;
 dFlow.forEach(f=>{
   t4+=`<div class="dbg"><div class="dbr">${f.label}<div class="db-flow">${f.note}</div></div>`;
@@ -1738,7 +1751,7 @@ initTimers();
 
 // ═══ HISTORY TAB ═══
 function renderHistory(){
-let t5=`<div class="bh"><div class="bh-tag">League History</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Past Seasons &bull; All-Time Records</span></div></div>`;
+let t5=`<div class="bh"><h2 class="bh-tag">League History</h2><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Past Seasons &bull; All-Time Records</span></div></div>`;
 // All-time: titles first, then +/- Vegas (wins across sports aren't comparable, so they're shown per sport, not summed)
 const atMap={};
 PAST_SEASONS.forEach(season=>{
@@ -2246,7 +2259,7 @@ function renderOddsBlock(){
     rows+=`<div class="odds-row"><div class="odds-name">${o.name}</div><div class="odds-logos">${logos}</div><div class="odds-track"><div class="odds-fill" style="width:${w}%;background:${PCOL[ci]};color:${PCOL[ci]}"></div></div><div class="odds-pct">${fmt(o.pct)}</div></div>`;
   });
   const note=POOL.draftPending?'Rosters fill in as the draft finishes — odds even out once everyone has 3 teams.':'Each team\'s rest-of-season win rate blends its record with its Vegas line. A tied finish splits the title. Recalculates with every score update.';
-  return `<div class="bh" style="margin-top:36px"><div class="bh-tag">Title Odds</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SIMS.toLocaleString()} Season Simulations</span></div></div><div class="odds-wrap">${rows}<div class="odds-note">${note}</div></div>`;
+  return `<div class="bh" style="margin-top:36px"><h2 class="bh-tag">Title Odds</h2><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SIMS.toLocaleString()} Season Simulations</span></div></div><div class="odds-wrap">${rows}<div class="odds-note">${note}</div></div>`;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2287,7 +2300,12 @@ const NFL_BASE_PICKS=[
 SPORTS.NFL.draftPending=NFL_BASE_PICKS.length<30;
 const DRAFT_KEY='wp-nfl-draft-'+SPORTS.NFL.season+'-v2';
 // {order:[{player,slot,abbr}], names:{oldName:newName}}
-function draftState(){return lsGet(DRAFT_KEY)||{order:[],names:{}}}
+const cleanName=(v)=>String(v||'').replace(/[<>&"'`]/g,'').slice(0,24).trim();
+function draftState(){
+  const st=lsGet(DRAFT_KEY)||{order:[],names:{}};
+  Object.keys(st.names||{}).forEach(k=>{st.names[k]=cleanName(st.names[k]);if(!st.names[k])delete st.names[k]});
+  return st;
+}
 function draftSave(st){lsSet(DRAFT_KEY,st);applyDraft();render();switchTab(3)}
 function draftTaken(){const m={};(SPORTS.NFL.effPicks||[]).forEach(o=>{m[o.abbr]=o.player});return m}
 // Rebuild SPORTS.NFL.players/undrafted from the saved draft (only while draftPending)
@@ -2351,8 +2369,8 @@ function draftRename(base,ev){
   if(ev)ev.stopPropagation();
   const st=draftState();
   const cur=st.names[base]||base;
-  const nm=window.prompt('Player name:',cur);
-  if(nm&&nm.trim()){st.names[base]=nm.trim();draftSave(st)}
+  const nm=cleanName(window.prompt('Player name:',cur));
+  if(nm){st.names[base]=nm;draftSave(st)}
 }
 function draftReset(){
   if(!window.confirm('Clear the picks you added on this device? (Official picks stay.)'))return;
@@ -2383,11 +2401,30 @@ function openDraftPicker(player,slot){
   const nm=st.names[player]||player;
   const ov=document.createElement('div');
   ov.className='dp-overlay';ov.id='dp-overlay';
-  ov.innerHTML=`<div class="dp-sheet" role="dialog" aria-label="Pick a team"><div class="dp-hdr"><div class="dp-title">${nm} &bull; Round ${slot+1}</div><button class="dp-close" onclick="closeDraftPicker()">&times;</button></div><div class="dp-grid">${grid}</div></div>`;
+  ov.innerHTML=`<div class="dp-sheet" role="dialog" aria-modal="true" aria-label="Pick a team for ${nm}, round ${slot+1}"><div class="dp-hdr"><div class="dp-title">${nm} &bull; Round ${slot+1}</div><button class="dp-close" aria-label="Close team picker" onclick="closeDraftPicker()">&times;</button></div><div class="dp-grid">${grid}</div></div>`;
   ov.addEventListener('click',e=>{if(e.target===ov)closeDraftPicker()});
+  // Modal behavior: remember opener, focus in, trap Tab, close on Escape
+  pickerOpener=document.activeElement;
+  ov.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){e.preventDefault();closeDraftPicker();return}
+    if(e.key==='Tab'){
+      const f=[...ov.querySelectorAll('button:not([disabled])')];
+      if(!f.length)return;
+      const first=f[0],last=f[f.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+    }
+  });
   document.body.appendChild(ov);
+  const target=ov.querySelector('.dp-team:not(.taken)')||ov.querySelector('.dp-close');
+  if(target)target.focus();
 }
-function closeDraftPicker(){const ov=document.getElementById('dp-overlay');if(ov)ov.remove();pickerTarget=null}
+let pickerOpener=null;
+function closeDraftPicker(){
+  const ov=document.getElementById('dp-overlay');if(ov)ov.remove();pickerTarget=null;
+  if(pickerOpener&&document.contains(pickerOpener)){try{pickerOpener.focus()}catch(e){}}
+  pickerOpener=null;
+}
 // Draft entry UI (rendered above the draft board while draftPending)
 function renderDraftRoom(){
   if(SPORT!=='NFL'||!POOL.draftPending)return '';
@@ -2403,7 +2440,7 @@ function renderDraftRoom(){
       const idx=eff.findIndex(o=>o.player===base&&o.slot===slot);
       if(idx>=0){
         const o=eff[idx];
-        slots+=`<button class="dr-slot filled${o.locked?' locked':''}" ${o.locked?'disabled':`onclick="openDraftPicker('${base}',${slot})"`}>${SLB('NFL',o.abbr,'sm')}<span class="dr-abbr">${o.abbr}</span><span class="dr-pick">#${idx+1}</span>${o.locked?'':`<span class="dr-x" onclick="draftRemove('${base}',${slot},event)" role="button" aria-label="Remove">&times;</span>`}</button>`;
+        slots+=`<span class="dr-slotwrap"><button class="dr-slot filled${o.locked?' locked':''}" ${o.locked?'disabled':`onclick="openDraftPicker('${base}',${slot})"`}>${SLB('NFL',o.abbr,'sm')}<span class="dr-abbr">${o.abbr}</span><span class="dr-pick">#${idx+1}</span></button>${o.locked?'':`<button class="dr-x" aria-label="Remove ${o.abbr}" onclick="draftRemove('${base}',${slot},event)">&times;</button>`}</span>`;
       }else{
         slots+=`<button class="dr-slot" onclick="openDraftPicker('${base}',${slot})"><span class="dr-plus">+</span><span class="dr-rd">Rd ${slot+1}</span></button>`;
       }
@@ -2411,7 +2448,7 @@ function renderDraftRoom(){
     rows+=`<div class="dr-row${onClock?' on-clock':''}"><button class="dr-name" onclick="draftRename('${base}',event)" title="Tap to rename">${nm}${onClock?'<span class="dr-otc">ON THE CLOCK</span>':''}</button><div class="dr-slots">${slots}</div></div>`;
   });
   const sub=otc?`Pick ${otc.pick} of 30 &bull; <b style="color:var(--y)">${otc.player}</b> on the clock (Rd ${otc.round})`:`All 30 picks in`;
-  return `<div class="bh"><div class="bh-tag">Draft Room</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${sub}</span></div></div><div class="dr-wrap">${rows}<div class="dr-actions"><button class="dr-btn" id="draft-copy-btn" onclick="draftCopy()">COPY SETUP</button><button class="dr-btn ghost" onclick="draftReset()">RESET MY PICKS</button><div class="dr-hint">Official picks from the group text are locked in for everyone. Tap an open slot to add picks as they happen — those save on this device until they're made official.</div></div></div>`;
+  return `<div class="bh"><h2 class="bh-tag">Draft Room</h2><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${sub}</span></div></div><div class="dr-wrap">${rows}<div class="dr-actions"><button class="dr-btn" id="draft-copy-btn" onclick="draftCopy()">COPY SETUP</button><button class="dr-btn ghost" onclick="draftReset()">RESET MY PICKS</button><div class="dr-hint">Official picks from the group text are locked in for everyone. Tap an open slot to add picks as they happen — those save on this device until they're made official.</div></div></div>`;
 }
 
 // ═══ DATA STATUS ═══
