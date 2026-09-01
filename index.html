@@ -1283,19 +1283,12 @@ function pStats(p){
 const shortN=(n)=>n.replace(/^(Los Angeles|New York|San Diego|San Francisco|Kansas City|Tampa Bay|St\. Louis|Toronto|Chicago|Boston|Detroit|Oakland|Sacramento|Atlanta|Arizona|Seattle|Cleveland|Cincinnati|Baltimore|Pittsburgh|Houston|Colorado|Milwaukee|Minnesota|Washington|Philadelphia|Miami|Texas|Buffalo|Carolina|Denver|Green Bay|Indianapolis|Jacksonville|Las Vegas|New England|New Orleans|Tennessee|Dallas) /,"");
 const fmtN=(v)=>v%1?(+v).toFixed(1):String(v); // 21.0 → 21, 26.5 stays 26.5
 const ordinal=(n)=>{const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
-// League tiebreaker (per Chuck's rules): tied total wins → whoever has the single team
-// with the most wins; still tied → compare 2nd teams, then 3rd. Returns <0 if a wins.
-const tbCmp=(a,b)=>{
-  const aw=a.teams.map(t=>t.w).sort((x,y)=>y-x);
-  const bw=b.teams.map(t=>t.w).sort((x,y)=>y-x);
-  for(let i=0;i<Math.max(aw.length,bw.length);i++){const d=(bw[i]||0)-(aw[i]||0);if(d!==0)return d}
-  return 0;
-};
+// NOTE: the league has no agreed tiebreaker. Tied wins = tied, period.
+// (Order within a tie is by projection, purely for a stable list.)
 const getRanked=()=>{
   const mapped=POOL.players.map(p=>({...p,s:pStats(p)}));
   const anyGames=mapped.some(p=>p.s.gp>0);
-  // In season: actual wins → official tiebreaker → projection. Pre-season: projected (= O/U).
-  if(anyGames) return mapped.sort((a,b)=>b.s.wins-a.s.wins||tbCmp(a,b)||b.s.proj-a.s.proj);
+  if(anyGames) return mapped.sort((a,b)=>b.s.wins-a.s.wins||b.s.proj-a.s.proj);
   return mapped.sort((a,b)=>b.s.proj-a.s.proj);
 };
 // All drafted teams with owner + derived stats. In season, "best" = record (win%, then wins, then WAE).
@@ -1625,7 +1618,7 @@ const featVal=liveCount>0?liveCount:started?totW+'-'+totL+(totT>0?'-'+totT:''):R
 const featSub=liveCount>0?(finalCount>0?finalCount+' final • ':'')+upCount+' upcoming':started?totG+' games played':'Combined pre-season lines';
 const bestSub=bestT0?(started?recStr(bestT0)+' • '+bestTeamOwner:'O/U '+bestT0.ou+' • '+bestTeamOwner):'';
 document.getElementById("sstrip-area").innerHTML=`<div class="ss feat"><div class="ss-l">${featLabel}</div><div class="ss-v" style="color:var(--r)">${featVal}</div><div class="ss-sub">${featSub}</div></div>${(()=>{const co=started?R.filter(p=>p.s.wins===R[0].s.wins):[R[0]];
-if(co.length>1)return `<div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">TIED</div><div class="ss-sub" style="color:var(--t2);font-weight:600">${co.map(p=>p.name).join(' & ')} • ${leader.s.wins} wins</div><div class="ss-sub">${leader.name} holds tiebreaker</div></div>`;
+if(co.length>1)return `<div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">TIED</div><div class="ss-sub" style="color:var(--t2);font-weight:600">${co.map(p=>p.name).join(' & ')}</div><div class="ss-sub">${leader.s.wins} wins apiece</div></div>`;
 return `<div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">${leader.name}</div><div class="ss-logos">${leader.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.abbr)}"><img src="${L(LOGOKEY(t.abbr))}"></span>`).join('')}</div><div class="ss-sub">${leader.s.wins} win${leader.s.wins===1?'':'s'}</div></div>`})()}<div class="ss"><div class="ss-l">Best Team</div><div class="ss-v ss-team">${bestT0?LB(bestT0.abbr,'xs'):''}${bestTeamName}</div><div class="ss-sub">${bestSub}</div></div><div class="ss"><div class="ss-l">Projected Spread</div><div class="ss-v">${spread.toFixed(0)}</div><div class="ss-sub">1st to last</div></div><div class="ss"><div class="ss-l">Avg O/U</div><div class="ss-v">${avgOU}</div><div class="ss-sub">per player</div></div>`;
 
 // ═══ TAB 1: STANDINGS ═══
@@ -1639,13 +1632,13 @@ R.forEach((p,i)=>{
   }
 });
 const earlyCut=SPORT==='NFL'?3:10; // games before we start showing pace/WAE badges
-let t1=`<div class="bh"><div class="bh-tag">Power Rankings</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${started?'Through '+POOL.unit(sp.unit)+' &bull; Ties broken by best team':'Pre-Season Projections'}</span></div></div><div class="plist">`;
+let t1=`<div class="bh"><div class="bh-tag">Power Rankings</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${started?'Through '+POOL.unit(sp.unit):'Pre-Season Projections'}</span></div></div><div class="plist">`;
 R.forEach((p,i)=>{
   const rkInfo=ranks[i],rk=rkInfo.rk,rkLabel=rkInfo.tied?'T'+rk:String(rk),gb=leader.s.wins-p.s.wins;
   let cards='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),d=tp-t.ou,earlyS=tg<earlyCut,ds=earlyS?'':d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=earlyS?'ev':d>0?'ov':d<0?'un':'ev',rec=recStr(t),lgb=gameBadge(t.abbr);cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${tcb(t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec}${ds?' <span class="dbadge '+dc+'">'+ds+'</span>':''}</div><div class="ptc-pace">${earlyS?'':'Pace: '+tp}</div></div></div>`});
   const grad=p.teams.length>1?`linear-gradient(180deg,${p.teams.map(t=>tc(t.abbr)).join(',')})`:(p.teams[0]?tc(p.teams[0].abbr):'#333');
   const isOpen=openCards.has(p.name);
-  t1+=`<div class="pcard${rk===1?' r1':''}${isOpen?' open':''}" data-pn="${p.name}" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}${started&&i===0&&rkInfo.tied?'<span class="tb-chip" title="Best single team: official tiebreaker">TB ✓</span>':''}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${fmtN(p.s.ou)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
+  t1+=`<div class="pcard${rk===1?' r1':''}${isOpen?' open':''}" data-pn="${p.name}" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${fmtN(p.s.ou)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
 });
 t1+=`</div>`;
 
@@ -1722,7 +1715,7 @@ const gt=buildGamesTicker();
 let tk='';
 const coL=started?R.filter(p=>p.s.wins===R[0].s.wins):[R[0]];
 const leaderItem=coL.length>1
-  ?`<div class="tk-leader"><span class="tkt">CO-LEADERS</span><span class="tk-stat">${coL.map(p=>p.name).join(' & ')} • ${leader.s.wins} wins • ${leader.name} holds TB</span></div>${sep}`
+  ?`<div class="tk-leader"><span class="tkt">CO-LEADERS</span><span class="tk-stat">${coL.map(p=>p.name).join(' & ')} • ${leader.s.wins} wins</span></div>${sep}`
   :`<div class="tk-leader">${tkLogos(leader)}<span class="tkt">LEADER</span><span class="tk-stat">${leader.name} • ${started?leader.s.wins+' wins':leader.s.proj+' proj'}</span></div>${sep}`;
 const bestT=sT[0];
 const bestItem=bestT?`<div class="tki"><span class="lbox mini" style="--acc:${tcb(bestT.abbr)}"><img src="${L(LOGOKEY(bestT.abbr))}"></span><span class="tkt"><b>${shortN(bestT.name)}</b> (${bestT.owner}) leads all teams • <span class="hl">${started?recStr(bestT):'O/U '+bestT.ou}</span></span></div>${sep}`:'';
@@ -2206,9 +2199,10 @@ function titleOdds(){
   const done=players.every(p=>p.teams.every(t=>t.rem===0));
   const wins=new Array(players.length).fill(0);
   if(done){
-    // Season over: standings + official tiebreaker decide
-    const R=getRanked();
-    players.forEach((p,i)=>{wins[i]=p.name===R[0].name?SIMS:0});
+    // Season over: current standings decide; a tied finish splits the title
+    let best=-1;players.forEach(p=>{if(p.base>best)best=p.base});
+    const tied=players.filter(p=>p.base===best).length;
+    players.forEach((p,i)=>{wins[i]=p.base===best?SIMS/tied:0});
   }else{
     const rand=mulberry32(0xC0FFEE^(players.reduce((s,p)=>s+p.base,0)));
     // Normal approximation of each team's remaining-wins distribution
@@ -2232,19 +2226,9 @@ function titleOdds(){
         });
         totals[i]=tot;if(tot>best)best=tot;
       }
-      // Official league tiebreaker: best single team, then next, then next
-      let winner=-1,wKey=null;
-      for(let i=0;i<players.length;i++){
-        if(totals[i]!==best)continue;
-        const key=[...teamWins[i]].sort((a,b)=>b-a);
-        if(winner<0){winner=i;wKey=key;continue}
-        for(let k=0;k<Math.max(key.length,wKey.length);k++){
-          const d=(key[k]||0)-(wKey[k]||0);
-          if(d>0){winner=i;wKey=key;break}
-          if(d<0)break;
-        }
-      }
-      if(winner>=0)wins[winner]+=1;
+      // No tiebreaker in the rules: a tied finish splits the title
+      let tied=0;for(let i=0;i<players.length;i++)if(totals[i]===best)tied++;
+      for(let i=0;i<players.length;i++)if(totals[i]===best)wins[i]+=1/tied;
     }
   }
   return players.map((p,i)=>({name:p.name,pct:100*wins[i]/SIMS})).sort((a,b)=>b.pct-a.pct);
@@ -2261,7 +2245,7 @@ function renderOddsBlock(){
     const logos=pl?pl.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.abbr)}"><img src="${L(LOGOKEY(t.abbr))}"></span>`).join(''):'';
     rows+=`<div class="odds-row"><div class="odds-name">${o.name}</div><div class="odds-logos">${logos}</div><div class="odds-track"><div class="odds-fill" style="width:${w}%;background:${PCOL[ci]};color:${PCOL[ci]}"></div></div><div class="odds-pct">${fmt(o.pct)}</div></div>`;
   });
-  const note=POOL.draftPending?'Rosters fill in as the draft finishes — odds even out once everyone has 3 teams.':'Each team\'s rest-of-season win rate blends its record with its Vegas line. Tied finishes go to the official tiebreaker (best single team). Recalculates with every score update.';
+  const note=POOL.draftPending?'Rosters fill in as the draft finishes — odds even out once everyone has 3 teams.':'Each team\'s rest-of-season win rate blends its record with its Vegas line. A tied finish splits the title. Recalculates with every score update.';
   return `<div class="bh" style="margin-top:36px"><div class="bh-tag">Title Odds</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SIMS.toLocaleString()} Season Simulations</span></div></div><div class="odds-wrap">${rows}<div class="odds-note">${note}</div></div>`;
 }
 
