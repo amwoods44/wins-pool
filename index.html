@@ -72,6 +72,62 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
 .undrafted-strip-lbl{font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t4)}
 .undrafted-strip-item{display:inline-flex;align-items:center;gap:8px;font-family:var(--fd);font-size:13px;font-weight:700}
 .last-game.gt{background:rgba(255,255,255,.08);color:var(--t2)}
+/* ═══ RACE MODE TOGGLE ═══ */
+.rc-modes{display:flex;gap:0;border:1px solid var(--g5);border-radius:6px;overflow:hidden;margin-right:14px}
+.rc-mode-btn{font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;background:none;border:none;color:var(--t4);cursor:pointer;transition:all .15s}
+.rc-mode-btn.active{background:var(--r);color:#fff}
+.rc-mode-btn:not(.active):hover{color:var(--t2);background:rgba(255,255,255,.03)}
+/* ═══ TITLE ODDS ═══ */
+.odds-wrap{background:var(--g2);border:1px solid var(--g5);border-radius:8px;padding:18px 20px}
+.odds-row{display:grid;grid-template-columns:90px 1fr 64px;align-items:center;gap:12px;padding:5px 0}
+.odds-name{font-family:var(--fd);font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.odds-track{height:14px;background:var(--g4);border-radius:7px;overflow:hidden}
+.odds-fill{height:100%;border-radius:7px;min-width:3px;transition:width .6s ease}
+.odds-pct{font-family:var(--fd);font-size:16px;font-weight:800;text-align:right;color:var(--t1)}
+.odds-note{margin-top:12px;font-size:12px;color:var(--t4);line-height:1.5}
+/* ═══ DRAFT ROOM ═══ */
+.dr-wrap{background:var(--g2);border:1px solid rgba(255,204,0,.3);border-radius:8px;padding:16px 18px;margin-bottom:32px}
+.dr-row{display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid rgba(51,51,51,.35)}
+.dr-row:last-of-type{border-bottom:none}
+.dr-name{font-family:var(--fd);font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t1);background:none;border:none;cursor:pointer;width:110px;text-align:left;padding:4px 0;flex-shrink:0;border-bottom:1px dashed rgba(255,255,255,.15)}
+.dr-name:hover{color:var(--y)}
+.dr-slots{display:flex;gap:8px;flex:1;min-width:0}
+.dr-slot{position:relative;display:flex;align-items:center;gap:7px;padding:6px 10px;background:var(--g3);border:1px dashed var(--g6);border-radius:6px;cursor:pointer;color:var(--t3);min-width:92px;justify-content:center;transition:all .15s}
+.dr-slot:hover{border-color:var(--y);color:var(--t1)}
+.dr-slot.filled{border-style:solid;border-color:var(--g5);background:var(--g4)}
+.dr-plus{font-size:18px;font-weight:700;color:var(--y);line-height:1}
+.dr-rd{font-family:var(--fd);font-size:11px;letter-spacing:1px;text-transform:uppercase}
+.dr-abbr{font-family:var(--fd);font-size:14px;font-weight:700;color:var(--t1)}
+.dr-pick{font-family:var(--fm);font-size:10px;color:var(--t4)}
+.dr-x{position:absolute;top:-7px;right:-7px;width:18px;height:18px;border-radius:50%;background:var(--r);color:#fff;font-size:13px;line-height:17px;text-align:center;display:none}
+.dr-slot.filled:hover .dr-x{display:block}
+.dr-actions{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+.dr-btn{font-family:var(--fd);font-size:13px;font-weight:700;letter-spacing:2px;padding:9px 20px;border-radius:6px;border:none;background:var(--y);color:#111;cursor:pointer}
+.dr-btn.ghost{background:none;border:1px solid var(--g5);color:var(--t3)}
+.dr-btn:hover{filter:brightness(1.1)}
+.dr-hint{font-size:12px;color:var(--t4);line-height:1.5;flex:1;min-width:200px}
+/* team picker sheet */
+.dp-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px}
+.dp-sheet{background:var(--g2);border:1px solid var(--g5);border-radius:12px;max-width:640px;width:100%;max-height:82vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.dp-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:2px solid var(--r)}
+.dp-title{font-family:var(--fd);font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.dp-close{background:none;border:none;color:var(--t3);font-size:26px;cursor:pointer;line-height:1}
+.dp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;padding:16px;overflow-y:auto}
+.dp-team{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;background:var(--g3);border:1px solid var(--g5);border-radius:8px;cursor:pointer;transition:all .15s}
+.dp-team:hover:not(.taken){border-color:var(--y);background:var(--g4)}
+.dp-team.taken{opacity:.35;cursor:not-allowed}
+.dp-team.mine{border-color:var(--y)}
+.dp-abbr{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--t1)}
+.dp-ou{font-size:11px;color:var(--t4)}
+.dp-owner{font-family:var(--fd);font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--y)}
+@media(max-width:600px){
+  .dr-name{width:84px;font-size:13px}
+  .dr-slot{min-width:0;flex:1;padding:6px 6px;gap:5px}
+  .dr-slot .lbox{width:26px;height:26px}
+  .odds-row{grid-template-columns:74px 1fr 56px;gap:8px}
+  .odds-name{font-size:13px}
+  .dp-grid{grid-template-columns:repeat(4,1fr)}
+}
 
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
@@ -1102,13 +1158,17 @@ const SPORTS={
   }
 };
 Object.values(SPORTS).forEach(s=>{s.updated="—";s.players.forEach(p=>p.teams.forEach(t=>{if(t.t===undefined)t.t=0}));s.undrafted.forEach(t=>{if(t.t===undefined)t.t=0})});
+// Snapshots of the placeholder NFL setup — the Draft Room rebuilds from these
+SPORTS.NFL.basePlayers=SPORTS.NFL.players;
+SPORTS.NFL.baseUndrafted=SPORTS.NFL.undrafted;
+SPORTS.NFL.baseDraftOrder=[...SPORTS.NFL.draftOrder];
 
 // ═══ ACTIVE SPORT ═══
 // Default: NFL once it has kicked off and MLB regular season is over; otherwise MLB. Remembered per device.
 let SPORT=(()=>{try{const s=localStorage.getItem('wp-sport');if(s&&SPORTS[s])return s}catch(e){}const now=new Date();return(now>=SPORTS.NFL.start&&now>=SPORTS.MLB.end)?'NFL':'MLB'})();
 let POOL=SPORTS[SPORT];
 const nP=()=>POOL.players.length;           // player count
-const nT=()=>POOL.players.length*3;         // drafted team count
+const nT=()=>POOL.players.reduce((n,p)=>n+p.teams.length,0); // drafted team count
 const G=()=>POOL.games;                     // games per team
 
 function setSport(key,fromInit){
@@ -1273,6 +1333,8 @@ function getHighlights(){
 // RACE[sport] = [{game, date, data:{Name:wins}}] computed by the data layer (MLB schedule / NFL weekly results).
 // Falls back to POOL.history + a live point if the history fetch failed.
 let raceHidden={};
+let raceMode='rank'; // 'rank' = bump chart of standings position, 'wins' = cumulative wins
+function setRaceMode(m){raceMode=m;document.querySelectorAll('.rc-mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===m));drawRace()}
 const RACE={MLB:null,NFL:null};
 function getRaceData(){
   const R=getRanked();
@@ -1301,33 +1363,58 @@ function drawRace(){
   canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;
   canvas.style.width=rect.width+'px';canvas.style.height=rect.height+'px';
   ctx.scale(dpr,dpr);
-  const W=rect.width,H=rect.height,pad={top:20,right:70,bottom:40,left:50};
+  const W=rect.width,H=rect.height,pad={top:20,right:76,bottom:40,left:raceMode==='rank'?34:50};
   const cw=W-pad.left-pad.right,ch=H-pad.top-pad.bottom;
   const names=POOL.players.map(p=>p.name);
-  const data=[{game:0,date:'',data:Object.fromEntries(names.map(n=>[n,0]))},...hist];
+  const rankMode=raceMode==='rank';
+  // In wins mode prepend the zero origin; in rank mode start at the first real snapshot
+  const data=rankMode?hist:[{game:0,date:'',data:Object.fromEntries(names.map(n=>[n,0]))},...hist];
   const pts=data.length;
-  let maxY=0,maxG=POOL.raceMax;
-  data.forEach(d=>{names.forEach(n=>{if((d.data[n]||0)>maxY)maxY=d.data[n]});if(d.game>maxG)maxG=d.game});
-  if(maxY<=5)maxY=maxY+2;else if(maxY<=20)maxY=Math.ceil(maxY/5)*5+5;else if(maxY<=60)maxY=Math.ceil(maxY/10)*10+10;else maxY=Math.ceil(maxY/20)*20+20;
-  const gridStep=maxY<=10?1:maxY<=30?5:maxY<=80?10:20;
-  const gridLines=Math.ceil(maxY/gridStep);
-  ctx.strokeStyle='#222';ctx.lineWidth=1;
-  for(let i=0;i<=gridLines;i++){const val=i*gridStep;const y=pad.top+ch-(val/maxY)*ch;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+cw,y);ctx.stroke();ctx.fillStyle='#555';ctx.font='10px Oswald';ctx.textAlign='right';ctx.fillText(val,pad.left-8,y+3)}
+  let maxG=POOL.raceMax;
+  data.forEach(d=>{if(d.game>maxG)maxG=d.game});
+  // Standings position at each snapshot (ties share the better rank)
+  const rankAt=(snap)=>{
+    const sorted=[...names].sort((a,b)=>(snap.data[b]||0)-(snap.data[a]||0));
+    const rk={};sorted.forEach((n,i)=>{rk[n]=(i>0&&snap.data[n]===snap.data[sorted[i-1]])?rk[sorted[i-1]]:i+1});
+    return rk;
+  };
+  const ranks=rankMode?data.map(rankAt):null;
+  let maxY;
+  const yOf=(name,i)=>{
+    if(rankMode){return pad.top+((ranks[i][name]-1)/(names.length-1))*ch}
+    return pad.top+ch-((data[i].data[name]||0)/maxY)*ch;
+  };
+  if(rankMode){
+    // Grid: one line per place
+    ctx.strokeStyle='#1e1e1e';ctx.lineWidth=1;
+    for(let r=1;r<=names.length;r++){const y=pad.top+((r-1)/(names.length-1))*ch;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+cw,y);ctx.stroke();ctx.fillStyle='#555';ctx.font='10px Oswald';ctx.textAlign='right';ctx.fillText(ordinal(r),pad.left-8,y+3)}
+  }else{
+    maxY=0;data.forEach(d=>{names.forEach(n=>{if((d.data[n]||0)>maxY)maxY=d.data[n]})});
+    if(maxY<=5)maxY=maxY+2;else if(maxY<=20)maxY=Math.ceil(maxY/5)*5+5;else if(maxY<=60)maxY=Math.ceil(maxY/10)*10+10;else maxY=Math.ceil(maxY/20)*20+20;
+    const gridStep=maxY<=10?1:maxY<=30?5:maxY<=80?10:20;
+    const gridLines=Math.ceil(maxY/gridStep);
+    ctx.strokeStyle='#222';ctx.lineWidth=1;
+    for(let i=0;i<=gridLines;i++){const val=i*gridStep;const y=pad.top+ch-(val/maxY)*ch;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+cw,y);ctx.stroke();ctx.fillStyle='#555';ctx.font='10px Oswald';ctx.textAlign='right';ctx.fillText(val,pad.left-8,y+3)}
+  }
   ctx.textAlign='center';
   POOL.raceTicks.forEach(g=>{const x=pad.left+(g/maxG)*cw;ctx.fillStyle='#444';ctx.font='10px Oswald';ctx.fillText(g===0?'Start':POOL.raceUnit+g,x,H-pad.bottom+20);ctx.strokeStyle='#1a1a1a';ctx.beginPath();ctx.moveTo(x,pad.top);ctx.lineTo(x,pad.top+ch);ctx.stroke()});
-  // Label placement: spread end labels apart so they don't overlap
-  const ends=names.filter(n=>!raceHidden[n]).map(n=>({n,y:pad.top+ch-((data[pts-1].data[n]||0)/maxY)*ch})).sort((a,b)=>a.y-b.y);
-  for(let i=1;i<ends.length;i++){if(ends[i].y-ends[i-1].y<12)ends[i].y=ends[i-1].y+12}
-  const yMax=pad.top+ch;
-  if(ends.length&&ends[ends.length-1].y>yMax){ends[ends.length-1].y=yMax;for(let i=ends.length-2;i>=0;i--){if(ends[i+1].y-ends[i].y<12)ends[i].y=ends[i+1].y-12}}
+  // End labels, spread apart so they stay readable
+  const ends=names.filter(n=>!raceHidden[n]).map(n=>({n,y:yOf(n,pts-1)})).sort((a,b)=>a.y-b.y);
+  const minGap=rankMode?Math.min(13,ch/(names.length-1)):12;
+  for(let i=1;i<ends.length;i++){if(ends[i].y-ends[i-1].y<minGap)ends[i].y=ends[i-1].y+minGap}
+  const yMaxL=pad.top+ch;
+  if(ends.length&&ends[ends.length-1].y>yMaxL){ends[ends.length-1].y=yMaxL;for(let i=ends.length-2;i>=0;i--){if(ends[i+1].y-ends[i].y<minGap)ends[i].y=ends[i+1].y-minGap}}
   const labelY={};ends.forEach(e=>labelY[e.n]=e.y);
   names.forEach((name,ni)=>{
     if(raceHidden[name])return;
-    ctx.strokeStyle=PCOL[ni];ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.beginPath();
-    for(let i=0;i<pts;i++){const x=pad.left+(data[i].game/maxG)*cw;const y=pad.top+ch-((data[i].data[name]||0)/maxY)*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
-    ctx.stroke();
+    ctx.strokeStyle=PCOL[ni];ctx.lineWidth=rankMode?3:2.5;ctx.lineJoin='round';ctx.lineCap='round';
+    if(rankMode)ctx.globalAlpha=0.9;
+    ctx.beginPath();
+    for(let i=0;i<pts;i++){const x=pad.left+(data[i].game/maxG)*cw;const y=yOf(name,i);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+    ctx.stroke();ctx.globalAlpha=1;
     const lastX=pad.left+(data[pts-1].game/maxG)*cw;
-    ctx.fillStyle=PCOL[ni];ctx.font='bold 11px Oswald';ctx.textAlign='left';ctx.fillText(name,lastX+8,labelY[name]+4);
+    ctx.fillStyle=PCOL[ni];ctx.font='bold 11px Oswald';ctx.textAlign='left';
+    ctx.fillText(rankMode?(ranks[pts-1][name]+'. '+name):name,lastX+8,labelY[name]+4);
   });
   const showTip=(clientX,clientY,touch)=>{
     const br=canvas.getBoundingClientRect(),mx=clientX-br.left;
@@ -1337,16 +1424,17 @@ function drawRace(){
     let closest=0,closestDist=999;
     data.forEach((d,i)=>{const dist=Math.abs(d.game-gameNum);if(dist<closestDist){closestDist=dist;closest=i}});
     const snap=data[closest];
+    const rk=rankMode?ranks[closest]:null;
     const sorted=names.filter(n=>!raceHidden[n]).map(n=>({n,v:snap.data[n]||0})).sort((a,b)=>b.v-a.v);
     let html=`<div class="rc-tt-w">${snap.game===0?'Start':POOL.unit(snap.game)+(snap.date&&snap.date!=='Now'?' &bull; '+snap.date:'')}</div>`;
-    sorted.forEach(s=>{html+=`<div class="rc-tt-r"><div class="rc-tt-d" style="background:${PCOL[names.indexOf(s.n)]}"></div><span class="rc-tt-n">${s.n}</span><span class="rc-tt-v">${s.v}</span></div>`});
+    sorted.forEach(s=>{html+=`<div class="rc-tt-r"><div class="rc-tt-d" style="background:${PCOL[names.indexOf(s.n)]}"></div><span class="rc-tt-n">${rk?ordinal(rk[s.n])+' ':''}${s.n}</span><span class="rc-tt-v">${s.v}</span></div>`});
     tt.innerHTML=html;tt.style.display='block';
     let tx=clientX-br.left+16,ty=clientY-br.top-(touch?60:10);
     if(tx+200>W)tx=clientX-br.left-210;if(ty<0)ty=10;tt.style.left=tx+'px';tt.style.top=ty+'px';
     drawRace();
     const sx=pad.left+(snap.game/maxG)*cw;
     ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(sx,pad.top);ctx.lineTo(sx,pad.top+ch);ctx.stroke();ctx.setLineDash([]);
-    names.forEach((name,ni)=>{if(raceHidden[name])return;const y=pad.top+ch-((snap.data[name]||0)/maxY)*ch;ctx.fillStyle=PCOL[ni];ctx.beginPath();ctx.arc(sx,y,4,0,Math.PI*2);ctx.fill()});
+    names.forEach((name,ni)=>{if(raceHidden[name])return;const y=yOf(name,closest);ctx.fillStyle=PCOL[ni];ctx.beginPath();ctx.arc(sx,y,4,0,Math.PI*2);ctx.fill()});
   };
   canvas.onmousemove=(e)=>showTip(e.clientX,e.clientY,false);
   canvas.onmouseleave=()=>{document.getElementById('rc-tt').style.display='none'};
@@ -1466,7 +1554,7 @@ let t1=`<div class="bh"><div class="bh-tag">Power Rankings</div><div class="bh-a
 R.forEach((p,i)=>{
   const rkInfo=ranks[i],rk=rkInfo.rk,rkLabel=rkInfo.tied?'T'+rk:String(rk),gb=leader.s.wins-p.s.wins;
   let cards='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),d=tp-t.ou,earlyS=tg<earlyCut,ds=earlyS?'':d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=earlyS?'ev':d>0?'ov':d<0?'un':'ev',rec=recStr(t),lgb=gameBadge(t.abbr);cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${tcb(t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec}${ds?' <span class="dbadge '+dc+'">'+ds+'</span>':''}</div><div class="ptc-pace">${earlyS?'':'Pace: '+tp}</div></div></div>`});
-  const grad=`linear-gradient(180deg,${p.teams.map(t=>tc(t.abbr)).join(',')})`;
+  const grad=p.teams.length>1?`linear-gradient(180deg,${p.teams.map(t=>tc(t.abbr)).join(',')})`:(p.teams[0]?tc(p.teams[0].abbr):'#333');
   const isOpen=openCards.has(p.name);
   t1+=`<div class="pcard${rk===1?' r1':''}${isOpen?' open':''}" data-pn="${p.name}" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${p.s.ou.toFixed(1)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
 });
@@ -1474,6 +1562,7 @@ t1+=`</div>`;
 
 // Narrative
 const hl=getHighlights();
+t1+=renderOddsBlock();
 t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Headlines</div><div class="bh-acc"></div><div class="bh-line"></div></div><div class="narrative"><div class="nar-items">${hl.map(h=>`<div class="nar-item"><div class="nar-icon">${h.icon}</div><div class="nar-text">${h.text}</div></div>`).join('')}</div></div>`;
 
 // Race Chart
@@ -1481,8 +1570,9 @@ const names=POOL.players.map(p=>p.name);
 const raceData=getRaceData();
 const hasHistory=raceData.length>=1;
 let legend=names.map((n,i)=>`<div class="rc-leg${raceHidden[n]?' dim':''}" role="checkbox" tabindex="0" aria-checked="${!raceHidden[n]}" aria-label="Toggle ${n}" onclick="toggleRace('${n}',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="rc-dot" style="background:${PCOL[i]}"></div><div class="rc-ln">${n}</div></div>`).join('');
-t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Season Race</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Cumulative Wins &bull; ${SPORT==='NFL'?'Weeks 1-'+POOL.weeks:'Games 1-'+G()}</span></div></div>`;
-t1+=`<div class="rc-wrap"><div class="rc-hdr"><div class="rc-title">Who Led When?</div>${hasHistory?`<div class="rc-legend">${legend}</div>`:''}</div>`;
+t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Season Race</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SPORT==='NFL'?'Weeks 1-'+POOL.weeks:'Games 1-'+G()}</span></div></div>`;
+const modeBtns=`<div class="rc-modes" role="tablist" aria-label="Chart mode"><button class="rc-mode-btn${raceMode==='rank'?' active':''}" data-mode="rank" onclick="setRaceMode('rank')">Rank</button><button class="rc-mode-btn${raceMode==='wins'?' active':''}" data-mode="wins" onclick="setRaceMode('wins')">Wins</button></div>`;
+t1+=`<div class="rc-wrap"><div class="rc-hdr"><div class="rc-title">Who Led When?</div>${hasHistory?modeBtns:''}${hasHistory?`<div class="rc-legend">${legend}</div>`:''}</div>`;
 if(hasHistory){t1+=`<div class="rc-body"><div class="rc-cw"><canvas id="raceCanvas"></canvas><div class="rc-tt" id="rc-tt"></div></div></div>`}
 else{t1+=`<div class="rc-empty"><b>Chart Activates Once Games Begin</b>Builds itself automatically from every ${SPORT} result of the season.<br>X-axis: ${SPORT==='NFL'?'Week 1 through Week '+POOL.weeks:'Game 1 through Game '+G()} &bull; Y-axis: Cumulative combined wins</div>`}
 t1+=`</div>`;
@@ -1501,7 +1591,7 @@ const waeVal=p.s.gp>0?p.s.wae:null;
 const waeStr=waeVal!==null?(waeVal>=0?'+':'')+waeVal.toFixed(1):'—';
 const waeColor=waeVal===null?'var(--t4)':waeVal>=0?'var(--grn)':'var(--red-t)';
 const waeLbl=p.s.gp>0?'vs Expected':'vs O/U';
-t2+=`<div class="pc"><div class="pch" style="background:linear-gradient(135deg,${tc(p.teams[0].abbr)}15,var(--g2))"><div class="pch-rk ${rC}">${ordinal(rk)} Place${rkInfo.tied?' (Tied)':''}</div><div class="pch-t"><div class="pch-nm">${p.name}</div><div style="text-align:right"><div class="pch-pl">Projected</div><div class="pch-pv">${p.s.proj}</div><div class="pch-gb">${gb>0?gb+' back':'Leader'}</div></div></div></div><div class="pc-sr"><div class="pc-sc"><div class="pc-sv">${p.s.wins}</div><div class="pc-sl">Wins</div></div><div class="pc-sc"><div class="pc-sv">${p.s.ou.toFixed(1)}</div><div class="pc-sl">O/U Total</div></div><div class="pc-sc"><div class="pc-sv" style="color:${waeColor}">${waeStr}</div><div class="pc-sl">${waeLbl}</div></div></div>${tR}</div>`});
+t2+=`<div class="pc"><div class="pch" style="background:linear-gradient(135deg,${p.teams[0]?tc(p.teams[0].abbr):'#333'}15,var(--g2))"><div class="pch-rk ${rC}">${ordinal(rk)} Place${rkInfo.tied?' (Tied)':''}</div><div class="pch-t"><div class="pch-nm">${p.name}</div><div style="text-align:right"><div class="pch-pl">Projected</div><div class="pch-pv">${p.s.proj}</div><div class="pch-gb">${gb>0?gb+' back':'Leader'}</div></div></div></div><div class="pc-sr"><div class="pc-sc"><div class="pc-sv">${p.s.wins}</div><div class="pc-sl">Wins</div></div><div class="pc-sc"><div class="pc-sv">${p.s.ou.toFixed(1)}</div><div class="pc-sl">O/U Total</div></div><div class="pc-sc"><div class="pc-sv" style="color:${waeColor}">${waeStr}</div><div class="pc-sl">${waeLbl}</div></div></div>${tR}</div>`});
 t2+=`</div>`;document.getElementById("tab-players").innerHTML=t2;
 
 // ═══ TAB 3: TEAMS ═══
@@ -1517,7 +1607,8 @@ const dNames=POOL.draftOrder;
 const dFlow=POOL.draftFlow;
 const pm={};POOL.players.forEach(p=>{p.teams.forEach(t=>{pm[p.name+'_'+t.round]=t})});
 const flowLabel=dFlow.map(f=>f.note.charAt(0)+f.note.slice(1).toLowerCase()).join(' / ');
-let t4=`<div class="bh"><div class="bh-tag">Draft Board</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${flowLabel} &bull; ${nP()} Players</span></div></div><div class="db" style="--dbn:${dNames.length}"><div class="dbg"><div class="dbh"></div>`;
+let t4=renderDraftRoom();
+t4+=`<div class="bh"><div class="bh-tag">Draft Board</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${flowLabel} &bull; ${nP()} Players</span></div></div><div class="db" style="--dbn:${dNames.length}"><div class="dbg"><div class="dbh"></div>`;
 dNames.forEach(n=>{t4+=`<div class="dbh">${n}</div>`});t4+=`</div>`;
 dFlow.forEach(f=>{
   t4+=`<div class="dbg"><div class="dbr">${f.label}<div class="db-flow">${f.note}</div></div>`;
@@ -2001,6 +2092,184 @@ function gameBadge(abbr){
   return '';
 }
 
+// ═══════════════════════════════════════════════════════════════
+// TITLE ODDS — Monte Carlo simulation of the rest of the season
+// Each team's game-by-game win probability comes from the same
+// Bayesian blend as the projections (Vegas prior fades as real
+// games accumulate). 10,000 simulated seasons; ties split the title.
+// ═══════════════════════════════════════════════════════════════
+const SIMS=10000;
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function titleOdds(){
+  const N=G(),K=POOL.priorGames;
+  const players=POOL.players.map(p=>({
+    name:p.name,
+    base:p.teams.reduce((s,t)=>s+t.w,0),
+    teams:p.teams.map(t=>{
+      const g=gpOf(t),rem=Math.max(0,N-g);
+      const prob=g===0?t.ou/N:(t.w+0.5*(t.t||0)+(t.ou/N)*K)/(g+K);
+      return{rem,prob:Math.min(0.99,Math.max(0.01,prob))};
+    })
+  }));
+  const done=players.every(p=>p.teams.every(t=>t.rem===0));
+  const wins=new Array(players.length).fill(0);
+  if(done){
+    // Season over: current standings decide
+    let best=-1;players.forEach(p=>{if(p.base>best)best=p.base});
+    const tied=players.filter(p=>p.base===best).length;
+    players.forEach((p,i)=>{wins[i]=p.base===best?SIMS/tied:0});
+  }else{
+    const rand=mulberry32(0xC0FFEE^(players.reduce((s,p)=>s+p.base,0)));
+    // Normal approximation of each team's remaining-wins distribution
+    const gauss=()=>{let u=0,v=0;while(u===0)u=rand();while(v===0)v=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+    const totals=new Array(players.length);
+    for(let s=0;s<SIMS;s++){
+      let best=-1;
+      for(let i=0;i<players.length;i++){
+        let tot=players[i].base;
+        players[i].teams.forEach(t=>{
+          if(t.rem===0)return;
+          const mu=t.rem*t.prob,sd=Math.sqrt(t.rem*t.prob*(1-t.prob));
+          let w=Math.round(mu+sd*gauss());
+          if(w<0)w=0;if(w>t.rem)w=t.rem;
+          tot+=w;
+        });
+        totals[i]=tot;if(tot>best)best=tot;
+      }
+      let tied=0;for(let i=0;i<players.length;i++)if(totals[i]===best)tied++;
+      for(let i=0;i<players.length;i++)if(totals[i]===best)wins[i]+=1/tied;
+    }
+  }
+  return players.map((p,i)=>({name:p.name,pct:100*wins[i]/SIMS})).sort((a,b)=>b.pct-a.pct);
+}
+function renderOddsBlock(){
+  const odds=titleOdds();
+  const names=POOL.players.map(p=>p.name);
+  const fmt=(v)=>v>=99.95?'>99.9%':v<0.05?'<0.1%':v>=10?v.toFixed(0)+'%':v.toFixed(1)+'%';
+  let rows='';
+  odds.forEach(o=>{
+    const ci=names.indexOf(o.name);
+    const w=Math.max(0.6,o.pct);
+    rows+=`<div class="odds-row"><div class="odds-name">${o.name}</div><div class="odds-track"><div class="odds-fill" style="width:${w}%;background:${PCOL[ci]}"></div></div><div class="odds-pct">${fmt(o.pct)}</div></div>`;
+  });
+  return `<div class="bh" style="margin-top:36px"><div class="bh-tag">Title Odds</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SIMS.toLocaleString()} Season Simulations</span></div></div><div class="odds-wrap">${rows}<div class="odds-note">Each team's rest-of-season win rate blends its record with its Vegas line. Ties split the title. Recalculates with every score update.</div></div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NFL DRAFT ROOM — tap-to-assign rosters while draftPending
+// Picks live in localStorage (this device), apply to the whole app
+// instantly, and "Copy Setup" exports the final config to bake in.
+// ═══════════════════════════════════════════════════════════════
+// 2026 Vegas win totals (DraftKings, Jul 23 2026 via FOX Sports)
+const NFL_LINES={ARI:["Arizona Cardinals",3.5],ATL:["Atlanta Falcons",6.5],BAL:["Baltimore Ravens",11.5],BUF:["Buffalo Bills",10.5],CAR:["Carolina Panthers",7.5],CHI:["Chicago Bears",9.5],CIN:["Cincinnati Bengals",10.5],CLE:["Cleveland Browns",5.5],DAL:["Dallas Cowboys",9.5],DEN:["Denver Broncos",9.5],DET:["Detroit Lions",10.5],GB:["Green Bay Packers",9.5],HOU:["Houston Texans",9.5],IND:["Indianapolis Colts",7.5],JAX:["Jacksonville Jaguars",8.5],KC:["Kansas City Chiefs",10.5],LV:["Las Vegas Raiders",5.5],LAC:["Los Angeles Chargers",9.5],LAR:["Los Angeles Rams",11.5],MIA:["Miami Dolphins",4.5],MIN:["Minnesota Vikings",8.5],NE:["New England Patriots",10.5],NO:["New Orleans Saints",7.5],NYG:["New York Giants",7.5],NYJ:["New York Jets",5.5],PHI:["Philadelphia Eagles",10.5],PIT:["Pittsburgh Steelers",8.5],SF:["San Francisco 49ers",9.5],SEA:["Seattle Seahawks",10.5],TB:["Tampa Bay Buccaneers",8.5],TEN:["Tennessee Titans",6.5],WSH:["Washington Commanders",7.5]};
+const DRAFT_KEY='wp-nfl-draft-'+SPORTS.NFL.season;
+// {order:[{player,slot,abbr}], names:{oldName:newName}}
+function draftState(){return lsGet(DRAFT_KEY)||{order:[],names:{}}}
+function draftSave(st){lsSet(DRAFT_KEY,st);applyDraft();render();switchTab(3)}
+function draftTaken(st){const m={};st.order.forEach(o=>{m[o.abbr]=o.player});return m}
+// Rebuild SPORTS.NFL.players/undrafted from the saved draft (only while draftPending)
+function applyDraft(){
+  const S=SPORTS.NFL;
+  if(!S.draftPending)return;
+  const st=draftState();
+  // player display names (rename support)
+  S.draftOrder=S.baseDraftOrder.map(n=>st.names[n]||n);
+  if(st.order.length===0){S.players=S.basePlayers;S.undrafted=S.baseUndrafted;return}
+  const taken=new Set();
+  S.players=S.baseDraftOrder.map(base=>{
+    const nm=st.names[base]||base;
+    const teams=[];
+    for(let slot=0;slot<3;slot++){
+      const entry=st.order.find(o=>o.player===base&&o.slot===slot);
+      if(entry){
+        const pick=st.order.indexOf(entry)+1;
+        const [name,ou]=NFL_LINES[entry.abbr];
+        taken.add(entry.abbr);
+        teams.push({pick,round:slot+1,name,abbr:entry.abbr,w:0,l:0,t:0,ou});
+      }
+    }
+    return{name:nm,teams};
+  });
+  S.undrafted=Object.keys(NFL_LINES).filter(a=>!taken.has(a)).map(a=>({name:NFL_LINES[a][0],abbr:a,w:0,l:0,t:0,ou:NFL_LINES[a][1]}));
+  // re-apply any cached/live standings to the fresh team objects
+  const c=lsGet('wp-standings-NFL-'+S.season);
+  if(c&&c.standings)applyStandings('NFL',c.standings,S.updated);
+}
+function draftAssign(player,slot,abbr){
+  const st=draftState();
+  st.order=st.order.filter(o=>!(o.player===player&&o.slot===slot)&&o.abbr!==abbr);
+  st.order.push({player,slot,abbr});
+  draftSave(st);closeDraftPicker();
+}
+function draftRemove(player,slot,ev){
+  if(ev)ev.stopPropagation();
+  const st=draftState();
+  st.order=st.order.filter(o=>!(o.player===player&&o.slot===slot));
+  draftSave(st);
+}
+function draftRename(base,ev){
+  if(ev)ev.stopPropagation();
+  const st=draftState();
+  const cur=st.names[base]||base;
+  const nm=window.prompt('Player name:',cur);
+  if(nm&&nm.trim()){st.names[base]=nm.trim();draftSave(st)}
+}
+function draftReset(){
+  if(!window.confirm('Clear all draft picks on this device?'))return;
+  try{localStorage.removeItem(DRAFT_KEY)}catch(e){}
+  applyDraft();render();switchTab(3);
+}
+function draftCopy(){
+  const S=SPORTS.NFL;
+  const out=S.players.map(p=>({name:p.name,teams:p.teams.map(t=>({pick:t.pick,round:t.round,abbr:t.abbr}))}));
+  const txt='NFL 2026 WINS POOL DRAFT\n'+JSON.stringify(out,null,1);
+  const done=()=>{const b=document.getElementById('draft-copy-btn');if(b){b.textContent='COPIED ✓';setTimeout(()=>{b.textContent='COPY SETUP'},2000)}};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(()=>window.prompt('Copy this:',txt));
+  else window.prompt('Copy this:',txt);
+}
+let pickerTarget=null;
+function openDraftPicker(player,slot){
+  pickerTarget={player,slot};
+  const st=draftState();const taken=draftTaken(st);
+  const cur=st.order.find(o=>o.player===player&&o.slot===slot);
+  let grid='';
+  Object.entries(NFL_LINES).sort((a,b)=>b[1][1]-a[1][1]).forEach(([abbr,[name,ou]])=>{
+    const owner=taken[abbr];
+    const mine=cur&&cur.abbr===abbr;
+    const dis=owner&&!mine;
+    grid+=`<button class="dp-team${dis?' taken':''}${mine?' mine':''}" ${dis?'disabled':''} onclick="draftAssign('${player}',${slot},'${abbr}')">${SLB('NFL',abbr,'sm')}<div class="dp-abbr">${abbr}</div><div class="dp-ou">${ou}</div>${owner?`<div class="dp-owner">${(st.names[owner]||owner)}</div>`:''}</button>`;
+  });
+  const nm=st.names[player]||player;
+  const ov=document.createElement('div');
+  ov.className='dp-overlay';ov.id='dp-overlay';
+  ov.innerHTML=`<div class="dp-sheet" role="dialog" aria-label="Pick a team"><div class="dp-hdr"><div class="dp-title">${nm} &bull; Round ${slot+1}</div><button class="dp-close" onclick="closeDraftPicker()">&times;</button></div><div class="dp-grid">${grid}</div></div>`;
+  ov.addEventListener('click',e=>{if(e.target===ov)closeDraftPicker()});
+  document.body.appendChild(ov);
+}
+function closeDraftPicker(){const ov=document.getElementById('dp-overlay');if(ov)ov.remove();pickerTarget=null}
+// Draft entry UI (rendered above the draft board while draftPending)
+function renderDraftRoom(){
+  if(SPORT!=='NFL'||!POOL.draftPending)return '';
+  const st=draftState();
+  const filled=st.order.length;
+  let rows='';
+  SPORTS.NFL.baseDraftOrder.forEach(base=>{
+    const nm=st.names[base]||base;
+    let slots='';
+    for(let slot=0;slot<3;slot++){
+      const entry=st.order.find(o=>o.player===base&&o.slot===slot);
+      if(entry){
+        const pick=st.order.indexOf(entry)+1;
+        slots+=`<button class="dr-slot filled" onclick="openDraftPicker('${base}',${slot})">${SLB('NFL',entry.abbr,'sm')}<span class="dr-abbr">${entry.abbr}</span><span class="dr-pick">#${pick}</span><span class="dr-x" onclick="draftRemove('${base}',${slot},event)" role="button" aria-label="Remove">&times;</span></button>`;
+      }else{
+        slots+=`<button class="dr-slot" onclick="openDraftPicker('${base}',${slot})"><span class="dr-plus">+</span><span class="dr-rd">Rd ${slot+1}</span></button>`;
+      }
+    }
+    rows+=`<div class="dr-row"><button class="dr-name" onclick="draftRename('${base}',event)" title="Tap to rename">${nm}</button><div class="dr-slots">${slots}</div></div>`;
+  });
+  return `<div class="bh"><div class="bh-tag">Draft Room</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${filled} of 30 picks in &bull; Tap a slot to assign</span></div></div><div class="dr-wrap">${rows}<div class="dr-actions"><button class="dr-btn" id="draft-copy-btn" onclick="draftCopy()">COPY SETUP</button><button class="dr-btn ghost" onclick="draftReset()">RESET</button><div class="dr-hint">Picks save on this device and update every tab instantly. When the real draft is done, hit COPY SETUP and send it to lock the rosters in for everyone.</div></div></div>`;
+}
+
 // ═══ DATA STATUS ═══
 let lastFetchOk=null; // null=pending, true=ok, false=error
 let lastFetchTime=null;
@@ -2073,6 +2342,7 @@ document.querySelectorAll('.sport-btn').forEach(b=>b.addEventListener('click',()
 
 // Initial load + auto-refresh
 hydrateFromCache();
+applyDraft();
 setSport(SPORT,true);
 refreshData(true);
 // Safety net: never leave the loading screen up more than 8s even if every fetch hangs
