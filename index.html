@@ -53,6 +53,26 @@
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh;overflow-x:hidden;padding-bottom:100px}
 
+
+/* ═══ SPORT SWITCHER ═══ */
+.sport-bar{background:linear-gradient(180deg,#151515,#101010);border-bottom:1px solid var(--g5)}
+.sport-in{max-width:1440px;margin:0 auto;padding:0 28px;display:flex;gap:0}
+.sport-btn{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:12px 26px;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;color:var(--t3);font-family:var(--fd);font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;transition:all .2s;position:relative;min-width:150px;justify-content:center}
+.sport-btn img{width:30px;height:30px;object-fit:contain;filter:grayscale(1) opacity(.5);transition:filter .2s}
+.sport-btn:hover{color:var(--t1);background:rgba(255,255,255,.02)}
+.sport-btn.active{color:#fff;border-bottom-color:var(--y);background:rgba(255,255,255,.03)}
+.sport-btn.active img{filter:none}
+.sport-btn:focus-visible{outline:2px solid var(--y);outline-offset:-2px}
+.sport-badge{font-size:10px;font-weight:600;letter-spacing:1px;color:#111;background:var(--y);padding:2px 7px;border-radius:10px;text-transform:uppercase}
+.sport-badge:empty{display:none}
+body[data-sport="NFL"] .hero{background:linear-gradient(180deg,#0a0f1a,#0f0f0f 40%,var(--g1))}
+body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 250px at 50% 20%,rgba(0,53,148,.12),transparent)}
+.draft-pending{display:inline-block;margin-top:16px;font-family:var(--fd);font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--y);background:rgba(255,204,0,.1);border:1px solid rgba(255,204,0,.35);padding:6px 14px;border-radius:4px}
+.undrafted-strip{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:14px;padding:12px 16px;background:var(--g2);border:1px solid var(--g5);border-radius:8px}
+.undrafted-strip-lbl{font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t4)}
+.undrafted-strip-item{display:inline-flex;align-items:center;gap:8px;font-family:var(--fd);font-size:13px;font-weight:700}
+.last-game.gt{background:rgba(255,255,255,.08);color:var(--t2)}
+
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
 .hdr-in{max-width:1440px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:56px}
@@ -403,8 +423,8 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
 
 /* ═══ DRAFT BOARD ═══ */
 .db{background:var(--g2);border:1px solid var(--g5);border-radius:8px;overflow:hidden}
-.dbg{display:grid;grid-template-columns:64px repeat(8,1fr)}
-@media(max-width:768px){.dbg{grid-template-columns:48px repeat(8,1fr)}}
+.dbg{display:grid;grid-template-columns:64px repeat(var(--dbn,8),1fr)}
+@media(max-width:768px){.dbg{grid-template-columns:48px repeat(var(--dbn,8),1fr);min-width:calc(48px + var(--dbn,8)*66px)}}
 .dbh{font-family:var(--fd);padding:12px 4px;text-align:center;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);background:var(--g3);border-bottom:2px solid var(--r);border-right:1px solid rgba(51,51,51,.4)}
 .dbh:last-child{border-right:none}
 .dbr{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:var(--fd);font-size:12px;font-weight:700;color:var(--r);background:var(--g3);border-right:1px solid var(--g5);border-bottom:1px solid rgba(51,51,51,.4)}
@@ -482,7 +502,7 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
   .sstrip .ss{flex:0 0 auto!important;min-width:140px!important;scroll-snap-align:start!important}
   .ss-v{font-size:26px!important}
   .tw{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}
-  .dbg{grid-template-columns:48px repeat(8,1fr)!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}
+  .dbg{grid-template-columns:48px repeat(var(--dbn,8),1fr)!important;min-width:calc(48px + var(--dbn,8)*66px)!important}
   .db{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}
   .nfl-cd-num{font-size:15px!important;padding:3px 5px!important;min-width:26px!important}
   .nfl-cd-tag{font-size:11px!important}.nfl-cd-sep{font-size:12px!important}
@@ -509,6 +529,7 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
   /* GLOBAL */
   html,body{overflow-x:hidden!important;max-width:100vw!important}
 
+  .sport-in{padding:0!important}.sport-btn{flex:1 1 0!important;min-width:0!important;padding:9px 10px!important;font-size:14px!important;letter-spacing:2px!important;gap:7px!important}.sport-btn img{width:22px!important;height:22px!important}.sport-badge{font-size:9px!important;padding:1px 5px!important}
   /* HEADER — clean, compact */
   .hdr-in{padding:0 12px!important;height:48px!important}
   .hdr-espn-logo{height:22px!important}
@@ -658,7 +679,7 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
 
   /* ═ TAB 4: DRAFT BOARD — scroll-friendly ═ */
   .db{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;border-radius:8px!important}
-  .dbg{min-width:620px!important;grid-template-columns:40px repeat(8,1fr)!important}
+  .dbg{min-width:calc(40px + var(--dbn,8)*72px)!important;grid-template-columns:40px repeat(var(--dbn,8),1fr)!important}
   .dbh{font-size:10px!important;padding:8px 3px!important}
   .dbr{font-size:10px!important}
   .db-flow{font-size:10px!important}
@@ -792,8 +813,12 @@ body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh
 
 <header class="hdr" role="banner"><div class="hdr-in">
   <div style="display:flex;align-items:center"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKQAAAAoCAYAAABwx1HiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA7dJREFUeNrsXdFR4zAQtTP5xx3EVICvAkIHuQoIFRAqOK6CXAfJVUCowL4KzlQQ04E7MKsbmdEoMsSSsnni9GY0MEk8s+w+Pb9d2yFNNHRdN6cfZYKDXZqm301vUKw5/binVdCaJ/83WloVrWfK13boQ5Sz8sy5qkWMtLYUZ6O/OTEckIMl+sWQ1IzWhn7d01pFMv5DRmtBa0O52dMqBj537vqKuH6I2lGMqxAJ2WpkLCQRl5GDgxA1LAdIiVTfNcW4/oyQM7Dk1topupRqEPG5Yj4ZLA4aVtImBqmQm0jGcUpJxV4C17bHfTCEJONbK81W9Irjca2pJiKCUUhVHW8jt6z9pNpQQNoL0ageELJ/EdE/Ap9uQsIFcGyFSSHRdlBrkvUIt6KDojUREk0hXyKHvHfekOh7hSAUUh0LRDjZngI92FTzkDmYV6tp57TS2xaRW1Zo+kt0wBu77RUyIiIiIiIiIgikin8UPm0F5n22Mrblmb2t8DeV8LNDH0C9kkQxP8r4FjY+vD/+GMgeZGkR5uGtaCKhHRaelNhQsBm6eECvP3Z42CvxlS7HH0lI2xy8b5QJ8IwKcQYpdv/QvYYzwHgbx/o2TCpemwiJfJUGCaKwpUEpc8BYXWeQYwl57VpnlZAXwMmsAUm5DoCQr0p/YH08Y52DUUjEoekiAELuHGs7ViHnjnXG9ZDa5P434qm795Kgd2LvlM41YyKkc6+AqpCtRs5KjAZA/SSiOor83Xmo7dGEdLgseaiQ4PdB9qQUCf4F2uggEVJs3kttZmrVH5geUz11rachddiUoAfaPOL0fZtgPYudnzlXtVzP8myig6PD9qKQU0ePcTOQgFN7S69NjvSCfx1298zyb0mZrQWaf9R7hXcPydWFoSKzTGbroJCcuUOdQR5gEoDHQD3luj7vw5I78BlkNUTIAnyHIxKyDYGQjGc/L32Ii4fM5BcXncJX3MjdvUx4Hn+1IdQfGaNtQ/PKREiuGWRmm0NfXXZ2oi5XfxYbpZMeijNnKjisQn7wxVbjPWQIM0hQ1MwKZAuO/sA2B0YPiTyDLAIgJPqEgqM/8KeQCfZ9kKjPETfKyAd9QsExg7QdmwWhkN59yQmwY1YgdIW88qmQaPdBVuDqKJTxJ7MC2W5qrhlk5lDnMBQSOK4H7cYFZIUMagYJ6SEVX4GokHfqF8qDXwXhnAB4mUGiK+QVUCxik3wz/HeDr9hh97bkLF5/CuofERSykrt4+0FHjD6DtD1LjZkFe5tBCrwJMADOg2IEMOOZEQAAAABJRU5ErkJggg==" alt="ESPN" class="hdr-espn-logo"><span class="hdr-div"></span><span class="hdr-sub">Wins Pool 2026</span></div>
-  <div class="hdr-right"><div class="nfl-cd" id="nfl-countdown" aria-label="NFL Kickoff Countdown"></div><div class="live-badge" aria-label="Live data indicator"><span class="live-dot" aria-hidden="true"></span><span class="live-txt">LIVE</span></div><div class="espn-date" id="bar-date"></div></div>
+  <div class="hdr-right"><div class="live-badge" aria-label="Live data indicator"><span class="live-dot" aria-hidden="true"></span><span class="live-txt">LIVE</span></div><div class="espn-date" id="bar-date"></div></div>
 </div></header>
+<div class="sport-bar" role="tablist" aria-label="Sport"><div class="sport-in">
+  <button class="sport-btn" data-sport="MLB" role="tab" aria-selected="false"><img data-logo="MLB_SHIELD" alt=""><span class="sport-lbl">MLB</span><span class="sport-badge" id="sport-badge-MLB"></span></button>
+  <button class="sport-btn" data-sport="NFL" role="tab" aria-selected="false"><img data-logo="NFL_SHIELD" alt=""><span class="sport-lbl">NFL</span><span class="sport-badge" id="sport-badge-NFL"></span></button>
+</div></div>
 
 <div class="data-status ok" id="data-status" aria-live="polite">LIVE DATA</div>
 
@@ -879,11 +904,9 @@ const LOGO_DATA = {
 "mlb_shield":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAE0UlEQVR42u2af1CTdRzHp4z0VLTzun4Jgliz1Go5qbNLEguHQaTsDCecd5xCFHqnQIWl5K4sb4l5qdUhd3lpdQnHnaV4gDMqO8iWjh/jBvFDfhOL4TYghsKnz/c5HCw3fB628Wz6/d69/9g9n+dzz/N6Pt/P9/v5fCcAAMHdLAEFQAFQABQABUABUAAUAAVAAVAAFAAFQAFQABTAGD2Iike9h9rtxdqFWo+azgWADNUBd9YoQ4nYAIhE3Whp7YTd+76EyE3psDY2ddJ1JOeUzdMPD14HTVwyqKVyTroctRkasj6HIYuFuGlFPT4egKkoXZfeAPOXrQfh/NW8aVrgajj+3Y82EJqzT0CxIAi1gLOuyLbcdJM/HgBCB5SHT07KS94TsArmitbCzKAXwcd/1S3X/R5ZA5rKmtEoGBoCjSxxQgCKBIFg1uqIGzNK6AjA88Rie0aWW198+UsJkP+DCq4ZzTA8PAwWDO+6hhY4kn0Klq6Ms7F97Dk5Y3dz9De1gGrmoglB0BeoiIsh1GzeAKx8JRkMPUaHmcpoMkPKW0oQBoRZ70l5+xMbG13q+xMDcJZnAIESGbS2/80qZW/PODB6L8L4Jvec9dp1owlKHpZ4H4C9yhzWa5bR1AuiFRut9855VAqV1XXW620nczknRN4BFKpKOS3c7yiO2ty/BPNDa9tIBGHuuBQa4z0AFuHXbOvo4gTgxPcFdnPIICZNMkzlWigWBns+gIjYHaNfjsM4fe4Xu/6Un31ttamI3+bZABLeVMAldRWo/9RCeUUNs+yxGcTu27xCuz6n476h5KKasRto74ALsxd7Rw546Mlo6LlmYgWgs6sb/BaEO/TlL14H7R16xrYx6wtWCZF3AJn7s1mHf2/fvxC8XAY+80L/pxes/qSv7RipEwaZff/tIPAKYNbCNUBqDC6DLIVt+JXHqgmLtLOFF0GetAei5GlWW1Ls1CkOeC4AX9S8p9bBZswJrhpmc5/Nb4v+H1BHxHnuFCBaGLLBrUV/96+lUPLAMs8E8Kx0K+SdPu/2zsfVQ8c8D0B0fDpYLIOT0vox/PY7qOwsjU4DYGr2MVUa6+XviWjoNhgntf/VV98IVYlpUDzFRQCSdn4MtfXN8MdlLax4OYkTgI8+Pc5bI7A8Ntl5AAFPx8DAgMXqlHRphHY6OHaFdrraq7wB0Bf9hFEQ5ByA0FdTbMOrfwCmsZwKwc9sAJa7X7cNXbrCOQAzgsOhUvuX1eHRnFzW4R+T8C7v/fCeUjWzS3QqB9wrioCNiXuY7acvh/mflnmYdwAVcds4RsCugy5b/vhMgGR0FZyH4qnsm6JLicU+fGhXASBdnWpMgk0tnW59UdItNlVobdSZf8a6KyzCKWDSVDEpDOXrCIAPqS5J4/L+JVGugUCSpX8Y+GEx1NTsvtO2cvkbI9XgWI3uAdTSTVg2MqZnTFe0ApOm2uHRWCypMHW1jfB66n4Iwe2rJHyLS6RQHnMbgJqMD6FULL1FZSGReO0DuNHby6yKhp/LxBdmLRa1f5U3ZbzD0a2k5XaHHY7q+huaxSX3iSUYEZkIQHK74/G5qBhUKirdi7UTJSXz3lylE9TvPTQDFYbTYA79gwQFQAFQABQABUABUAAUAAVAAVAAFAAFcJfqPy3A9useD5LgAAAAAElFTkSuQmCC",
 "nfl_shield":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAALpElEQVR42u1beVSUyREneebty3smMfvMH0lAWRfXC5F4767niscqq2JQ0dWIrho2soqCyqXiyaWOioqKoKLigYoKiIIKCAhe4IoXohwOhzDAgCPHMDCVqh6/YT5mRhFhMkjqvXow3d/XXf3r6qrq7voMAMCgPbPB/wFo4oNpaWkGHh4eLc7+/v5/FAgEnzX3fbFYrBsADh06ZNAahINwdHBw+Km572dnZ7ddAAwNDf8skUhEOIu5PXv2/Fu7AyAqKiq4uPQ1VEiqICEh4WKHDh1+024AcHd3/7dcDvCTaxA4bA6B+no5oC1wbhcAWFtbj5TJZG9OXboNfx++AgxHOELA6XjAMinWTfpkAUAVN7Czs7PGgVZGxv0KXUevZAAQG410hNMICJLU2dnZVu8AyMzM7IcgeNnb28+kgXwomZiY/DU2NvYstiU/GHoDuoxyUg6eY9KEHUeiQY5rIzw8PNjU1LRrE7TJwNbWlsfJyclTsB8v5AEtGQjZ0PTUo3AYE1ybOnXqsKYMHAdhFBAQ4IWzLnnxshgW4JpvPPDGPGvFPhAWltGSqELQBQMHDuzWlL4sLCwGoTGNJBnfkm2LAlAjlcGPTgcg6V4ma10oFKb7+fltmjNnzuRRo0aZ42C/wL99bWxsLNGgbUCg4vCxurxXZeAmOAfG36187+A5/tJiNTh5n4LsPBF1JU9PT0/CNtdiX1OwDzN0m9SXGc64FQZT3qihqfTg3fRssF66p/UAMJ+yjqnvIvfDEHUjHSSV1aCJJG+qIf5OBjhvDYVe37u9c7A9xrvC7BX7Ycu+CNi45yJMW7JbWffVOBdw9DoJ15IfQ2WVVGNf5a+r4OrNR7Bk/VEwRrvSbcyq1gVAVXijkU4wfLYnTF+6F+atPggzlvmz31T+vlkebL0BTkbegtcIVpZQBPtPxrHfZAOGTN+o9jwB/43NZpi+jOtrL3xrswWM0HaoPqdTAGiGtA3wXXU/rwtG7amBV6IKINuw5/g1mPzzLhYUETl6nWp2PzoF4ETELa2CeR2IhG9mblYrX7rpOJvlWlkdJN59xpbTul3nobT8jVKt/U/EKp/vN3kt+B29qrWfExEpzIPoDICuqIo0Q74Ho1gvnvsjwWXbGWa4SIAFLkFsQGTAwq/fZ/8PsFrP6kbO8YJqaS17T3A4Gua7BMLtB9nwLPsVb10Hn78JZj+shbU7wyA06g4UispZO3Zrj7B2yKCu9DnN2iCrTwCt9g1lg9eJBozAdf48t5j1kpFVCBMWblfOQO+JbhB76wmrk9bKUOhgZd2l+AesnMDbFXwVyEOcuXxXzbCRPaDn/7UqQGn8ImJ/ZdrAtTV6rg/k5JewOmpnrO1W3S4BUt/C4nJmoRurJc0IbXSqa2qhz0R3VjZqrjcDRFQmYXWBZ24wV6eJ1uw4p3SHZCuKSipg095wtX7uoNsjGR5kCHVrA0xQMFJBCmGdt54B88l820DqSJpguXgHM25U5uF3nkmViHEEqffO4BhQCVp4NHa+YjbHLdgG//xlDzN0BBbffSpcJMmwbFOIEmidGsEP4WMXk5lU5LPdMTB6iktHE6U/y2t2HzoHYKaDv1ZBKKD5QiX6u3A1jUm1ZP0x5v40ESkEhcK8WAMtPPl8bf00lkFnAJiMdYaCYjEOcpVGwc5fTYX5zoHK36fRmpMHWIVLRxvtOBKjDqT9brie8kRjHz0nuEJ+kRhMLdfo0A1iuLk35Dpk5haxXsiFHb1wk9kFEmCF50l4iGpMBpCMV3TSI+YGyTCSy7uS+FDj4I/jElHdJZKdoG1zAQ6QYob0jDw0jmGsjjTrwKl4FkQRUSR56GyC7twgGZ4bGOtza9p4NH+jswsHS0Tv0ECobDEGPMcuJDNPoEpkwRe6HdI6w+LXley5jY28QBcMt1Puv2B1qY9zWXyisyVAkRd1TtaedodcEMQxnfZ4HbjEZn/iIgEr6/W9K9BZAB1/ZaDWHDqbCFYqGx9NPGyWJySgu6VNUhDOcGMASKNW44br7sNs5SToBIBuY1YzN6QYmBv0wJlSFY6b9cb/dx/nrAbWu7gvrm1us6PaDmeDqD0uXuD2BHrrBnXFOgFg8ZrDzK3pEy/bHKI7ALYFXQF9IzpZ1jkAr35ZAUJLKyWX7fZXCiRau4FXR1x++ChILoSrlWti6dMMjW1Qn3oDAAn0vFsvJed8O1oRziEV2C7i1RGX+GyD8qAjauWauDrtvsY2qE+9AUC0fjM8N+nDFzxVEfKW7vDj1WX1GwySi5FQGZ8AWeaDG975sje86GXO+Hl3Ux4ApVsFau0XrXTVHwCISjZ782d5i4+yrthljbJccj5cWV6VeFNZnj1kOMhrali5OPAwDwDWhnNDG3kzftQvG8AAQLVWBeDl+B8aAHD3aAAg/FIDACm3NQIgzXyuDoBKG/mz5uk/AMQ0kOYAoInaJACcN2i3AAgnWYG8ru6DAag4cRpKPH3aPgDEZOiaAkCWaX9mOEUbtqDFV3iENgtAzvAxDd4AvUNTAGjMbRqAYrd1kGU2SAkG/W5XAIg2ekLR8lUNtmDK9PcvAbOBIA4IAvH+g8qAqE0DUHktVuPMNsUIViUlQ8XJ0CYBQHsFarPqZop+ASCX1kLWP4Y0C4APcYNclMmV6Q0Ail3i8lYHoGD+Yv0F4M3l6FYH4OXYSf97ACQXIyD3uwkNXgCFZRcc1TW88pYCIG/6bLbmS30F8KKnmU4BsJbJ6mDANMU1t0+AYjB502z4M41bV/G+AMV2eNvOlgFAZTeoiTkA9r3NKaCD0hYHQCQSfU0tWi3xY53QVRVb68sc1fbr3IGF9Omzjwag4tgJePFVX+0AYN9FqxTnA9zdwph5vgrtlEgmtBgAoaGhn1VXV5fvPxWnPH2NiFVsV+vF5eyQo8RrKwitZqDvt25Yp+Ms1QCQy2QgPhDYJAB4BydvOXf0eLYs3kRdYX0Txd9+qjw+9w28TIPPj4mJ+VOLZoqGhYUFlpW/YWf1XCJE3K2narebsoIC5c/S7TvVAKANj+qAsvoNAll+gVYAaK2Tmpft3gdVybfQzfKzxaLiHygTJ+iugu4rUd5tJHOLAkAp7YWFhS/iEG3u1pduiOzWBUNSaibL+9FEtdk57KSnOlWhMZrOBIVTZ6gNjC0VNHjyqiqN7VJyBKXYqGaRUQaKWCwuMDQ0/LzFASAaNmxYX1SvUkpyaJwUMdh6I7sqo5yeh5n5WvP6ZK+KoFSwC3JGWPBAkAnztBrCqppadod4LvoeuG4/q5Z81WeSO8QkPaLsUomlpeVQkrVVACAaOnRob6FQ+ERcUQnrd1/QmsJGa5LSYiiDhC5QpbV1asuFVLpopQtk9/+aBwBdo5OmUaoMGTVteYd0LUd3kKKy14CGOtvCwmIAJ2erAUDUqVOn3wsEgnVoGCsoKzQcDeLSTSEs+VHblRXd4RMYb9Nf+VjU1jLjSMlOlA32ruzS/lYe8B+PoxAWcw8qq6WAMpRSPnLnzp3/oCpjqwLAkbm5eTd/f/8tqBEPFNfhtXD/yUsIvXyHxQqUAstdYKpmkVHQUldfr6IMcpZC0/gClC49KQOEUvFI/VMf5UBVtZTLVX6CvN7X19eoccY4cUJCgm6/F0Ajabhw4cKZfn5+W9AFnUPhHpOXpHyA6MSHYOscyPtGgK7GKVuMZn22437etffiNUdYcgQlWRA+qN4ZUVFRZ7Btb3t7+9kIvHGb+GDC2Nj4cwTFhr4Joszx3PwSXtoM5RWT8eR+2yzfB5k5LPOkNjk5+bKDg8NcbOMvn8QXIzhr3TGWOEgzeiQsiZcOQ+50z/Hr7FYNZ/o4Ptvlk/1mCNfnJHRXry9eS2OpNpTZERKewj6QsLOzm9EuvhpD1Z5GS8INfbq3YmMld3Jysm03n80RoRt1oS22rK6eQlefdvfhZIcOHX6blpYWj8YuomPHjr/TawDIp2rytR/L6NZ6eHp6GjX3fXSPHwXAfwGWRpSGGAVJYQAAAABJRU5ErkJggg=="
 };
-const
-
-LOGO_MAP = {
+const LOGO_MAP = {
   LAD:"lad",TOR:"tor",TB:"tb",BOS:"bos",MIL:"mil",CHW:"chw",PHI:"phi",DET:"det",
-  OAK:"oak",ATL:"atl",SD:"sd",ARI:"ari",SEA:"sea",KC:"kc",CLE:"cle",NYY:"nyy",
+  OAK:"oak",ATH:"oak",ATL:"atl",SD:"sd",ARI:"ari",SEA:"sea",KC:"kc",CLE:"cle",NYY:"nyy",
   TEX:"tex",CIN:"cin",NYM:"nym",BAL:"bal",PIT:"pit",CHC:"chc",HOU:"hou",SF:"sf",
   COL:"col",LAA:"laa",MIA:"mia",MIN:"min",STL:"stl",WSH:"wsh",
   NFL_ARI:"nfl_ari",NFL_ATL:"nfl_atl",NFL_BAL:"nfl_bal",NFL_BUF:"nfl_buf",
@@ -893,209 +916,292 @@ LOGO_MAP = {
   NFL_LAC:"nfl_lac",NFL_LAR:"nfl_lar",NFL_LV:"nfl_lv",NFL_MIA:"nfl_mia",
   NFL_MIN:"nfl_min",NFL_NE:"nfl_ne",NFL_NO:"nfl_no",NFL_NYG:"nfl_nyg",
   NFL_NYJ:"nfl_nyj",NFL_PHI:"nfl_phi",NFL_PIT:"nfl_pit",NFL_SEA:"nfl_sea",
-  NFL_SF:"nfl_sf",NFL_TB:"nfl_tb",NFL_TEN:"nfl_ten",NFL_WSH:"nfl_wsh"
-,
-"MLB_SHIELD":"mlb_shield",
-"NFL_SHIELD":"nfl_shield"
+  NFL_SF:"nfl_sf",NFL_TB:"nfl_tb",NFL_TEN:"nfl_ten",NFL_WSH:"nfl_wsh",
+  MLB_SHIELD:"mlb_shield",NFL_SHIELD:"nfl_shield"
 };
 // Logo lookup: abbreviation → base64 data URL
 const L=(abbr)=>{const key=LOGO_MAP[abbr];return key?LOGO_DATA[key]:''};
 
-const TC={LAD:["#005A9C","#EF3E42"],TOR:["#134A8E","#E8291C"],TB:["#092C5C","#8FBCE6"],BOS:["#BD3039","#0C2340"],MIL:["#12284B","#FFC52F"],CHW:["#27251F","#C4CED4"],PHI:["#E81828","#002D72"],DET:["#0C2340","#FA4616"],OAK:["#003831","#EFB21E"],ATL:["#CE1141","#13274F"],SD:["#2F241D","#FFC425"],ARI:["#A71930","#E3D4AD"],SEA:["#0C2C56","#005C5C"],KC:["#004687","#BD9B60"],CLE:["#00385D","#E50022"],NYY:["#003087","#E4002C"],TEX:["#003278","#C0111F"],CIN:["#C6011F","#000000"],NYM:["#002D72","#FF5910"],BAL:["#DF4601","#27251F"],PIT:["#27251F","#FDB827"],CHC:["#0E3386","#CC3433"],HOU:["#002D62","#EB6E1F"],SF:["#FD5A1E","#27251F"],COL:["#33006F","#C4CED4"],LAA:["#BA0021","#003263"],MIA:["#00A3E0","#EF3340"],MIN:["#002B5C","#D31145"],STL:["#C41E3A","#0C2340"],WSH:["#AB0003","#14225A"]};
+// MLB team colors
+const TC={LAD:["#005A9C","#EF3E42"],TOR:["#134A8E","#E8291C"],TB:["#092C5C","#8FBCE6"],BOS:["#BD3039","#0C2340"],MIL:["#12284B","#FFC52F"],CHW:["#27251F","#C4CED4"],PHI:["#E81828","#002D72"],DET:["#0C2340","#FA4616"],OAK:["#003831","#EFB21E"],ATH:["#003831","#EFB21E"],ATL:["#CE1141","#13274F"],SD:["#2F241D","#FFC425"],ARI:["#A71930","#E3D4AD"],SEA:["#0C2C56","#005C5C"],KC:["#004687","#BD9B60"],CLE:["#00385D","#E50022"],NYY:["#003087","#E4002C"],TEX:["#003278","#C0111F"],CIN:["#C6011F","#000000"],NYM:["#002D72","#FF5910"],BAL:["#DF4601","#27251F"],PIT:["#27251F","#FDB827"],CHC:["#0E3386","#CC3433"],HOU:["#002D62","#EB6E1F"],SF:["#FD5A1E","#27251F"],COL:["#33006F","#C4CED4"],LAA:["#BA0021","#003263"],MIA:["#00A3E0","#EF3340"],MIN:["#002B5C","#D31145"],STL:["#C41E3A","#0C2340"],WSH:["#AB0003","#14225A"]};
 // NFL team colors
 const NTC={ARI:["#97233F","#000"],ATL:["#A71930","#000"],BAL:["#241773","#000"],BUF:["#00338D","#C60C30"],CAR:["#0085CA","#101820"],CHI:["#0B162A","#C83803"],CIN:["#FB4F14","#000"],CLE:["#311D00","#FF3C00"],DAL:["#003594","#869397"],DEN:["#FB4F14","#002244"],DET:["#0076B6","#B0B7BC"],GB:["#203731","#FFB612"],HOU:["#03202F","#A71930"],IND:["#002C5F","#A2AAAD"],JAX:["#006778","#9F792C"],KC:["#E31837","#FFB81C"],LAC:["#0080C6","#FFC20E"],LAR:["#003594","#FFA300"],LV:["#000","#A5ACAF"],MIA:["#008E97","#FC4C02"],MIN:["#4F2683","#FFC62F"],NE:["#002244","#C60C30"],NO:["#D3BC8D","#101820"],NYG:["#0B2265","#A71930"],NYJ:["#125740","#000"],PHI:["#004C54","#A5ACAF"],PIT:["#FFB612","#101820"],SEA:["#002244","#69BE28"],SF:["#AA0000","#B3995D"],TB:["#D50A0A","#FF7900"],TEN:["#0C2340","#4B92DB"],WSH:["#5A1414","#FFB612"]};
 
-// Sport-aware logo builder
-const stc=(sport,abbr,i=0)=>{const map=sport==='NFL'?NTC:TC;return(map[abbr]||["#333","#666"])[i]};
-const stcBest=(sport,abbr)=>{const map=sport==='NFL'?NTC:TC;return bestC(map[abbr]||["#333","#666"],abbr)};
+// Pick the lighter/higher-contrast color from a team's palette for borders on dark bg
+const lum=(hex)=>{let h=hex.replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];const r=parseInt(h.substr(0,2),16)/255,g=parseInt(h.substr(2,2),16)/255,b=parseInt(h.substr(4,2),16)/255;const s=c=>c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);return 0.2126*s(r)+0.7152*s(g)+0.0722*s(b)};
+// Override map: teams where identity color > pure contrast
+const BORDER_OV={MLB:{LAD:'#005A9C',NYY:'#003087',DET:'#0C2340',ARI:'#00A6A0',SEA:'#005C5C',KC:'#004687',TOR:'#134A8E'},NFL:{}};
+const bestCS=(sport,colors,abbr)=>{if(BORDER_OV[sport]&&BORDER_OV[sport][abbr])return BORDER_OV[sport][abbr];if(!colors||colors.length<2)return(colors||["#666"])[0];return lum(colors[0])>=lum(colors[1])?colors[0]:colors[1]};
+const bestC=(colors,abbr)=>bestCS(SPORT,colors,abbr);
+
+// Sport-aware color + logo builders
+const cmap=(sport)=>sport==='NFL'?NTC:TC;
+const stc=(sport,abbr,i=0)=>(cmap(sport)[abbr]||["#333","#666"])[i];
+const stcBest=(sport,abbr)=>bestCS(sport,cmap(sport)[abbr]||["#333","#666"],abbr);
 const SLB=(sport,abbr,sz='md')=>{const key=sport==='NFL'?'NFL_'+abbr:abbr;const src=L(key);const color=stcBest(sport,abbr);return `<div class="lbox ${sz}" style="--acc:${color}"><img src="${src}" alt="${abbr}"></div>`};
+// Active-sport shorthands (used everywhere in the live tabs)
+const tc=(a,i=0)=>stc(SPORT,a,i);
+const tcb=(a)=>stcBest(SPORT,a);
+const LB=(a,sz='md')=>SLB(SPORT,a,sz);
+const LOGOKEY=(a)=>SPORT==='NFL'?'NFL_'+a:a;
 
-const PCOL=["#cc0000","#ffcc00","#448aff","#00cc66","#ff6b35","#b388ff","#00bcd4","#ff4081"];
+const PCOL=["#cc0000","#ffcc00","#448aff","#00cc66","#ff6b35","#b388ff","#00bcd4","#ff4081","#c6ff00","#f5f5f5"];
 
-// ═══ UNDRAFTED TEAMS — top-level constant ═══
-const UNDRAFTED=[
-  {name:"Colorado Rockies",abbr:"COL",w:0,l:0,ou:64.5},
-  {name:"Los Angeles Angels",abbr:"LAA",w:0,l:0,ou:72.5},
-  {name:"Miami Marlins",abbr:"MIA",w:0,l:0,ou:65.5},
-  {name:"Minnesota Twins",abbr:"MIN",w:0,l:0,ou:79.5},
-  {name:"St. Louis Cardinals",abbr:"STL",w:0,l:0,ou:77.5},
-  {name:"Washington Nationals",abbr:"WSH",w:0,l:0,ou:71.5}
+// ═══ HISTORICAL RESULTS ═══
+// Past seasons — used to render the History tab (shared across sports)
+const PAST_SEASONS=[
+  {
+    year:2025, sport:"NFL", label:"2025 NFL Wins Pool", games:17,
+    note:"Co-champions Max & Chuck tied at 41 wins",
+    standings:[
+      {rank:1,name:"Max",wins:41,gb:0,ou:36,teams:[
+        {name:"Green Bay Packers",abbr:"GB",w:9,ou:9.5},
+        {name:"Denver Broncos",abbr:"DEN",w:14,ou:9.5},
+        {name:"Chicago Bears",abbr:"CHI",w:11,ou:8.5},
+        {name:"Miami Dolphins",abbr:"MIA",w:7,ou:8.5}]},
+      {rank:1,name:"Chuck",wins:41,gb:0,ou:33,teams:[
+        {name:"Los Angeles Rams",abbr:"LAR",w:12,ou:9.5},
+        {name:"San Francisco 49ers",abbr:"SF",w:12,ou:10.5},
+        {name:"Jacksonville Jaguars",abbr:"JAX",w:13,ou:7.5},
+        {name:"New York Giants",abbr:"NYG",w:4,ou:5.5}]},
+      {rank:3,name:"Hayden",wins:33,gb:8,ou:35,teams:[
+        {name:"Kansas City Chiefs",abbr:"KC",w:6,ou:11.5},
+        {name:"Washington Commanders",abbr:"WSH",w:5,ou:9.5},
+        {name:"New England Patriots",abbr:"NE",w:14,ou:7.5},
+        {name:"Carolina Panthers",abbr:"CAR",w:8,ou:6.5}]},
+      {rank:4,name:"Kyle",wins:33,gb:8,ou:36,teams:[
+        {name:"Buffalo Bills",abbr:"BUF",w:12,ou:11.5},
+        {name:"Houston Texans",abbr:"HOU",w:12,ou:9.5},
+        {name:"Arizona Cardinals",abbr:"ARI",w:3,ou:8.5},
+        {name:"New Orleans Saints",abbr:"NO",w:6,ou:6.5}]},
+      {rank:5,name:"Winnie",wins:32,gb:9,ou:31,teams:[
+        {name:"Cincinnati Bengals",abbr:"CIN",w:6,ou:9.5},
+        {name:"Minnesota Vikings",abbr:"MIN",w:9,ou:8.5},
+        {name:"Seattle Seahawks",abbr:"SEA",w:14,ou:7.5},
+        {name:"New York Jets",abbr:"NYJ",w:3,ou:5.5}]},
+      {rank:6,name:"Woods",wins:32,gb:9,ou:35,teams:[
+        {name:"Detroit Lions",abbr:"DET",w:9,ou:10.5},
+        {name:"Tampa Bay Buccaneers",abbr:"TB",w:8,ou:9.5},
+        {name:"Dallas Cowboys",abbr:"DAL",w:7,ou:7.5},
+        {name:"Indianapolis Colts",abbr:"IND",w:8,ou:7.5}]},
+      {rank:7,name:"Landon",wins:31,gb:10,ou:33,teams:[
+        {name:"Baltimore Ravens",abbr:"BAL",w:8,ou:11.5},
+        {name:"Atlanta Falcons",abbr:"ATL",w:8,ou:7.5},
+        {name:"Pittsburgh Steelers",abbr:"PIT",w:10,ou:8.5},
+        {name:"Cleveland Browns",abbr:"CLE",w:5,ou:5.5}]},
+      {rank:8,name:"Nash",wins:28,gb:13,ou:33,teams:[
+        {name:"Philadelphia Eagles",abbr:"PHI",w:11,ou:11.5},
+        {name:"Los Angeles Chargers",abbr:"LAC",w:11,ou:9.5},
+        {name:"Las Vegas Raiders",abbr:"LV",w:3,ou:6.5},
+        {name:"Tennessee Titans",abbr:"TEN",w:3,ou:5.5}]}
+    ]
+  },
+  {
+    year:2025, sport:"MLB", label:"2025 MLB Wins Pool", games:162,
+    note:"Max dominated with 280 combined wins — highest in league history",
+    standings:[
+      {rank:1,name:"Max",wins:280,gb:0,ou:267.5,teams:[
+        {name:"New York Yankees",abbr:"NYY",w:94,ou:90.5},
+        {name:"Chicago Cubs",abbr:"CHC",w:92,ou:88.5},
+        {name:"Toronto Blue Jays",abbr:"TOR",w:94,ou:88.5}]},
+      {rank:2,name:"Winnie",wins:263,gb:17,ou:256.5,teams:[
+        {name:"Philadelphia Phillies",abbr:"PHI",w:96,ou:90.5},
+        {name:"San Diego Padres",abbr:"SD",w:90,ou:85.5},
+        {name:"Tampa Bay Rays",abbr:"TB",w:77,ou:80.5}]},
+      {rank:3,name:"Chuck",wins:259,gb:21,ou:249.5,teams:[
+        {name:"Boston Red Sox",abbr:"BOS",w:89,ou:86.5},
+        {name:"Detroit Tigers",abbr:"DET",w:87,ou:83.5},
+        {name:"Cincinnati Reds",abbr:"CIN",w:83,ou:79.5}]},
+      {rank:4,name:"Nash",wins:251,gb:29,ou:251.5,teams:[
+        {name:"Texas Rangers",abbr:"TEX",w:81,ou:86.5},
+        {name:"Cleveland Guardians",abbr:"CLE",w:88,ou:82.5},
+        {name:"Kansas City Royals",abbr:"KC",w:82,ou:82.5}]},
+      {rank:5,name:"Hayden",wins:247,gb:33,ou:272.5,teams:[
+        {name:"Los Angeles Dodgers",abbr:"LAD",w:93,ou:103.5},
+        {name:"New York Mets",abbr:"NYM",w:83,ou:90.5},
+        {name:"Pittsburgh Pirates",abbr:"PIT",w:71,ou:78.5}]},
+      {rank:6,name:"Woods",wins:247,gb:33,ou:236.5,teams:[
+        {name:"Arizona Diamondbacks",abbr:"ARI",w:80,ou:79.5},
+        {name:"Milwaukee Brewers",abbr:"MIL",w:97,ou:82.5},
+        {name:"Minnesota Twins",abbr:"MIN",w:70,ou:74.5}]},
+      {rank:7,name:"Kyle",wins:246,gb:34,ou:251.5,teams:[
+        {name:"Baltimore Orioles",abbr:"BAL",w:75,ou:86.5},
+        {name:"Seattle Mariners",abbr:"SEA",w:90,ou:85.5},
+        {name:"San Francisco Giants",abbr:"SF",w:81,ou:79.5}]},
+      {rank:8,name:"Landon",wins:241,gb:39,ou:255.5,teams:[
+        {name:"Atlanta Braves",abbr:"ATL",w:76,ou:93.5},
+        {name:"Houston Astros",abbr:"HOU",w:87,ou:86.5},
+        {name:"St. Louis Cardinals",abbr:"STL",w:78,ou:75.5}]}
+    ]
+  }
 ];
 
-
-const POOL={
-  season:2026, games:162, updated:"2026-03-24",
-  openingDay: new Date("2026-03-25T00:00:00"),
-  nflKickoff: new Date("2026-09-10T20:20:00"), // NFL 2026 regular season kickoff
-  // RACE CHART: Add entries as season progresses
-  // Each entry: { game: 10, date: "Apr 3", data: { Woods: 14, Chuck: 12, ... } }
-  // 'game' = the approximate game number in the season (1-162)
-  // 'data' = each player's CUMULATIVE combined wins at that point
-  history: [],
-  // ═══ HISTORICAL RESULTS ═══
-  // Past seasons — used to render the History tab
-  pastSeasons:[
-    {
-      year:2025, sport:"NFL", label:"2025 NFL Wins Pool", games:17,
-      note:"Co-champions Max & Chuck tied at 41 wins",
-      standings:[
-        {rank:1,name:"Max",wins:41,gb:0,ou:36,teams:[
-          {name:"Green Bay Packers",abbr:"GB",w:9,ou:9.5},
-          {name:"Denver Broncos",abbr:"DEN",w:14,ou:9.5},
-          {name:"Chicago Bears",abbr:"CHI",w:11,ou:8.5},
-          {name:"Miami Dolphins",abbr:"MIA",w:7,ou:8.5}]},
-        {rank:1,name:"Chuck",wins:41,gb:0,ou:33,teams:[
-          {name:"Los Angeles Rams",abbr:"LAR",w:12,ou:9.5},
-          {name:"San Francisco 49ers",abbr:"SF",w:12,ou:10.5},
-          {name:"Jacksonville Jaguars",abbr:"JAX",w:13,ou:7.5},
-          {name:"New York Giants",abbr:"NYG",w:4,ou:5.5}]},
-        {rank:3,name:"Hayden",wins:33,gb:8,ou:35,teams:[
-          {name:"Kansas City Chiefs",abbr:"KC",w:6,ou:11.5},
-          {name:"Washington Commanders",abbr:"WSH",w:5,ou:9.5},
-          {name:"New England Patriots",abbr:"NE",w:14,ou:7.5},
-          {name:"Carolina Panthers",abbr:"CAR",w:8,ou:6.5}]},
-        {rank:4,name:"Kyle",wins:33,gb:8,ou:36,teams:[
-          {name:"Buffalo Bills",abbr:"BUF",w:12,ou:11.5},
-          {name:"Houston Texans",abbr:"HOU",w:12,ou:9.5},
-          {name:"Arizona Cardinals",abbr:"ARI",w:3,ou:8.5},
-          {name:"New Orleans Saints",abbr:"NO",w:6,ou:6.5}]},
-        {rank:5,name:"Winnie",wins:32,gb:9,ou:31,teams:[
-          {name:"Cincinnati Bengals",abbr:"CIN",w:6,ou:9.5},
-          {name:"Minnesota Vikings",abbr:"MIN",w:9,ou:8.5},
-          {name:"Seattle Seahawks",abbr:"SEA",w:14,ou:7.5},
-          {name:"New York Jets",abbr:"NYJ",w:3,ou:5.5}]},
-        {rank:6,name:"Woods",wins:32,gb:9,ou:35,teams:[
-          {name:"Detroit Lions",abbr:"DET",w:9,ou:10.5},
-          {name:"Tampa Bay Buccaneers",abbr:"TB",w:8,ou:9.5},
-          {name:"Dallas Cowboys",abbr:"DAL",w:7,ou:7.5},
-          {name:"Indianapolis Colts",abbr:"IND",w:8,ou:7.5}]},
-        {rank:7,name:"Landon",wins:31,gb:10,ou:33,teams:[
-          {name:"Baltimore Ravens",abbr:"BAL",w:8,ou:11.5},
-          {name:"Atlanta Falcons",abbr:"ATL",w:8,ou:7.5},
-          {name:"Pittsburgh Steelers",abbr:"PIT",w:10,ou:8.5},
-          {name:"Cleveland Browns",abbr:"CLE",w:5,ou:5.5}]},
-        {rank:8,name:"Nash",wins:28,gb:13,ou:33,teams:[
-          {name:"Philadelphia Eagles",abbr:"PHI",w:11,ou:11.5},
-          {name:"Los Angeles Chargers",abbr:"LAC",w:11,ou:9.5},
-          {name:"Las Vegas Raiders",abbr:"LV",w:3,ou:6.5},
-          {name:"Tennessee Titans",abbr:"TEN",w:3,ou:5.5}]}
-      ]
-    },
-    {
-      year:2025, sport:"MLB", label:"2025 MLB Wins Pool", games:162,
-      note:"Max dominated with 280 combined wins — highest in league history",
-      standings:[
-        {rank:1,name:"Max",wins:280,gb:0,ou:267.5,teams:[
-          {name:"New York Yankees",abbr:"NYY",w:94,ou:90.5},
-          {name:"Chicago Cubs",abbr:"CHC",w:92,ou:88.5},
-          {name:"Toronto Blue Jays",abbr:"TOR",w:94,ou:88.5}]},
-        {rank:2,name:"Winnie",wins:263,gb:17,ou:256.5,teams:[
-          {name:"Philadelphia Phillies",abbr:"PHI",w:96,ou:90.5},
-          {name:"San Diego Padres",abbr:"SD",w:90,ou:85.5},
-          {name:"Tampa Bay Rays",abbr:"TB",w:77,ou:80.5}]},
-        {rank:3,name:"Chuck",wins:259,gb:21,ou:249.5,teams:[
-          {name:"Boston Red Sox",abbr:"BOS",w:89,ou:86.5},
-          {name:"Detroit Tigers",abbr:"DET",w:87,ou:83.5},
-          {name:"Cincinnati Reds",abbr:"CIN",w:83,ou:79.5}]},
-        {rank:4,name:"Nash",wins:251,gb:29,ou:251.5,teams:[
-          {name:"Texas Rangers",abbr:"TEX",w:81,ou:86.5},
-          {name:"Cleveland Guardians",abbr:"CLE",w:88,ou:82.5},
-          {name:"Kansas City Royals",abbr:"KC",w:82,ou:82.5}]},
-        {rank:5,name:"Hayden",wins:247,gb:33,ou:272.5,teams:[
-          {name:"Los Angeles Dodgers",abbr:"LAD",w:93,ou:103.5},
-          {name:"New York Mets",abbr:"NYM",w:83,ou:90.5},
-          {name:"Pittsburgh Pirates",abbr:"PIT",w:71,ou:78.5}]},
-        {rank:6,name:"Woods",wins:247,gb:33,ou:236.5,teams:[
-          {name:"Arizona Diamondbacks",abbr:"ARI",w:80,ou:79.5},
-          {name:"Milwaukee Brewers",abbr:"MIL",w:97,ou:82.5},
-          {name:"Minnesota Twins",abbr:"MIN",w:70,ou:74.5}]},
-        {rank:7,name:"Kyle",wins:246,gb:34,ou:251.5,teams:[
-          {name:"Baltimore Orioles",abbr:"BAL",w:75,ou:86.5},
-          {name:"Seattle Mariners",abbr:"SEA",w:90,ou:85.5},
-          {name:"San Francisco Giants",abbr:"SF",w:81,ou:79.5}]},
-        {rank:8,name:"Landon",wins:241,gb:39,ou:255.5,teams:[
-          {name:"Atlanta Braves",abbr:"ATL",w:76,ou:93.5},
-          {name:"Houston Astros",abbr:"HOU",w:87,ou:86.5},
-          {name:"St. Louis Cardinals",abbr:"STL",w:78,ou:75.5}]}
-      ]
-    }
-  ],
-  players:[
-    {name:"Woods",teams:[{pick:1,round:1,name:"Los Angeles Dodgers",abbr:"LAD",w:0,l:0,ou:103.5},{pick:9,round:2,name:"Toronto Blue Jays",abbr:"TOR",w:0,l:0,ou:88.5},{pick:24,round:3,name:"Tampa Bay Rays",abbr:"TB",w:0,l:0,ou:76.5}]},
-    {name:"Chuck",teams:[{pick:2,round:1,name:"Boston Red Sox",abbr:"BOS",w:0,l:0,ou:87.5},{pick:10,round:2,name:"Milwaukee Brewers",abbr:"MIL",w:0,l:0,ou:84.5},{pick:23,round:3,name:"Chicago White Sox",abbr:"CHW",w:0,l:0,ou:67.5}]},
-    {name:"Kyle",teams:[{pick:3,round:1,name:"Philadelphia Phillies",abbr:"PHI",w:0,l:0,ou:89.5},{pick:11,round:2,name:"Detroit Tigers",abbr:"DET",w:0,l:0,ou:85.5},{pick:22,round:3,name:"Oakland Athletics",abbr:"OAK",w:0,l:0,ou:75.5}]},
-    {name:"Hayden",teams:[{pick:4,round:1,name:"Atlanta Braves",abbr:"ATL",w:0,l:0,ou:87.5},{pick:12,round:2,name:"San Diego Padres",abbr:"SD",w:0,l:0,ou:83.5},{pick:21,round:3,name:"Arizona Diamondbacks",abbr:"ARI",w:0,l:0,ou:79.5}]},
-    {name:"Nash",teams:[{pick:5,round:1,name:"Seattle Mariners",abbr:"SEA",w:0,l:0,ou:89.5},{pick:13,round:2,name:"Kansas City Royals",abbr:"KC",w:0,l:0,ou:82.5},{pick:20,round:3,name:"Cleveland Guardians",abbr:"CLE",w:0,l:0,ou:78.5}]},
-    {name:"Max",teams:[{pick:6,round:1,name:"New York Yankees",abbr:"NYY",w:0,l:0,ou:90.5},{pick:14,round:2,name:"Texas Rangers",abbr:"TEX",w:0,l:0,ou:83.5},{pick:19,round:3,name:"Cincinnati Reds",abbr:"CIN",w:0,l:0,ou:81.5}]},
-    {name:"Winnie",teams:[{pick:7,round:1,name:"New York Mets",abbr:"NYM",w:0,l:0,ou:90.5},{pick:15,round:2,name:"Baltimore Orioles",abbr:"BAL",w:0,l:0,ou:85.5},{pick:18,round:3,name:"Pittsburgh Pirates",abbr:"PIT",w:0,l:0,ou:78.5}]},
-    {name:"Landon",teams:[{pick:8,round:1,name:"Chicago Cubs",abbr:"CHC",w:0,l:0,ou:88.5},{pick:16,round:2,name:"Houston Astros",abbr:"HOU",w:0,l:0,ou:86.5},{pick:17,round:3,name:"San Francisco Giants",abbr:"SF",w:0,l:0,ou:80.5}]}
-  ]
+// ═══════════════════════════════════════════════════════════════
+// SPORT CONFIGS — one pool per sport, identical shape.
+// To update a roster: edit players[] below. Each team: {pick, round, name, abbr, w, l, (t), ou}
+// ═══════════════════════════════════════════════════════════════
+const SPORTS={
+  MLB:{
+    key:'MLB', label:'MLB', season:2026, games:162, yr:"'26",
+    start:new Date("2026-03-25T00:00:00"), end:new Date("2026-09-28T00:00:00"), startLabel:'Opening Day',
+    priorGames:50,           // how many games of evidence the Vegas line is worth in projections
+    raceMax:162, raceTicks:[0,20,40,60,80,100,120,140,162], raceUnit:'G',
+    unit:(n)=>'Game '+n, unitPlural:'Games', totalLabel:'162 Games',
+    draftOrder:["Woods","Chuck","Kyle","Hayden","Nash","Max","Winnie","Landon"],
+    draftFlow:[{rd:1,label:"RD 1",note:"LINEAR"},{rd:2,label:"RD 2",note:"LINEAR"},{rd:3,label:"RD 3",note:"SNAKE"}],
+    history:[], // optional manual race snapshots: {game, date, data:{Name:wins}} — auto-built from MLB API when empty
+    undrafted:[
+      {name:"Colorado Rockies",abbr:"COL",w:0,l:0,ou:64.5},
+      {name:"Los Angeles Angels",abbr:"LAA",w:0,l:0,ou:72.5},
+      {name:"Miami Marlins",abbr:"MIA",w:0,l:0,ou:65.5},
+      {name:"Minnesota Twins",abbr:"MIN",w:0,l:0,ou:79.5},
+      {name:"St. Louis Cardinals",abbr:"STL",w:0,l:0,ou:77.5},
+      {name:"Washington Nationals",abbr:"WSH",w:0,l:0,ou:71.5}
+    ],
+    players:[
+      {name:"Woods",teams:[{pick:1,round:1,name:"Los Angeles Dodgers",abbr:"LAD",w:0,l:0,ou:103.5},{pick:9,round:2,name:"Toronto Blue Jays",abbr:"TOR",w:0,l:0,ou:88.5},{pick:24,round:3,name:"Tampa Bay Rays",abbr:"TB",w:0,l:0,ou:76.5}]},
+      {name:"Chuck",teams:[{pick:2,round:1,name:"Boston Red Sox",abbr:"BOS",w:0,l:0,ou:87.5},{pick:10,round:2,name:"Milwaukee Brewers",abbr:"MIL",w:0,l:0,ou:84.5},{pick:23,round:3,name:"Chicago White Sox",abbr:"CHW",w:0,l:0,ou:67.5}]},
+      {name:"Kyle",teams:[{pick:3,round:1,name:"Philadelphia Phillies",abbr:"PHI",w:0,l:0,ou:89.5},{pick:11,round:2,name:"Detroit Tigers",abbr:"DET",w:0,l:0,ou:85.5},{pick:22,round:3,name:"Athletics",abbr:"ATH",w:0,l:0,ou:75.5}]},
+      {name:"Hayden",teams:[{pick:4,round:1,name:"Atlanta Braves",abbr:"ATL",w:0,l:0,ou:87.5},{pick:12,round:2,name:"San Diego Padres",abbr:"SD",w:0,l:0,ou:83.5},{pick:21,round:3,name:"Arizona Diamondbacks",abbr:"ARI",w:0,l:0,ou:79.5}]},
+      {name:"Nash",teams:[{pick:5,round:1,name:"Seattle Mariners",abbr:"SEA",w:0,l:0,ou:89.5},{pick:13,round:2,name:"Kansas City Royals",abbr:"KC",w:0,l:0,ou:82.5},{pick:20,round:3,name:"Cleveland Guardians",abbr:"CLE",w:0,l:0,ou:78.5}]},
+      {name:"Max",teams:[{pick:6,round:1,name:"New York Yankees",abbr:"NYY",w:0,l:0,ou:90.5},{pick:14,round:2,name:"Texas Rangers",abbr:"TEX",w:0,l:0,ou:83.5},{pick:19,round:3,name:"Cincinnati Reds",abbr:"CIN",w:0,l:0,ou:81.5}]},
+      {name:"Winnie",teams:[{pick:7,round:1,name:"New York Mets",abbr:"NYM",w:0,l:0,ou:90.5},{pick:15,round:2,name:"Baltimore Orioles",abbr:"BAL",w:0,l:0,ou:85.5},{pick:18,round:3,name:"Pittsburgh Pirates",abbr:"PIT",w:0,l:0,ou:78.5}]},
+      {name:"Landon",teams:[{pick:8,round:1,name:"Chicago Cubs",abbr:"CHC",w:0,l:0,ou:88.5},{pick:16,round:2,name:"Houston Astros",abbr:"HOU",w:0,l:0,ou:86.5},{pick:17,round:3,name:"San Francisco Giants",abbr:"SF",w:0,l:0,ou:80.5}]}
+    ]
+  },
+  NFL:{
+    key:'NFL', label:'NFL', season:2026, games:17, weeks:18, yr:"'26",
+    start:new Date("2026-09-09T19:20:00-05:00"), startLabel:'Kickoff', // 2026 NFL kickoff: Wed Sep 9, NE @ SEA (per ESPN schedule)
+    priorGames:5,            // Vegas line worth ~5 games of evidence in a 17-game season
+    raceMax:18, raceTicks:[0,2,4,6,8,10,12,14,16,18], raceUnit:'Wk',
+    unit:(n)=>'Week '+n, unitPlural:'Weeks', totalLabel:'17 Games',
+    // ⚠ DRAFT PENDING — rosters below are PLACEHOLDERS (teams assigned by Vegas O/U rank in draft order).
+    // Replace players[] with the real draft, rename "Player A"/"Player B", then set draftPending:false.
+    draftPending:true,
+    draftOrder:["Woods","Chuck","Kyle","Hayden","Nash","Max","Winnie","Landon","Player A","Player B"],
+    draftFlow:[{rd:1,label:"RD 1",note:"LINEAR"},{rd:2,label:"RD 2",note:"LINEAR"},{rd:3,label:"RD 3",note:"SNAKE"}],
+    history:[],
+    // O/U lines: DraftKings, Jul 23 2026 (via FOX Sports)
+    undrafted:[
+      {name:"Miami Dolphins",abbr:"MIA",w:0,l:0,t:0,ou:4.5},
+      {name:"Arizona Cardinals",abbr:"ARI",w:0,l:0,t:0,ou:3.5}
+    ],
+    players:[
+      {name:"Woods",teams:[{pick:1,round:1,name:"Baltimore Ravens",abbr:"BAL",w:0,l:0,t:0,ou:11.5},{pick:11,round:2,name:"Dallas Cowboys",abbr:"DAL",w:0,l:0,t:0,ou:9.5},{pick:30,round:3,name:"New York Jets",abbr:"NYJ",w:0,l:0,t:0,ou:5.5}]},
+      {name:"Chuck",teams:[{pick:2,round:1,name:"Los Angeles Rams",abbr:"LAR",w:0,l:0,t:0,ou:11.5},{pick:12,round:2,name:"Denver Broncos",abbr:"DEN",w:0,l:0,t:0,ou:9.5},{pick:29,round:3,name:"Las Vegas Raiders",abbr:"LV",w:0,l:0,t:0,ou:5.5}]},
+      {name:"Kyle",teams:[{pick:3,round:1,name:"Buffalo Bills",abbr:"BUF",w:0,l:0,t:0,ou:10.5},{pick:13,round:2,name:"Green Bay Packers",abbr:"GB",w:0,l:0,t:0,ou:9.5},{pick:28,round:3,name:"Cleveland Browns",abbr:"CLE",w:0,l:0,t:0,ou:5.5}]},
+      {name:"Hayden",teams:[{pick:4,round:1,name:"Cincinnati Bengals",abbr:"CIN",w:0,l:0,t:0,ou:10.5},{pick:14,round:2,name:"Houston Texans",abbr:"HOU",w:0,l:0,t:0,ou:9.5},{pick:27,round:3,name:"Tennessee Titans",abbr:"TEN",w:0,l:0,t:0,ou:6.5}]},
+      {name:"Nash",teams:[{pick:5,round:1,name:"Detroit Lions",abbr:"DET",w:0,l:0,t:0,ou:10.5},{pick:15,round:2,name:"Los Angeles Chargers",abbr:"LAC",w:0,l:0,t:0,ou:9.5},{pick:26,round:3,name:"Atlanta Falcons",abbr:"ATL",w:0,l:0,t:0,ou:6.5}]},
+      {name:"Max",teams:[{pick:6,round:1,name:"Kansas City Chiefs",abbr:"KC",w:0,l:0,t:0,ou:10.5},{pick:16,round:2,name:"San Francisco 49ers",abbr:"SF",w:0,l:0,t:0,ou:9.5},{pick:25,round:3,name:"Washington Commanders",abbr:"WSH",w:0,l:0,t:0,ou:7.5}]},
+      {name:"Winnie",teams:[{pick:7,round:1,name:"New England Patriots",abbr:"NE",w:0,l:0,t:0,ou:10.5},{pick:17,round:2,name:"Jacksonville Jaguars",abbr:"JAX",w:0,l:0,t:0,ou:8.5},{pick:24,round:3,name:"New York Giants",abbr:"NYG",w:0,l:0,t:0,ou:7.5}]},
+      {name:"Landon",teams:[{pick:8,round:1,name:"Philadelphia Eagles",abbr:"PHI",w:0,l:0,t:0,ou:10.5},{pick:18,round:2,name:"Minnesota Vikings",abbr:"MIN",w:0,l:0,t:0,ou:8.5},{pick:23,round:3,name:"New Orleans Saints",abbr:"NO",w:0,l:0,t:0,ou:7.5}]},
+      {name:"Player A",teams:[{pick:9,round:1,name:"Seattle Seahawks",abbr:"SEA",w:0,l:0,t:0,ou:10.5},{pick:19,round:2,name:"Pittsburgh Steelers",abbr:"PIT",w:0,l:0,t:0,ou:8.5},{pick:22,round:3,name:"Indianapolis Colts",abbr:"IND",w:0,l:0,t:0,ou:7.5}]},
+      {name:"Player B",teams:[{pick:10,round:1,name:"Chicago Bears",abbr:"CHI",w:0,l:0,t:0,ou:9.5},{pick:20,round:2,name:"Tampa Bay Buccaneers",abbr:"TB",w:0,l:0,t:0,ou:8.5},{pick:21,round:3,name:"Carolina Panthers",abbr:"CAR",w:0,l:0,t:0,ou:7.5}]}
+    ]
+  }
 };
+Object.values(SPORTS).forEach(s=>{s.updated="—";s.players.forEach(p=>p.teams.forEach(t=>{if(t.t===undefined)t.t=0}));s.undrafted.forEach(t=>{if(t.t===undefined)t.t=0})});
+
+// ═══ ACTIVE SPORT ═══
+// Default: NFL once it has kicked off and MLB regular season is over; otherwise MLB. Remembered per device.
+let SPORT=(()=>{try{const s=localStorage.getItem('wp-sport');if(s&&SPORTS[s])return s}catch(e){}const now=new Date();return(now>=SPORTS.NFL.start&&now>=SPORTS.MLB.end)?'NFL':'MLB'})();
+let POOL=SPORTS[SPORT];
+const nP=()=>POOL.players.length;           // player count
+const nT=()=>POOL.players.length*3;         // drafted team count
+const G=()=>POOL.games;                     // games per team
+
+function setSport(key,fromInit){
+  if(!SPORTS[key])return;
+  SPORT=key;POOL=SPORTS[key];
+  try{localStorage.setItem('wp-sport',key)}catch(e){}
+  document.body.setAttribute('data-sport',key);
+  document.querySelectorAll('.sport-btn').forEach(b=>{const on=b.dataset.sport===key;b.classList.toggle('active',on);b.setAttribute('aria-selected',on)});
+  raceHidden={};
+  if(!fromInit){render();switchTab(0);lastFetchOk=null;updateDataStatus();refreshData(false)}
+}
 
 // ═══ HELPERS ═══
-const pace=(w,l)=>(w+l)===0?null:Math.round((w/(w+l))*162);
-const blendedPace=(w,l,ou)=>{const gp=w+l;if(gp===0)return null;const raw=(w/gp)*162;return Math.round((raw*gp+ou*162)/(gp+162))};
-const pOU=(t)=>{const bp=blendedPace(t.w,t.l,t.ou);return bp!==null?bp:t.ou};
+const gpOf=(t)=>t.w+t.l+(t.t||0);
+const recStr=(t)=>{const g=gpOf(t);if(g===0)return '0-0';return t.w+'-'+t.l+((t.t||0)>0?'-'+t.t:'')};
+const winPct=(t)=>{const g=gpOf(t);return g===0?0:(t.w+0.5*(t.t||0))/g};
+// PROJECTION: Bayesian blend. The Vegas line counts as `priorGames` worth of evidence and fades
+// as real games pile up. Pre-season = O/U exactly; late season ≈ actual pace. Never below actual wins.
+const projWins=(t)=>{
+  const g=gpOf(t),N=G(),K=POOL.priorGames;
+  if(g===0)return t.ou;
+  const p=(t.w+0.5*(t.t||0)+(t.ou/N)*K)/(g+K);
+  return Math.round(t.w+(N-g)*p);
+};
+const pOU=(t)=>projWins(t);
+// Wins Above Expectation: actual wins vs the Vegas-implied wins through games played
+const waeOf=(t)=>{const g=gpOf(t);return g>0?t.w-(t.ou*g/G()):null};
 function pStats(p){
-  let w=0,ls=0,ou=0,proj=0,gp=0,live=false,wae=0;
+  let w=0,ls=0,ties=0,ou=0,proj=0,gp=0,live=false,wae=0;
   p.teams.forEach(t=>{
-    w+=t.w;ls+=t.l;ou+=t.ou;
-    const tg=t.w+t.l;
-    const pc=blendedPace(t.w,t.l,t.ou);
-    if(pc!==null){proj+=pc;live=true;gp=Math.max(gp,tg)}else{proj+=t.ou}
-    // Wins Above Expectation: actual wins vs expected wins through games played
-    if(tg>0){wae+=t.w-(t.ou*tg/162)}
+    w+=t.w;ls+=t.l;ties+=(t.t||0);ou+=t.ou;
+    const tg=gpOf(t);
+    proj+=projWins(t);
+    if(tg>0){live=true;gp=Math.max(gp,tg);wae+=t.w-(t.ou*tg/G())}
   });
-  return{wins:w,losses:ls,ou,proj,gp,live,delta:proj-ou,wae}
+  return{wins:w,losses:ls,ties,ou,proj,gp,live,delta:proj-ou,wae}
 }
-const shortN=(n)=>n.replace(/^(Los Angeles|New York|San Diego|San Francisco|Kansas City|Tampa Bay|St\. Louis|Toronto|Chicago|Boston|Detroit|Oakland|Atlanta|Arizona|Seattle|Cleveland|Cincinnati|Baltimore|Pittsburgh|Houston|Colorado|Milwaukee|Minnesota|Washington|Philadelphia|Miami|Texas|Buffalo|Carolina|Denver|Green Bay|Indianapolis|Jacksonville|Las Vegas|New England|New Orleans|Tennessee|Dallas) /,"");
+const shortN=(n)=>n.replace(/^(Los Angeles|New York|San Diego|San Francisco|Kansas City|Tampa Bay|St\. Louis|Toronto|Chicago|Boston|Detroit|Oakland|Sacramento|Atlanta|Arizona|Seattle|Cleveland|Cincinnati|Baltimore|Pittsburgh|Houston|Colorado|Milwaukee|Minnesota|Washington|Philadelphia|Miami|Texas|Buffalo|Carolina|Denver|Green Bay|Indianapolis|Jacksonville|Las Vegas|New England|New Orleans|Tennessee|Dallas) /,"");
 const ordinal=(n)=>{const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
 const getRanked=()=>{
   const mapped=POOL.players.map(p=>({...p,s:pStats(p)}));
   const anyGames=mapped.some(p=>p.s.gp>0);
-  // Sort by actual wins only. Pre-season: sort by projected as preview.
+  // In season: actual wins, then projection. Pre-season: projected (= O/U) as a preview.
   if(anyGames) return mapped.sort((a,b)=>b.s.wins-a.s.wins||b.s.proj-a.s.proj);
   return mapped.sort((a,b)=>b.s.proj-a.s.proj);
 };
-const tc=(a,i=0)=>(TC[a]||["#333","#666"])[i];
-// Pick the lighter/higher-contrast color from a team's palette for borders on dark bg
-const lum=(hex)=>{let h=hex.replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];const r=parseInt(h.substr(0,2),16)/255,g=parseInt(h.substr(2,2),16)/255,b=parseInt(h.substr(4,2),16)/255;const s=c=>c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);return 0.2126*s(r)+0.7152*s(g)+0.0722*s(b)};
-// Override map: teams where identity color > pure contrast
-const BORDER_OV={LAD:'#005A9C',NYY:'#003087',DET:'#0C2340',ARI:'#00A6A0',SEA:'#005C5C',KC:'#004687',TOR:'#134A8E'};
-const bestC=(colors,abbr)=>{if(BORDER_OV[abbr])return BORDER_OV[abbr];if(!colors||colors.length<2)return(colors||["#666"])[0];return lum(colors[0])>=lum(colors[1])?colors[0]:colors[1]};
+// All drafted teams with owner + derived stats. In season, "best" = record (win%, then wins, then WAE).
+// Pre-season, "best" = highest O/U.
+function rankedTeams(includeUndrafted){
+  const drafted=POOL.players.flatMap(p=>p.teams.map(t=>({...t,owner:p.name})));
+  const und=includeUndrafted?POOL.undrafted.map(t=>({...t,owner:"Undrafted"})):[];
+  const all=[...drafted,...und].map(t=>({...t,pv:projWins(t),dv:projWins(t)-t.ou,wae:waeOf(t),pct:winPct(t),gp:gpOf(t)}));
+  const started=all.some(t=>t.gp>0);
+  if(started) return all.sort((a,b)=>b.pct-a.pct||b.w-a.w||(b.wae||0)-(a.wae||0)||b.pv-a.pv);
+  return all.sort((a,b)=>b.ou-a.ou);
+}
+const gpAll=()=>Math.max(0,...POOL.players.flatMap(p=>p.teams.map(gpOf)));
+const seasonProgress=()=>{ // {gp, label, pct}
+  const R=getRanked();
+  if(SPORT==='NFL'){
+    const wk=NFL_STATE.week||0,done=NFL_STATE.weekDone;
+    const gp=gpAll();
+    if(gp===0&&!wk)return{gp:0,pct:0,label:''};
+    const cur=wk||1;
+    const pct=Math.min(100,((done?cur:Math.max(0,cur-1))/POOL.weeks)*100);
+    return{gp,pct:+pct.toFixed(1),label:'Week '+cur+' of '+POOL.weeks,unit:cur};
+  }
+  const gp=gpAll();
+  return{gp,pct:gp>0?+((gp/G())*100).toFixed(1):0,label:'Game '+gp+' of '+G(),unit:gp};
+};
+const thru=()=>{const sp=seasonProgress();return sp.gp>0?'through '+POOL.unit(sp.unit):''};
 
-// Logo builder: white bg for ALL logos, team color on BORDER only
-const LB=(a,sz='md')=>`<div class="lbox ${sz}" style="--acc:${bestC(TC[a]||["#333","#666"],a)}"><img src="${L(a)}" alt="${a}"></div>`;
-
-// ═══ COUNTDOWN ═══
+// ═══ COUNTDOWN (hero) ═══
 function updateCountdown(){
   const el=document.getElementById('countdown');
   if(!el)return;
   const now=new Date();
-  const gp=getRanked()[0].s.gp;
-  if(gp>0){
-    el.innerHTML=`<div class="cd-message">Season in Progress &bull; Game ${gp} of 162</div>`;
+  const sp=seasonProgress();
+  if(sp.gp>0){
+    el.innerHTML=`<div class="cd-message">Season in Progress &bull; ${sp.label}</div>`;
     return;
   }
-  const diff=POOL.openingDay-now;
-  if(diff<=0){el.innerHTML=`<div class="cd-message">Play Ball!</div>`;return}
+  const diff=POOL.start-now;
+  if(diff<=0){el.innerHTML=`<div class="cd-message">${SPORT==='NFL'?'Kickoff!':'Play Ball!'}</div>`;return}
   const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
-  el.innerHTML=`<div class="countdown"><div class="cd-unit"><div class="cd-num">${d}</div><div class="cd-lbl">Days</div></div><div class="cd-unit"><div class="cd-num">${String(h).padStart(2,'0')}</div><div class="cd-lbl">Hours</div></div><div class="cd-unit"><div class="cd-num">${String(m).padStart(2,'0')}</div><div class="cd-lbl">Min</div></div><div class="cd-unit"><div class="cd-num">${String(s).padStart(2,'0')}</div><div class="cd-lbl">Sec</div></div></div><div class="cd-message">Until Opening Day</div>`;
+  el.innerHTML=`<div class="countdown"><div class="cd-unit"><div class="cd-num">${d}</div><div class="cd-lbl">Days</div></div><div class="cd-unit"><div class="cd-num">${String(h).padStart(2,'0')}</div><div class="cd-lbl">Hours</div></div><div class="cd-unit"><div class="cd-num">${String(m).padStart(2,'0')}</div><div class="cd-lbl">Min</div></div><div class="cd-unit"><div class="cd-num">${String(s).padStart(2,'0')}</div><div class="cd-lbl">Sec</div></div></div><div class="cd-message">Until ${POOL.startLabel}</div>`;
 }
-
-// ═══ NFL KICKOFF COUNTDOWN ═══
-function updateNFLCountdown(){
-  const el=document.getElementById('nfl-countdown');
-  if(!el)return;
-  const now=new Date();
-  const diff=POOL.nflKickoff-now;
-  if(diff<=0){el.innerHTML=`<span class="nfl-cd-text">NFL IN SEASON</span>`;return}
-  const d=Math.floor(diff/86400000);
-  const h=Math.floor((diff%86400000)/3600000);
-  const m=Math.floor((diff%3600000)/60000);
-  const box=(val,lbl)=>`<div class="nfl-cd-box"><div class="nfl-cd-num">${String(val).padStart(2,'0')}</div><div class="nfl-cd-lbl">${lbl}</div></div>`;
-  const sep='<div class="nfl-cd-sep">:</div>';
-  el.innerHTML=`<div class="nfl-cd-units">${box(d,'Days')}${sep}${box(h,'Hrs')}${sep}${box(m,'Min')}</div><div class="nfl-cd-tag"><span>NFL</span>Kickoff</div>`;
+// Small "kickoff in Xd" badge on the NFL sport tab while MLB is showing
+function updateSportBadges(){
+  const el=document.getElementById('sport-badge-NFL');if(!el)return;
+  const diff=SPORTS.NFL.start-new Date();
+  if(diff<=0){el.textContent='';el.style.display='none';return}
+  const d=Math.ceil(diff/86400000);
+  el.textContent=d<=1?'Kickoff soon':'Kickoff in '+d+'d';el.style.display='';
 }
 
 // ═══ BREAKING NEWS ═══
@@ -1103,103 +1209,90 @@ function getBreaking(){
   const R=getRanked();
   const gp=R[0].s.gp;
   if(gp===0){
-    // Pre-season
     const high=R[0],low=R[R.length-1];
     const spread=(high.s.proj-low.s.proj).toFixed(0);
-    return `Pre-season projections set <b>${high.name}</b> as the favorite at <b>${high.s.proj}</b> projected wins. The spread from 1st to 8th is <b>${spread}</b> wins. Opening Day is almost here.`;
+    return `Pre-season projections set <b>${high.name}</b> as the favorite at <b>${high.s.proj}</b> projected wins. The spread from 1st to ${ordinal(nP())} is <b>${spread}</b> wins. ${POOL.startLabel} is almost here.`;
   }
-  // During season - generate dynamic headline
   const leader=R[0],second=R[1];
   const wGap=leader.s.wins-second.s.wins;
-  if(wGap===0) return `It's dead even! <b>${leader.name}</b> and <b>${second.name}</b> are tied at <b>${leader.s.wins}</b> win${leader.s.wins!==1?'s':''} through Game ${gp}.`;
-  if(wGap<=2) return `It's a tight race! <b>${leader.name}</b> leads <b>${second.name}</b> by just <b>${wGap}</b> win${wGap!==1?'s':''} through Game ${gp}.`;
-  return `<b>${leader.name}</b> holds a <b>${wGap}</b>-win lead over <b>${second.name}</b> through Game ${gp} of 162.`;
+  const th=thru();
+  if(wGap===0) return `It's dead even! <b>${leader.name}</b> and <b>${second.name}</b> are tied at <b>${leader.s.wins}</b> win${leader.s.wins!==1?'s':''} ${th}.`;
+  if(wGap<=2) return `It's a tight race! <b>${leader.name}</b> leads <b>${second.name}</b> by just <b>${wGap}</b> win${wGap!==1?'s':''} ${th}.`;
+  return `<b>${leader.name}</b> holds a <b>${wGap}</b>-win lead over <b>${second.name}</b> ${th}.`;
 }
 
 // ═══ NARRATIVE HIGHLIGHTS ═══
 function getHighlights(){
   const R=getRanked();
-  const allT=POOL.players.flatMap(p=>p.teams.map(t=>({...t,owner:p.name})));
-  const sT=allT.map(t=>{const tg=t.w+t.l;const tWae=tg>0?t.w-(t.ou*tg/162):null;return{...t,pv:pOU(t),dv:pOU(t)-t.ou,wae:tWae}}).sort((a,b)=>b.pv-a.pv);
+  const sT=rankedTeams(false);
   const items=[];
   const gp=R[0].s.gp;
   const seasonStarted=gp>0;
+  const th=thru();
 
   if(seasonStarted){
-    // LIVE SEASON HEADLINES
-
     // Closest race - compare ACTUAL wins across ALL player pairs
     let minGap=999;let closeA,closeB;
     for(let i=0;i<R.length;i++){for(let j=i+1;j<R.length;j++){const g=Math.abs(R[i].s.wins-R[j].s.wins);if(g<minGap){minGap=g;closeA=R[i];closeB=R[j]}}}
     if(closeA&&closeB){
-      if(minGap===0) items.push({icon:"\u{1F525}",text:"Closest matchup: <b>"+closeA.name+"</b> and <b>"+closeB.name+"</b> are tied at <b>"+closeA.s.wins+"</b> win"+(closeA.s.wins===1?"":"s")+" through Game "+gp+"."});
-      else items.push({icon:"\u{1F525}",text:"Closest matchup: <b>"+closeA.name+"</b> vs <b>"+closeB.name+"</b> separated by just <b>"+minGap+"</b> win"+(minGap===1?"":"s")+" through Game "+gp+"."});
+      if(minGap===0) items.push({icon:"\u{1F525}",text:"Closest matchup: <b>"+closeA.name+"</b> and <b>"+closeB.name+"</b> are tied at <b>"+closeA.s.wins+"</b> win"+(closeA.s.wins===1?"":"s")+" "+th+"."});
+      else items.push({icon:"\u{1F525}",text:"Closest matchup: <b>"+closeA.name+"</b> vs <b>"+closeB.name+"</b> separated by just <b>"+minGap+"</b> win"+(minGap===1?"":"s")+" "+th+"."});
     }
-
-    // Best performing team by pace
+    // Best team by RECORD
     const best=sT[0];
-    const bestWaeStr=(best.w+best.l)>0&&best.wae!==null?" \u2014 <b>"+(best.wae>=0?"+":"")+best.wae.toFixed(1)+"</b> vs expected":"";
-    items.push({icon:"\u{1F3C6}",text:"Top performing team: <b>"+shortN(best.name)+"</b> ("+best.owner+") pacing at <b>"+best.pv+"</b> wins"+bestWaeStr+"."});
-
-    // Anchor watch
+    const bestWaeStr=best.wae!==null?" — <b>"+(best.wae>=0?"+":"")+best.wae.toFixed(1)+"</b> vs expected":"";
+    items.push({icon:"\u{1F3C6}",text:"Top team: <b>"+shortN(best.name)+"</b> ("+best.owner+") at <b>"+recStr(best)+"</b>, pacing for <b>"+best.pv+"</b> wins"+bestWaeStr+"."});
+    // Anchor watch — worst record
     const worst=sT[sT.length-1];
-    const worstWaeStr=(worst.w+worst.l)>0&&worst.wae!==null?" \u2014 <b class=\"red\">"+(worst.wae>=0?"+":"")+worst.wae.toFixed(1)+"</b> vs expected":"";
-    items.push({icon:"\u{1F4C9}",text:"Anchor watch: <b>"+shortN(worst.name)+"</b> ("+worst.owner+") pacing at <b>"+worst.pv+"</b> wins"+worstWaeStr+"."});
-
+    const worstWaeStr=worst.wae!==null?" — <b class=\"red\">"+(worst.wae>=0?"+":"")+worst.wae.toFixed(1)+"</b> vs expected":"";
+    items.push({icon:"\u{1F4C9}",text:"Anchor watch: <b>"+shortN(worst.name)+"</b> ("+worst.owner+") at <b>"+recStr(worst)+"</b>, pacing for <b>"+worst.pv+"</b> wins"+worstWaeStr+"."});
     // Biggest WAE overperformer
     const overT=sT.filter(t=>t.wae!==null&&t.wae>0).sort((a,b)=>b.wae-a.wae)[0];
-    if(overT) items.push({icon:"\u{1F4C8}",text:"Biggest value: <b>"+shortN(overT.name)+"</b> is <b>+"+overT.wae.toFixed(1)+"</b> wins above expected through "+(overT.w+overT.l)+" games \u2014 huge for <b>"+overT.owner+"</b>."});
-
+    if(overT) items.push({icon:"\u{1F4C8}",text:"Biggest value: <b>"+shortN(overT.name)+"</b> is <b>+"+overT.wae.toFixed(1)+"</b> wins above expected through "+overT.gp+" games — huge for <b>"+overT.owner+"</b>."});
     // Biggest WAE underperformer
     const underT=sT.filter(t=>t.wae!==null&&t.wae<0).sort((a,b)=>a.wae-b.wae)[0];
-    if(underT) items.push({icon:"\u26A0\uFE0F",text:"Biggest drag: <b>"+shortN(underT.name)+"</b> is <b class=\"red\">"+underT.wae.toFixed(1)+"</b> wins below expected through "+(underT.w+underT.l)+" games \u2014 costing <b>"+underT.owner+"</b>."});
-
+    if(underT) items.push({icon:"⚠️",text:"Biggest drag: <b>"+shortN(underT.name)+"</b> is <b class=\"red\">"+underT.wae.toFixed(1)+"</b> wins below expected through "+underT.gp+" games — costing <b>"+underT.owner+"</b>."});
   } else {
-    // PRE-SEASON HEADLINES
     const high=R[0],low=R[R.length-1];
     const spread=(high.s.ou-low.s.ou).toFixed(1);
-
-    items.push({icon:"\u{1F3B0}",text:"Vegas favorite: <b>"+high.name+"</b> holds the highest combined O/U at <b>"+high.s.ou.toFixed(1)+"</b> wins \u2014 a <b>"+spread+"</b>-win edge over <b>"+low.name+"</b> ("+low.s.ou.toFixed(1)+")."});
-
+    items.push({icon:"\u{1F3B0}",text:"Vegas favorite: <b>"+high.name+"</b> holds the highest combined O/U at <b>"+high.s.ou.toFixed(1)+"</b> wins — a <b>"+spread+"</b>-win edge over <b>"+low.name+"</b> ("+low.s.ou.toFixed(1)+")."});
     const bestT=sT[0];
-    items.push({icon:"\u{1F3C6}",text:"Highest O/U team: <b>"+shortN(bestT.name)+"</b> ("+bestT.owner+") at <b>"+bestT.ou+"</b> projected wins \u2014 the crown jewel of this draft."});
-
+    items.push({icon:"\u{1F3C6}",text:"Highest O/U team: <b>"+shortN(bestT.name)+"</b> ("+bestT.owner+") at <b>"+bestT.ou+"</b> projected wins — the crown jewel of this draft."});
     const worstT=sT[sT.length-1];
-    items.push({icon:"\u{1F4C9}",text:"Lowest O/U team: <b>"+shortN(worstT.name)+"</b> ("+worstT.owner+") at <b>"+worstT.ou+"</b> projected wins \u2014 the anchor weight."});
-
+    items.push({icon:"\u{1F4C9}",text:"Lowest O/U team: <b>"+shortN(worstT.name)+"</b> ("+worstT.owner+") at <b>"+worstT.ou+"</b> projected wins — the anchor weight."});
     let minOUGap=999;let gapA,gapB;
     for(let i=0;i<R.length;i++){for(let j=i+1;j<R.length;j++){const g=Math.abs(R[i].s.ou-R[j].s.ou);if(g<minOUGap){minOUGap=g;gapA=R[i];gapB=R[j]}}}
-    if(gapA&&gapB) items.push({icon:"\u{1F525}",text:"Tightest O/U gap: <b>"+gapA.name+"</b> ("+gapA.s.ou.toFixed(1)+") vs <b>"+gapB.name+"</b> ("+gapB.s.ou.toFixed(1)+") \u2014 separated by just <b>"+minOUGap.toFixed(1)+"</b> projected wins. This one could go either way."});
-
+    if(gapA&&gapB) items.push({icon:"\u{1F525}",text:"Tightest O/U gap: <b>"+gapA.name+"</b> ("+gapA.s.ou.toFixed(1)+") vs <b>"+gapB.name+"</b> ("+gapB.s.ou.toFixed(1)+") — separated by just <b>"+minOUGap.toFixed(1)+"</b> projected wins. This one could go either way."});
     items.push({icon:"\u{1F4CB}",text:"All projections based on pre-season Vegas O/U lines. Headlines update automatically once games begin."});
   }
-
   return items;
 }
 
-// ═══ RACE CHART — AUTO-POPULATE FROM LIVE DATA ═══
-// Automatically builds a race snapshot from current standings every render.
-// Combines manual POOL.history entries with live auto-generated point.
+// ═══ RACE CHART — built automatically from league results ═══
+// RACE[sport] = [{game, date, data:{Name:wins}}] computed by the data layer (MLB schedule / NFL weekly results).
+// Falls back to POOL.history + a live point if the history fetch failed.
 let raceHidden={};
+const RACE={MLB:null,NFL:null};
 function getRaceData(){
-  const manual=[...POOL.history];
   const R=getRanked();
-  const gp=R[0].s.gp;
+  const gp=gpAll();
+  let hist=RACE[SPORT]?[...RACE[SPORT]]:[...POOL.history];
   if(gp>0){
-    // Build a live snapshot from current standings
-    const livePoint={game:gp,date:'Now',data:{}};
+    const sp=seasonProgress();
+    const livePoint={game:SPORT==='NFL'?(sp.unit||1):gp,date:'Now',data:{}};
     R.forEach(p=>{livePoint.data[p.name]=p.s.wins});
-    // Avoid duplicating if manual history already has this game number
-    const lastManual=manual.length>0?manual[manual.length-1].game:0;
-    if(gp>lastManual){manual.push(livePoint)}
+    const last=hist.length>0?hist[hist.length-1]:null;
+    // Replace the last point if it's the same game/week (in-progress), else append
+    if(last&&last.game>=livePoint.game){hist[hist.length-1]={...livePoint,game:last.game}}
+    else hist.push(livePoint);
   }
-  return manual;
+  return hist;
 }
 function drawRace(){
   const canvas=document.getElementById('raceCanvas');
   if(!canvas)return;
   const hist=getRaceData();
-  if(hist.length<1){return}// Need at least 1 data point (auto-generates origin + live)
+  if(hist.length<1){return}
   const ctx=canvas.getContext('2d');
   const dpr=window.devicePixelRatio||1;
   const rect=canvas.parentElement.getBoundingClientRect();
@@ -1211,49 +1304,49 @@ function drawRace(){
   const names=POOL.players.map(p=>p.name);
   const data=[{game:0,date:'',data:Object.fromEntries(names.map(n=>[n,0]))},...hist];
   const pts=data.length;
-  let maxY=0,maxG=162;
-  data.forEach(d=>{names.forEach(n=>{if(d.data[n]>maxY)maxY=d.data[n]});if(d.game>maxG)maxG=d.game});
+  let maxY=0,maxG=POOL.raceMax;
+  data.forEach(d=>{names.forEach(n=>{if((d.data[n]||0)>maxY)maxY=d.data[n]});if(d.game>maxG)maxG=d.game});
   if(maxY<=5)maxY=maxY+2;else if(maxY<=20)maxY=Math.ceil(maxY/5)*5+5;else if(maxY<=60)maxY=Math.ceil(maxY/10)*10+10;else maxY=Math.ceil(maxY/20)*20+20;
-  // Grid — use integer steps to avoid duplicate labels
   const gridStep=maxY<=10?1:maxY<=30?5:maxY<=80?10:20;
   const gridLines=Math.ceil(maxY/gridStep);
   ctx.strokeStyle='#222';ctx.lineWidth=1;
   for(let i=0;i<=gridLines;i++){const val=i*gridStep;const y=pad.top+ch-(val/maxY)*ch;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+cw,y);ctx.stroke();ctx.fillStyle='#555';ctx.font='10px Oswald';ctx.textAlign='right';ctx.fillText(val,pad.left-8,y+3)}
-  // X labels (game numbers)
   ctx.textAlign='center';
-  const gLabels=[0,20,40,60,80,100,120,140,162];
-  gLabels.forEach(g=>{const x=pad.left+(g/maxG)*cw;ctx.fillStyle='#444';ctx.font='10px Oswald';ctx.fillText(g===0?'Start':'G'+g,x,H-pad.bottom+20);ctx.strokeStyle='#1a1a1a';ctx.beginPath();ctx.moveTo(x,pad.top);ctx.lineTo(x,pad.top+ch);ctx.stroke()});
-  // Lines
+  POOL.raceTicks.forEach(g=>{const x=pad.left+(g/maxG)*cw;ctx.fillStyle='#444';ctx.font='10px Oswald';ctx.fillText(g===0?'Start':POOL.raceUnit+g,x,H-pad.bottom+20);ctx.strokeStyle='#1a1a1a';ctx.beginPath();ctx.moveTo(x,pad.top);ctx.lineTo(x,pad.top+ch);ctx.stroke()});
+  // Label placement: spread end labels apart so they don't overlap
+  const ends=names.filter(n=>!raceHidden[n]).map(n=>({n,y:pad.top+ch-((data[pts-1].data[n]||0)/maxY)*ch})).sort((a,b)=>a.y-b.y);
+  for(let i=1;i<ends.length;i++){if(ends[i].y-ends[i-1].y<12)ends[i].y=ends[i-1].y+12}
+  const labelY={};ends.forEach(e=>labelY[e.n]=e.y);
   names.forEach((name,ni)=>{
     if(raceHidden[name])return;
     ctx.strokeStyle=PCOL[ni];ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.beginPath();
-    for(let i=0;i<pts;i++){const x=pad.left+(data[i].game/maxG)*cw;const y=pad.top+ch-(data[i].data[name]/maxY)*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+    for(let i=0;i<pts;i++){const x=pad.left+(data[i].game/maxG)*cw;const y=pad.top+ch-((data[i].data[name]||0)/maxY)*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
     ctx.stroke();
-    const lastX=pad.left+(data[pts-1].game/maxG)*cw;const lastY=pad.top+ch-(data[pts-1].data[name]/maxY)*ch;
-    ctx.fillStyle=PCOL[ni];ctx.font='bold 11px Oswald';ctx.textAlign='left';ctx.fillText(name,lastX+8,lastY+4);
+    const lastX=pad.left+(data[pts-1].game/maxG)*cw;
+    ctx.fillStyle=PCOL[ni];ctx.font='bold 11px Oswald';ctx.textAlign='left';ctx.fillText(name,lastX+8,labelY[name]+4);
   });
-  // Hover
-  canvas.onmousemove=(e)=>{
-    const br=canvas.getBoundingClientRect(),mx=e.clientX-br.left;
-    if(mx<pad.left||mx>pad.left+cw){document.getElementById('rc-tt').style.display='none';return}
+  const showTip=(clientX,clientY,touch)=>{
+    const br=canvas.getBoundingClientRect(),mx=clientX-br.left;
+    const tt=document.getElementById('rc-tt');
+    if(mx<pad.left||mx>pad.left+cw){tt.style.display='none';return}
     const gameNum=((mx-pad.left)/cw)*maxG;
     let closest=0,closestDist=999;
     data.forEach((d,i)=>{const dist=Math.abs(d.game-gameNum);if(dist<closestDist){closestDist=dist;closest=i}});
     const snap=data[closest];
-    const sorted=names.filter(n=>!raceHidden[n]).map(n=>({n,v:snap.data[n]})).sort((a,b)=>b.v-a.v);
-    let html=`<div class="rc-tt-w">${snap.game===0?'Start':'Game '+snap.game}</div>`;
+    const sorted=names.filter(n=>!raceHidden[n]).map(n=>({n,v:snap.data[n]||0})).sort((a,b)=>b.v-a.v);
+    let html=`<div class="rc-tt-w">${snap.game===0?'Start':POOL.unit(snap.game)+(snap.date&&snap.date!=='Now'?' &bull; '+snap.date:'')}</div>`;
     sorted.forEach(s=>{html+=`<div class="rc-tt-r"><div class="rc-tt-d" style="background:${PCOL[names.indexOf(s.n)]}"></div><span class="rc-tt-n">${s.n}</span><span class="rc-tt-v">${s.v}</span></div>`});
-    const tt=document.getElementById('rc-tt');tt.innerHTML=html;tt.style.display='block';
-    let tx=e.clientX-br.left+16,ty=e.clientY-br.top-10;
-    if(tx+200>W)tx=e.clientX-br.left-210;tt.style.left=tx+'px';tt.style.top=ty+'px';
+    tt.innerHTML=html;tt.style.display='block';
+    let tx=clientX-br.left+16,ty=clientY-br.top-(touch?60:10);
+    if(tx+200>W)tx=clientX-br.left-210;if(ty<0)ty=10;tt.style.left=tx+'px';tt.style.top=ty+'px';
     drawRace();
     const sx=pad.left+(snap.game/maxG)*cw;
     ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(sx,pad.top);ctx.lineTo(sx,pad.top+ch);ctx.stroke();ctx.setLineDash([]);
-    names.forEach((name,ni)=>{if(raceHidden[name])return;const y=pad.top+ch-(snap.data[name]/maxY)*ch;ctx.fillStyle=PCOL[ni];ctx.beginPath();ctx.arc(sx,y,4,0,Math.PI*2);ctx.fill()});
+    names.forEach((name,ni)=>{if(raceHidden[name])return;const y=pad.top+ch-((snap.data[name]||0)/maxY)*ch;ctx.fillStyle=PCOL[ni];ctx.beginPath();ctx.arc(sx,y,4,0,Math.PI*2);ctx.fill()});
   };
+  canvas.onmousemove=(e)=>showTip(e.clientX,e.clientY,false);
   canvas.onmouseleave=()=>{document.getElementById('rc-tt').style.display='none'};
-  // Touch support for mobile
-  const handleTouch=(e)=>{e.preventDefault();const t=e.touches[0];if(!t)return;const br=canvas.getBoundingClientRect(),mx=t.clientX-br.left;if(mx<pad.left||mx>pad.left+cw){document.getElementById('rc-tt').style.display='none';return}const gameNum=((mx-pad.left)/cw)*maxG;let closest=0,closestDist=999;data.forEach((d,i)=>{const dist=Math.abs(d.game-gameNum);if(dist<closestDist){closestDist=dist;closest=i}});const snap=data[closest];const sorted=names.filter(n=>!raceHidden[n]).map(n=>({n,v:snap.data[n]})).sort((a,b)=>b.v-a.v);let html=`<div class="rc-tt-w">${snap.game===0?'Start':'Game '+snap.game}</div>`;sorted.forEach(s=>{html+=`<div class="rc-tt-r"><div class="rc-tt-d" style="background:${PCOL[names.indexOf(s.n)]}"></div><span class="rc-tt-n">${s.n}</span><span class="rc-tt-v">${s.v}</span></div>`});const tt=document.getElementById('rc-tt');tt.innerHTML=html;tt.style.display='block';let tx=t.clientX-br.left+16,ty=t.clientY-br.top-60;if(tx+200>W)tx=t.clientX-br.left-210;if(ty<0)ty=10;tt.style.left=tx+'px';tt.style.top=ty+'px'};
+  const handleTouch=(e)=>{e.preventDefault();const t=e.touches[0];if(!t)return;showTip(t.clientX,t.clientY,true)};
   canvas.ontouchstart=handleTouch;canvas.ontouchmove=handleTouch;
   canvas.ontouchend=()=>{document.getElementById('rc-tt').style.display='none'};
 }
@@ -1262,6 +1355,7 @@ function toggleRace(name,el){raceHidden[name]=!raceHidden[name];el.classList.tog
 // ═══ COMPARISON ═══
 function renderCompare(aIdx,bIdx){
   const a=POOL.players[aIdx],b=POOL.players[bIdx];
+  if(!a||!b)return;
   const sa=pStats(a),sb=pStats(b);
   const stats=[
     {label:'Actual Wins',a:sa.wins,b:sb.wins},
@@ -1275,8 +1369,8 @@ function renderCompare(aIdx,bIdx){
     rows+=`<div class="cmp-row"><div class="cmp-row-val left${aWin?' win':''}">${typeof s.a==='number'&&s.a%1!==0?s.a.toFixed(1):s.a}</div><div class="cmp-row-label">${s.label}</div><div class="cmp-row-val right${bWin?' win':''}">${typeof s.b==='number'&&s.b%1!==0?s.b.toFixed(1):s.b}</div></div>`;
   });
   let aTeams='',bTeams='';
-  a.teams.forEach(t=>{const tp=pOU(t);aTeams+=`<div class="cmp-team-item">${LB(t.abbr,'xs')}<div class="cmp-tm-name">${shortN(t.name)}</div><div class="cmp-tm-stat">${tp}</div></div>`});
-  b.teams.forEach(t=>{const tp=pOU(t);bTeams+=`<div class="cmp-team-item">${LB(t.abbr,'xs')}<div class="cmp-tm-name">${shortN(t.name)}</div><div class="cmp-tm-stat">${tp}</div></div>`});
+  a.teams.forEach(t=>{aTeams+=`<div class="cmp-team-item">${LB(t.abbr,'xs')}<div class="cmp-tm-name">${shortN(t.name)}</div><div class="cmp-tm-stat">${recStr(t)}</div></div>`});
+  b.teams.forEach(t=>{bTeams+=`<div class="cmp-team-item">${LB(t.abbr,'xs')}<div class="cmp-tm-name">${shortN(t.name)}</div><div class="cmp-tm-stat">${recStr(t)}</div></div>`});
   document.getElementById('cmp-body').innerHTML=`${rows}<div class="cmp-teams"><div class="cmp-team-col">${aTeams}</div><div class="cmp-team-col">${bTeams}</div></div>`;
   document.getElementById('cmp-name-a').textContent=a.name;
   document.getElementById('cmp-name-b').textContent=b.name;
@@ -1299,21 +1393,26 @@ const CAST = [
 ];
 
 // ═══ RENDER ═══
+let breakingMsg='';
 function render(){
-const R=getRanked();const gp=R[0].s.gp;const pct=gp>0?((gp/POOL.games)*100).toFixed(1):0;
-const leader=R[0];const allT=POOL.players.flatMap(p=>p.teams.map(t=>({...t,owner:p.name})));
-const totW=allT.reduce((s,t)=>s+t.w,0);const totG=allT.reduce((s,t)=>s+t.w+t.l,0);
-const sT=allT.map(t=>{const tg=t.w+t.l;const tWae=tg>0?t.w-(t.ou*tg/162):null;return{...t,pv:pOU(t),dv:pOU(t)-t.ou,wae:tWae}}).sort((a,b)=>b.pv-a.pv);
+const R=getRanked();const gp=R[0].s.gp;const sp=seasonProgress();const pct=sp.pct;
+const leader=R[0];
+const sT=rankedTeams(false);
+const totW=sT.reduce((s,t)=>s+t.w,0);const totL=sT.reduce((s,t)=>s+t.l,0);const totT=sT.reduce((s,t)=>s+(t.t||0),0);const totG=totW+totL+totT;
 const spread=leader.s.proj-R[R.length-1].s.proj;const avgOU=(R.reduce((s,p)=>s+p.s.ou,0)/R.length).toFixed(1);
+const started=gp>0;
 
 document.getElementById("bar-date").textContent=POOL.updated;
+document.title=`Wins Pool ${POOL.season} — ${SPORT}`;
 
 // Hero
-document.getElementById("hero-area").innerHTML=`<div class="hero-c"><div class="hero-ey">Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">'26</span></div><div class="hero-tag"><b>8</b> Players &bull; <b>24</b> Teams &bull; <b>162</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${gp>0?'Game '+gp+' of 162':'Opening Day Tomorrow'}</div></div></div>`;
-// Timers initialized once below, outside render()
+const startStr=POOL.start.toLocaleDateString('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric'});
+const heroSub=started?sp.label:POOL.startLabel+' '+startStr;
+document.getElementById("hero-area").innerHTML=`<div class="hero-c"><div class="hero-ey">${SPORT} Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">${POOL.yr}</span></div><div class="hero-tag"><b>${nP()}</b> Players &bull; <b>${nT()}</b> Teams &bull; <b>${G()}</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${heroSub}</div></div>${POOL.draftPending?'<div class="draft-pending">⚠ Placeholder rosters — draft results coming soon</div>':''}</div>`;
+updateCountdown();
 
 // Cast strip
-if(CAST.length>0){
+if(CAST.length>0&&!document.getElementById("cast-strip").innerHTML){
   const castHTML=CAST.map(c=>`<div class="cast-fig" data-label="${c.label}"><img src="${REPO_IMG}${c.img}" alt="${c.label}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`).join('');
   document.getElementById("cast-strip").innerHTML=`<div class="cast-in">${castHTML}</div><div class="cast-line"></div>`;
 }
@@ -1321,44 +1420,46 @@ if(CAST.length>0){
 // Nav
 const tabNames=["Standings","Players","All Teams","Draft Board","History"];
 const tabIds=["tab-standings","tab-players","tab-teams","tab-draft","tab-history"];
-document.getElementById("nav-area").innerHTML=tabNames.map((t,i)=>`<button class="nav-btn${i===0?' active':''}" role="tab" aria-selected="${i===0}" aria-controls="${tabIds[i]}" tabindex="${i===0?'0':'-1'}" onclick="switchTab(${i})" onkeydown="navKeyboard(event,${i})">${t}</button>`).join('');
+const curTab=[...document.querySelectorAll('.nav-btn')].findIndex(b=>b.classList.contains('active'));
+const activeTab=curTab>=0?curTab:0;
+document.getElementById("nav-area").innerHTML=tabNames.map((t,i)=>`<button class="nav-btn${i===activeTab?' active':''}" role="tab" aria-selected="${i===activeTab}" aria-controls="${tabIds[i]}" tabindex="${i===activeTab?'0':'-1'}" onclick="switchTab(${i})" onkeydown="navKeyboard(event,${i})">${t}</button>`).join('');
 
-// Stats
-const bestTeamName=sT[0]?shortN(sT[0].name):'';
-const bestTeamOwner=sT[0]?sT[0].owner:'';
-// Count today's games across all pool teams
-const allEntries=Object.values(GAME_LOG).flat();
+// Stats strip
+const bestT0=sT[0];
+const bestTeamName=bestT0?shortN(bestT0.name):'';
+const bestTeamOwner=bestT0?bestT0.owner:'';
+const allEntries=Object.values(GAME_LOGS[SPORT]).flat();
 const liveGames=new Set();const finalGames=new Set();const upcomingGames=new Set();
 allEntries.forEach(e=>{
-  const key=e.opp+(e.home?'H':'A');
+  const key=e.gid||(e.opp+(e.home?'H':'A'));
   if(e.type==='live')liveGames.add(key);
   else if(e.type==='final')finalGames.add(key);
   else if(e.type==='upcoming')upcomingGames.add(key);
 });
-const liveCount=Math.ceil(liveGames.size/2),finalCount=Math.ceil(finalGames.size/2),upCount=Math.ceil(upcomingGames.size/2);
-const todayTotal=liveCount+finalCount+upCount;
-const featLabel=liveCount>0?'Games Live':gp>0?'Pool Record':'Pool O/U Total';
-const featVal=liveCount>0?liveCount:gp>0?totW+'-'+(totG-totW):R.reduce((s,p)=>s+p.s.ou,0).toFixed(1);
-const featSub=liveCount>0?(finalCount>0?finalCount+' final \u2022 ':'')+upCount+' upcoming':gp>0?totG+' games played':'Combined pre-season lines';
-document.getElementById("sstrip-area").innerHTML=`<div class="ss feat"><div class="ss-l">${featLabel}</div><div class="ss-v" style="color:var(--r)">${featVal}</div><div class="ss-sub">${featSub}</div></div><div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">${leader.name}</div><div class="ss-sub">${leader.s.wins} win${leader.s.wins===1?'':'s'}</div></div><div class="ss"><div class="ss-l">Best Team</div><div class="ss-v">${bestTeamName}</div><div class="ss-sub">${sT[0]?sT[0].w+'-'+sT[0].l+' \u2022 '+bestTeamOwner:''}</div></div><div class="ss"><div class="ss-l">Projected Spread</div><div class="ss-v">${spread.toFixed(0)}</div><div class="ss-sub">1st to last</div></div><div class="ss"><div class="ss-l">Avg O/U</div><div class="ss-v">${avgOU}</div><div class="ss-sub">per player</div></div>`;
+const liveCount=liveGames.size,finalCount=finalGames.size,upCount=upcomingGames.size;
+const featLabel=liveCount>0?'Games Live':started?'Pool Record':'Pool O/U Total';
+const featVal=liveCount>0?liveCount:started?totW+'-'+totL+(totT>0?'-'+totT:''):R.reduce((s,p)=>s+p.s.ou,0).toFixed(1);
+const featSub=liveCount>0?(finalCount>0?finalCount+' final • ':'')+upCount+' upcoming':started?totG+' games played':'Combined pre-season lines';
+const bestSub=bestT0?(started?recStr(bestT0)+' • '+bestTeamOwner:'O/U '+bestT0.ou+' • '+bestTeamOwner):'';
+document.getElementById("sstrip-area").innerHTML=`<div class="ss feat"><div class="ss-l">${featLabel}</div><div class="ss-v" style="color:var(--r)">${featVal}</div><div class="ss-sub">${featSub}</div></div><div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">${leader.name}</div><div class="ss-sub">${leader.s.wins} win${leader.s.wins===1?'':'s'}</div></div><div class="ss"><div class="ss-l">Best Team</div><div class="ss-v">${bestTeamName}</div><div class="ss-sub">${bestSub}</div></div><div class="ss"><div class="ss-l">Projected Spread</div><div class="ss-v">${spread.toFixed(0)}</div><div class="ss-sub">1st to last</div></div><div class="ss"><div class="ss-l">Avg O/U</div><div class="ss-v">${avgOU}</div><div class="ss-sub">per player</div></div>`;
 
 // ═══ TAB 1: STANDINGS ═══
-// Golf-style tied rankings: compute rank with ties
-// During season: tied = same actual wins AND same projected. Pre-season: same projected.
 const ranks=[];
 R.forEach((p,i)=>{
   if(i===0){ranks.push({rk:1,tied:false})}
   else{
-    const sameWins=R[i].s.wins===R[i-1].s.wins;
+    const sameWins=started?R[i].s.wins===R[i-1].s.wins:R[i].s.proj===R[i-1].s.proj;
     if(sameWins){ranks.push({rk:ranks[i-1].rk,tied:true});ranks[i-1].tied=true}
     else{ranks.push({rk:i+1,tied:false})}
   }
 });
-let t1=`<div class="bh"><div class="bh-tag">Power Rankings</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${gp>0?'Through Game '+gp:'Pre-Season Projections'}</span></div></div><div class="plist">`;
+const earlyCut=SPORT==='NFL'?3:10; // games before we start showing pace/WAE badges
+let t1=`<div class="bh"><div class="bh-tag">Power Rankings</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${started?'Through '+POOL.unit(sp.unit):'Pre-Season Projections'}</span></div></div><div class="plist">`;
 R.forEach((p,i)=>{
   const rkInfo=ranks[i],rk=rkInfo.rk,rkLabel=rkInfo.tied?'T'+rk:String(rk),gb=leader.s.wins-p.s.wins;
-  let cards='';p.teams.forEach(t=>{const tg=t.w+t.l,tp=pOU(t),d=tp-t.ou,earlyS=tg<10,ds=earlyS?'':d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=earlyS?'ev':d>0?'ov':d<0?'un':'ev',rec=tg>0?t.w+'-'+t.l:'0-0',lgb=gameBadge(t.abbr);cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${bestC(TC[t.abbr]||["#333","#666"],t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec}${ds?' <span class="dbadge '+dc+'">'+ds+'</span>':''}</div><div class="ptc-pace">${earlyS?'':'Pace: '+tp}</div></div></div>`});
-  t1+=`<div class="pcard${rk===1?' r1':''}" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:linear-gradient(180deg,${tc(p.teams[0].abbr)},${tc(p.teams[1].abbr)},${tc(p.teams[2].abbr)})"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' \u2022 '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${p.s.ou.toFixed(1)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
+  let cards='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),d=tp-t.ou,earlyS=tg<earlyCut,ds=earlyS?'':d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=earlyS?'ev':d>0?'ov':d<0?'un':'ev',rec=recStr(t),lgb=gameBadge(t.abbr);cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${tcb(t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec}${ds?' <span class="dbadge '+dc+'">'+ds+'</span>':''}</div><div class="ptc-pace">${earlyS?'':'Pace: '+tp}</div></div></div>`});
+  const grad=`linear-gradient(180deg,${p.teams.map(t=>tc(t.abbr)).join(',')})`;
+  t1+=`<div class="pcard${rk===1?' r1':''}" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${p.s.ou.toFixed(1)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
 });
 t1+=`</div>`;
 
@@ -1370,25 +1471,24 @@ t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Headlines</div>
 const names=POOL.players.map(p=>p.name);
 const raceData=getRaceData();
 const hasHistory=raceData.length>=1;
-let legend=names.map((n,i)=>`<div class="rc-leg" role="checkbox" tabindex="0" aria-checked="true" aria-label="Toggle ${n}" onclick="toggleRace('${n}',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="rc-dot" style="background:${PCOL[i]}"></div><div class="rc-ln">${n}</div></div>`).join('');
-t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Season Race</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Cumulative Wins &bull; Games 1-162</span></div></div>`;
+let legend=names.map((n,i)=>`<div class="rc-leg${raceHidden[n]?' dim':''}" role="checkbox" tabindex="0" aria-checked="${!raceHidden[n]}" aria-label="Toggle ${n}" onclick="toggleRace('${n}',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="rc-dot" style="background:${PCOL[i]}"></div><div class="rc-ln">${n}</div></div>`).join('');
+t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Season Race</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Cumulative Wins &bull; ${SPORT==='NFL'?'Weeks 1-'+POOL.weeks:'Games 1-'+G()}</span></div></div>`;
 t1+=`<div class="rc-wrap"><div class="rc-hdr"><div class="rc-title">Who Led When?</div>${hasHistory?`<div class="rc-legend">${legend}</div>`:''}</div>`;
 if(hasHistory){t1+=`<div class="rc-body"><div class="rc-cw"><canvas id="raceCanvas"></canvas><div class="rc-tt" id="rc-tt"></div></div></div>`}
-else{t1+=`<div class="rc-empty"><b>Chart Activates Once Games Begin</b>Add weekly snapshots to POOL.history to see who's leading at every point in the season.<br>X-axis: Game 1 through Game 162 &bull; Y-axis: Cumulative combined wins</div>`}
+else{t1+=`<div class="rc-empty"><b>Chart Activates Once Games Begin</b>Builds itself automatically from every ${SPORT} result of the season.<br>X-axis: ${SPORT==='NFL'?'Week 1 through Week '+POOL.weeks:'Game 1 through Game '+G()} &bull; Y-axis: Cumulative combined wins</div>`}
 t1+=`</div>`;
 
 // Comparison tool
 const opts=POOL.players.map((p,i)=>`<option value="${i}">${p.name}</option>`).join('');
 t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Compare</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Head to Head</span></div></div>`;
-t1+=`<div class="compare-wrap"><div class="cmp-hdr"><div class="cmp-label">Player</div><select class="cmp-select" id="cmpA" onchange="renderCompare(+this.value,+document.getElementById('cmpB').value)">${opts}</select><div class="cmp-vs">VS</div><select class="cmp-select" id="cmpB" onchange="renderCompare(+document.getElementById('cmpA').value,+this.value)">${POOL.players.map((p,i)=>`<option value="${i}"${i===1?' selected':''}>${p.name}</option>`).join('')}</select></div><div class="cmp-body" id="cmp-body"><div style="display:grid;grid-template-columns:1fr 80px 1fr;margin-bottom:8px"><div class="cmp-col-name" id="cmp-name-a"></div><div></div><div class="cmp-col-name" id="cmp-name-b"></div></div></div></div>`;
+t1+=`<div class="compare-wrap"><div class="cmp-hdr"><div class="cmp-label">Player</div><select class="cmp-select" id="cmpA" onchange="renderCompare(+this.value,+document.getElementById('cmpB').value)">${opts}</select><div class="cmp-vs">VS</div><select class="cmp-select" id="cmpB" onchange="renderCompare(+document.getElementById('cmpA').value,+this.value)">${POOL.players.map((p,i)=>`<option value="${i}"${i===1?' selected':''}>${p.name}</option>`).join('')}</select></div><div class="cmp-body"><div style="display:grid;grid-template-columns:1fr 80px 1fr;margin-bottom:8px"><div class="cmp-col-name" id="cmp-name-a"></div><div></div><div class="cmp-col-name" id="cmp-name-b"></div></div><div id="cmp-body"></div></div></div>`;
 
-// (matchups section removed)
 document.getElementById("tab-standings").innerHTML=t1;
-setTimeout(()=>{if(hasHistory){drawRace();window.addEventListener('resize',drawRace)}renderCompare(0,1)},50);
+setTimeout(()=>{if(hasHistory){drawRace()}renderCompare(0,1)},50);
 
 // ═══ TAB 2: PLAYERS ═══
 let t2=`<div class="bh"><div class="bh-tag">Player Cards</div><div class="bh-acc"></div><div class="bh-line"></div></div><div class="cg">`;
-R.forEach((p,i)=>{const rkInfo=ranks[i],rk=rkInfo.rk,rC=rk===1?'r1':'rn',rkLabel=rkInfo.tied?'T'+rk:String(rk),gb=leader.s.wins-p.s.wins;let tR='';p.teams.forEach(t=>{const tg=t.w+t.l,tp=pOU(t),earlyS=tg<10,tWae=tg>0?t.w-(t.ou*tg/162):null,ds=earlyS||tWae===null?'':(tWae>=0?'+':'')+tWae.toFixed(1),dc=tWae===null||earlyS?'ev':tWae>=0?'ov':'un',rec=tg>0?t.w+'-'+t.l:'0-0',lgb=gameBadge(t.abbr);tR+=`<div class="pc-tr">${LB(t.abbr,'sm')}<div style="flex:1"><div class="pc-trn">${shortN(t.name)}</div><div class="pc-trm">Rd ${t.round} &bull; O/U ${t.ou} &bull; Pace ${tp}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right"><div class="pc-trr">${rec}</div>${ds?'<span class="dbadge '+dc+'" style="margin-top:2px;display:inline-block">'+ds+'</span>':''}</div></div>`});
+R.forEach((p,i)=>{const rkInfo=ranks[i],rk=rkInfo.rk,rC=rk===1?'r1':'rn',gb=leader.s.wins-p.s.wins;let tR='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),earlyS=tg<earlyCut,tWae=waeOf(t),ds=earlyS||tWae===null?'':(tWae>=0?'+':'')+tWae.toFixed(1),dc=tWae===null||earlyS?'ev':tWae>=0?'ov':'un',rec=recStr(t),lgb=gameBadge(t.abbr);tR+=`<div class="pc-tr">${LB(t.abbr,'sm')}<div style="flex:1"><div class="pc-trn">${shortN(t.name)}</div><div class="pc-trm">Rd ${t.round} &bull; O/U ${t.ou} &bull; Pace ${tp}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right"><div class="pc-trr">${rec}</div>${ds?'<span class="dbadge '+dc+'" style="margin-top:2px;display:inline-block">'+ds+'</span>':''}</div></div>`});
 const waeVal=p.s.gp>0?p.s.wae:null;
 const waeStr=waeVal!==null?(waeVal>=0?'+':'')+waeVal.toFixed(1):'—';
 const waeColor=waeVal===null?'var(--t4)':waeVal>=0?'var(--grn)':'var(--red-t)';
@@ -1397,73 +1497,85 @@ t2+=`<div class="pc"><div class="pch" style="background:linear-gradient(135deg,$
 t2+=`</div>`;document.getElementById("tab-players").innerHTML=t2;
 
 // ═══ TAB 3: TEAMS ═══
-const undraftedMapped=UNDRAFTED.map(t=>{const tg=t.w+t.l;const tWae=tg>0?t.w-(t.ou*tg/162):null;const bp=blendedPace(t.w,t.l,t.ou);return{...t,owner:"Undrafted",pv:bp!==null?bp:t.ou,dv:(bp!==null?bp:t.ou)-t.ou,wae:tWae}});
-const allTeams=[...sT,...undraftedMapped].sort((a,b)=>b.pv-a.pv);
-
-const hasGames=gp>0;
-const deltaHdr=hasGames?'vs Exp':'Delta';
-let t3=`<div class="bh"><div class="bh-tag">All 30 Teams</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Ranked by Pace &bull; 24 Drafted + 6 Undrafted</span></div></div><div class="tw"><table class="ttbl"><thead><tr><th style="width:36px;text-align:center">#</th><th>Team</th><th>Owner</th><th class="r">Record</th><th class="r">Pace</th><th class="r">O/U</th><th class="r">${deltaHdr}</th>${hasGames?'<th class="r lg-col">Last</th>':''}</tr></thead><tbody>`;
-allTeams.forEach((t,i)=>{const tg=t.w+t.l;const tWae=t.wae!==undefined?t.wae:(tg>0?t.w-(t.ou*tg/162):null);const useWae=hasGames&&tWae!==null;const ds=useWae?((tWae>=0?'+':'')+tWae.toFixed(1)):(t.dv>0?'+'+t.dv.toFixed(0):t.dv<0?t.dv.toFixed(0):'E');const dc=useWae?(tWae>=0?'ov':tWae<0?'un':'ev'):(t.dv>0?'ov':t.dv<0?'un':'ev');const rec=tg>0?t.w+'-'+t.l:'0-0',lgb=gameBadge(t.abbr);const isUndrafted=t.owner==='Undrafted';t3+=`<tr${isUndrafted?' class="undrafted-row"':''}><td style="text-align:center;font-family:var(--fd);font-weight:700;color:var(--t4)">${i+1}</td><td><div class="ttc"><div style="width:3px;height:28px;border-radius:2px;background:${bestC(TC[t.abbr]||["#333","#666"],t.abbr)};flex-shrink:0"></div>${LB(t.abbr,'xs')}<div class="ttn">${t.name}</div></div></td><td class="tto">${isUndrafted?'<span class="undrafted-tag">Undrafted</span>':'<span class="owner-tag">'+t.owner+'</span>'}</td><td class="r ttm">${rec}</td><td class="r ttm">${t.pv}</td><td class="r ttm" style="color:var(--t4)">${t.ou}</td><td class="r"><span class="dbadge ${dc}">${ds}</span></td>${hasGames?'<td class="r lg-col">'+(lgb||'<span style="color:var(--t4)">—</span>')+'</td>':''}</tr>`});
+const allTeams=rankedTeams(true);
+const nAll=allTeams.length,nUnd=POOL.undrafted.length;
+const deltaHdr=started?'vs Exp':'Delta';
+let t3=`<div class="bh"><div class="bh-tag">All ${nAll} Teams</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Ranked by ${started?'Record':'O/U'} &bull; ${nT()} Drafted + ${nUnd} Undrafted</span></div></div><div class="tw"><table class="ttbl"><thead><tr><th style="width:36px;text-align:center">#</th><th>Team</th><th>Owner</th><th class="r">Record</th><th class="r">Pace</th><th class="r">O/U</th><th class="r">${deltaHdr}</th>${started?'<th class="r lg-col">Last</th>':''}</tr></thead><tbody>`;
+allTeams.forEach((t,i)=>{const tWae=t.wae;const useWae=started&&tWae!==null;const ds=useWae?((tWae>=0?'+':'')+tWae.toFixed(1)):(t.dv>0?'+'+t.dv.toFixed(0):t.dv<0?t.dv.toFixed(0):'E');const dc=useWae?(tWae>=0?'ov':tWae<0?'un':'ev'):(t.dv>0?'ov':t.dv<0?'un':'ev');const rec=recStr(t),lgb=gameBadge(t.abbr);const isUndrafted=t.owner==='Undrafted';t3+=`<tr${isUndrafted?' class="undrafted-row"':''}><td style="text-align:center;font-family:var(--fd);font-weight:700;color:var(--t4)">${i+1}</td><td><div class="ttc"><div style="width:3px;height:28px;border-radius:2px;background:${tcb(t.abbr)};flex-shrink:0"></div>${LB(t.abbr,'xs')}<div class="ttn">${t.name}</div></div></td><td class="tto">${isUndrafted?'<span class="undrafted-tag">Undrafted</span>':'<span class="owner-tag">'+t.owner+'</span>'}</td><td class="r ttm">${rec}</td><td class="r ttm">${t.pv}</td><td class="r ttm" style="color:var(--t4)">${t.ou}</td><td class="r"><span class="dbadge ${dc}">${ds}</span></td>${started?'<td class="r lg-col">'+(lgb||'<span style="color:var(--t4)">—</span>')+'</td>':''}</tr>`});
 t3+=`</tbody></table></div>`;document.getElementById("tab-teams").innerHTML=t3;
 
 // ═══ TAB 4: DRAFT ═══
-// All columns stay in the same order. Arrows show draft flow direction.
-const dNames=["Woods","Chuck","Kyle","Hayden","Nash","Max","Winnie","Landon"];
-const dFlow=[{rd:1,label:"RD 1",note:"LINEAR"},{rd:2,label:"RD 2",note:"LINEAR"},{rd:3,label:"RD 3",note:"SNAKE"}];
+const dNames=POOL.draftOrder;
+const dFlow=POOL.draftFlow;
 const pm={};POOL.players.forEach(p=>{p.teams.forEach(t=>{pm[p.name+'_'+t.round]=t})});
-let t4=`<div class="bh"><div class="bh-tag">Draft Board</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Linear / Linear / Snake &bull; 8 Players</span></div></div><div class="db"><div class="dbg"><div class="dbh"></div>`;
+const flowLabel=dFlow.map(f=>f.note.charAt(0)+f.note.slice(1).toLowerCase()).join(' / ');
+let t4=`<div class="bh"><div class="bh-tag">Draft Board</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${flowLabel} &bull; ${nP()} Players</span></div></div><div class="db" style="--dbn:${dNames.length}"><div class="dbg"><div class="dbh"></div>`;
 dNames.forEach(n=>{t4+=`<div class="dbh">${n}</div>`});t4+=`</div>`;
 dFlow.forEach(f=>{
   t4+=`<div class="dbg"><div class="dbr">${f.label}<div class="db-flow">${f.note}</div></div>`;
-  dNames.forEach(n=>{const t=pm[n+'_'+f.rd];if(t){t4+=`<div class="dbp"><div class="db-pick">#${t.pick}</div>${LB(t.abbr,'sm')}<div class="dba">${t.abbr}</div><div class="dbou">${t.ou}</div></div>`}else{t4+=`<div class="dbp">\u2014</div>`}});
+  dNames.forEach(n=>{const t=pm[n+'_'+f.rd];if(t){t4+=`<div class="dbp"><div class="db-pick">#${t.pick}</div>${LB(t.abbr,'sm')}<div class="dba">${t.abbr}</div><div class="dbou">${t.ou}</div></div>`}else{t4+=`<div class="dbp">—</div>`}});
   t4+=`</div>`;
 });
 t4+=`<div class="dbg dbt-row"><div class="dbr" style="color:var(--y);border-bottom:none">TOT</div>`;
-dNames.forEach(n=>{const p=POOL.players.find(pl=>pl.name===n);const s=pStats(p);t4+=`<div class="dbp"><div class="dbtv">${s.proj}</div><div class="dbts">O/U ${s.ou.toFixed(1)}</div></div>`});
-t4+=`</div></div>`;document.getElementById("tab-draft").innerHTML=t4;
+dNames.forEach(n=>{const p=POOL.players.find(pl=>pl.name===n);if(!p){t4+=`<div class="dbp">—</div>`;return}const s=pStats(p);t4+=`<div class="dbp"><div class="dbtv">${s.proj}</div><div class="dbts">O/U ${s.ou.toFixed(1)}</div></div>`});
+t4+=`</div></div>`;
+if(POOL.undrafted.length){t4+=`<div class="undrafted-strip"><span class="undrafted-strip-lbl">Undrafted</span>${POOL.undrafted.map(t=>`<span class="undrafted-strip-item">${LB(t.abbr,'xs')}<span>${t.abbr}</span><span class="dbou">${t.ou}</span></span>`).join('')}</div>`}
+document.getElementById("tab-draft").innerHTML=t4;
 
 // ═══ TAB 5: HISTORY ═══
-let t5=`<div class="bh"><div class="bh-tag">League History</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Past Seasons &bull; All-Time Records</span></div></div>`;
+renderHistory();
 
-// All-time aggregation with sport-specific tracking + Vegas +/-
+// ═══ BOTTOMLINE — SINGLE PREMIUM TICKER ═══
+const tkLogos=(p)=>p.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.abbr)}"><img src="${L(LOGOKEY(t.abbr))}"></span>`).join('');
+let tk='';
+R.forEach((p,i)=>{
+  const abbrs=p.teams.map(t=>t.abbr).join('/');
+  tk+=`<div class="tki">${tkLogos(p)}<span class="tkt"><b>${p.name}</b> <span class="hl">${started?p.s.wins:p.s.proj}</span> ${started?'wins &bull; proj '+p.s.proj:'projected wins'}<span class="sub">${abbrs}</span></span></div><div class="tks">◆</div>`;
+});
+tk+=`<div class="tk-leader">${tkLogos(leader)}<span class="tkt">LEADER</span><span class="tk-stat">${leader.name} • ${started?leader.s.wins+' wins':leader.s.proj+' proj'}</span></div><div class="tks">◆</div>`;
+tk+=`<div class="tk-leader"><span class="tkt">1ST TO LAST</span><span class="tk-stat">${spread.toFixed(0)} win gap (proj)</span></div><div class="tks">◆</div>`;
+const bestT=sT[0],worstT=sT[sT.length-1];
+if(bestT)tk+=`<div class="tki"><span class="lbox mini" style="--acc:${tcb(bestT.abbr)}"><img src="${L(LOGOKEY(bestT.abbr))}"></span><span class="tkt"><b>${shortN(bestT.name)}</b> (${bestT.owner}) leads all teams • <span class="hl">${started?recStr(bestT):'O/U '+bestT.ou}</span></span></div><div class="tks">◆</div>`;
+if(worstT)tk+=`<div class="tki"><span class="lbox mini" style="--acc:${tcb(worstT.abbr)}"><img src="${L(LOGOKEY(worstT.abbr))}"></span><span class="tkt"><b>${shortN(worstT.name)}</b> (${worstT.owner}) trails • <span class="hl">${started?recStr(worstT):'O/U '+worstT.ou}</span></span></div><div class="tks">◆</div>`;
+const tkDur=Math.max(50,R.length*7);
+document.getElementById("bl-area").innerHTML=`<div class="bl-t"><div class="bl-tag">LIVE</div><div class="bl-sw"><div class="bl-s" style="--td1:${tkDur}s">${tk+tk}</div></div><div class="bl-break" id="bl-break"><div class="bl-break-tag">Breaking</div><div class="bl-break-text" id="bl-break-text"></div></div></div>`;
+breakingMsg=getBreaking();
+renderScoreboard();
+initTimers();
+}
+
+// ═══ HISTORY TAB ═══
+function renderHistory(){
+let t5=`<div class="bh"><div class="bh-tag">League History</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Past Seasons &bull; All-Time Records</span></div></div>`;
+// All-time: titles first, then +/- Vegas (wins across sports aren't comparable, so they're shown per sport, not summed)
 const atMap={};
-POOL.pastSeasons.forEach(season=>{
+PAST_SEASONS.forEach(season=>{
   if(!season.standings.length) return;
   season.standings.forEach(p=>{
-    if(!atMap[p.name]) atMap[p.name]={wins:0,ou:0,mlbTitles:0,nflTitles:0,seasons:0};
-    atMap[p.name].wins+=p.wins;
-    atMap[p.name].ou+=p.ou||0;
-    atMap[p.name].seasons++;
-    if(p.rank===1){
-      if(season.sport==='MLB') atMap[p.name].mlbTitles++;
-      else atMap[p.name].nflTitles++;
-    }
+    if(!atMap[p.name]) atMap[p.name]={mlbW:0,nflW:0,ou:0,wins:0,mlbTitles:0,nflTitles:0,seasons:0,mlbYears:[],nflYears:[]};
+    const a=atMap[p.name];
+    if(season.sport==='MLB')a.mlbW+=p.wins;else a.nflW+=p.wins;
+    a.wins+=p.wins;a.ou+=p.ou||0;a.seasons++;
+    if(p.rank===1){const yr="'"+String(season.year).slice(-2);if(season.sport==='MLB'){a.mlbTitles++;a.mlbYears.push(yr)}else{a.nflTitles++;a.nflYears.push(yr)}}
   });
 });
-const atRanked=Object.entries(atMap).map(([name,d])=>({name,...d,delta:d.wins-d.ou,totalTitles:d.mlbTitles+d.nflTitles})).sort((a,b)=>b.wins-a.wins||b.totalTitles-a.totalTitles);
-
+const atRanked=Object.entries(atMap).map(([name,d])=>({name,...d,delta:d.wins-d.ou,totalTitles:d.mlbTitles+d.nflTitles})).sort((a,b)=>b.totalTitles-a.totalTitles||b.delta-a.delta);
 if(atRanked.length>0){
-  t5+=`<div class="hist-section"><div class="hist-section-title">All-Time Leaderboard <span style="font-size:11px;font-weight:400;color:var(--t4);letter-spacing:1px;margin-left:8px;text-transform:none">Based on Vegas O/U Lines</span></div><div class="tw"><table class="ttbl"><thead><tr><th style="width:36px;text-align:center">#</th><th>Player</th><th class="r">Titles</th><th class="r">Wins</th><th class="r">O/U</th><th class="r">+/- Vegas</th><th class="r">Seasons</th></tr></thead><tbody>`;
+  t5+=`<div class="hist-section"><div class="hist-section-title">All-Time Leaderboard <span style="font-size:11px;font-weight:400;color:var(--t4);letter-spacing:1px;margin-left:8px;text-transform:none">Titles, then +/- vs Vegas</span></div><div class="tw"><table class="ttbl"><thead><tr><th style="width:36px;text-align:center">#</th><th>Player</th><th class="r">Titles</th><th class="r">MLB W</th><th class="r">NFL W</th><th class="r">+/- Vegas</th><th class="r">Seasons</th></tr></thead><tbody>`;
   atRanked.forEach((p,i)=>{
-    // Sport-specific title badges — mini league logo + year
     let badges='';
-    const mlbYears=[], nflYears=[];
-    POOL.pastSeasons.forEach(s=>{if(!s.standings.length)return;s.standings.forEach(sp=>{if(sp.name===p.name&&sp.rank===1){if(s.sport==='MLB')mlbYears.push("'"+String(s.year).slice(-2));else nflYears.push("'"+String(s.year).slice(-2))}})});
-    mlbYears.forEach(yr=>{badges+=`<span class="title-chip mlb-chip"><img src="${L('MLB_SHIELD')}" class="title-chip-logo" alt="MLB">${yr}</span>`});
-    nflYears.forEach(yr=>{badges+=`<span class="title-chip nfl-chip"><img src="${L('NFL_SHIELD')}" class="title-chip-logo" alt="NFL">${yr}</span>`});
+    p.mlbYears.forEach(yr=>{badges+=`<span class="title-chip mlb-chip"><img src="${L('MLB_SHIELD')}" class="title-chip-logo" alt="MLB">${yr}</span>`});
+    p.nflYears.forEach(yr=>{badges+=`<span class="title-chip nfl-chip"><img src="${L('NFL_SHIELD')}" class="title-chip-logo" alt="NFL">${yr}</span>`});
     const dv=p.delta,ds=dv>0?'+'+dv.toFixed(1):dv<0?dv.toFixed(1):'E',dc=dv>0?'ov':dv<0?'un':'ev';
-    t5+=`<tr${i<3?' class="hist-top"':''}><td style="text-align:center;font-family:var(--fd);font-weight:700;color:${i===0?'var(--y)':i<3?'var(--t2)':'var(--t4)'}">${i+1}</td><td><span class="hist-name">${p.name}</span>${badges?' '+badges:''}</td><td class="r hist-stat">${p.totalTitles||'-'}</td><td class="r hist-stat" style="color:var(--y);font-weight:700">${p.wins}</td><td class="r hist-stat" style="color:var(--t4)">${p.ou.toFixed(1)}</td><td class="r"><span class="dbadge ${dc}">${ds}</span></td><td class="r hist-stat">${p.seasons}</td></tr>`;
+    t5+=`<tr${i<3?' class="hist-top"':''}><td style="text-align:center;font-family:var(--fd);font-weight:700;color:${i===0?'var(--y)':i<3?'var(--t2)':'var(--t4)'}">${i+1}</td><td><span class="hist-name">${p.name}</span>${badges?' '+badges:''}</td><td class="r hist-stat" style="color:var(--y);font-weight:700">${p.totalTitles||'-'}</td><td class="r hist-stat">${p.mlbW||'-'}</td><td class="r hist-stat">${p.nflW||'-'}</td><td class="r"><span class="dbadge ${dc}">${ds}</span></td><td class="r hist-stat">${p.seasons}</td></tr>`;
   });
   t5+=`</tbody></table></div></div>`;
 }
-
-// Past season standings cards — replicates the Power Rankings layout
-POOL.pastSeasons.forEach(season=>{
+PAST_SEASONS.forEach(season=>{
   const sp=season.sport;
   const champYr="'"+String(season.year).slice(-2);
   t5+=`<div class="hist-card"><div class="hist-card-hdr"><div class="hist-sport-badge ${sp.toLowerCase()}">${sp}</div><div class="hist-card-title">${season.label}</div></div>`;
   if(season.note) t5+=`<div class="hist-note">${season.note}</div>`;
-
   if(season.standings.length>0){
     t5+=`<div class="plist" style="padding:16px 20px">`;
     season.standings.forEach((p,i)=>{
@@ -1471,19 +1583,14 @@ POOL.pastSeasons.forEach(season=>{
       const delta=p.wins-(p.ou||0);
       const ds=delta>0?'+'+delta.toFixed(1):delta<0?delta.toFixed(1):'E';
       const dc=delta>0?'ov':delta<0?'un':'ev';
-
-      // Team detail cards (expandable)
       let cards='';
       p.teams.forEach(t=>{
         const td=t.w-(t.ou||0),tds=td>0?'+'+td.toFixed(1):td<0?td.toFixed(1):'E',tdc=td>0?'ov':td<0?'un':'ev';
-        cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${stc(sp,t.abbr)}"></div>${SLB(sp,t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">O/U ${t.ou||'—'}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${t.w}W <span class="dbadge ${tdc}">${tds}</span></div></div></div>`;
+        cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${stcBest(sp,t.abbr)}"></div>${SLB(sp,t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">O/U ${t.ou||'—'}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${t.w}W <span class="dbadge ${tdc}">${tds}</span></div></div></div>`;
       });
-
-      // Color gradient from team colors
       const colors=p.teams.map(t=>stc(sp,t.abbr));
-      const grad=colors.length>=3?`linear-gradient(180deg,${colors[0]},${colors[1]},${colors[2]})`:`linear-gradient(180deg,${colors[0]||'#333'},${colors[1]||'#666'})`;
-
-      t5+=`<div class="pcard${rk<=3?' r'+rk:''}" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rk}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>SLB(sp,t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}${rk===1?' <span class="title-chip '+(sp==='MLB'?'mlb':'nfl')+'-chip" style="margin-left:8px">\uD83C\uDFC6 '+champYr+'</span>':''}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${p.gb>0?' \u2022 '+p.gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p" style="color:var(--t2)">${p.ou||'—'}</div><div class="pnl">O/U</div></div><div class="pnb"><div class="pnv o"><span class="dbadge ${dc}" style="font-size:16px">${ds}</span></div><div class="pnl">+/- Vegas</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
+      const grad=`linear-gradient(180deg,${colors.join(',')})`;
+      t5+=`<div class="pcard${rk<=3?' r'+rk:''}" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rk}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>SLB(sp,t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}${rk===1?' <span class="title-chip '+(sp==='MLB'?'mlb':'nfl')+'-chip" style="margin-left:8px">🏆 '+champYr+'</span>':''}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${p.gb>0?' • '+p.gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p" style="color:var(--t2)">${p.ou||'—'}</div><div class="pnl">O/U</div></div><div class="pnb"><div class="pnv o"><span class="dbadge ${dc}" style="font-size:16px">${ds}</span></div><div class="pnl">+/- Vegas</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
     });
     t5+=`</div>`;
   } else {
@@ -1491,46 +1598,18 @@ POOL.pastSeasons.forEach(season=>{
   }
   t5+=`</div>`;
 });
-
 document.getElementById("tab-history").innerHTML=t5;
+}
 
-// ═══ BOTTOMLINE — SINGLE PREMIUM TICKER ═══
-const tkLogos=(p)=>p.teams.map(t=>`<span class="lbox mini" style="--acc:${bestC(TC[t.abbr]||["#333","#666"],t.abbr)}"><img src="${L(t.abbr)}"></span>`).join('');
-
-let tk='';
-// Every player — 3 logos + name + projected wins + team abbrs for context
-R.forEach((p,i)=>{
-  const abbrs=p.teams.map(t=>t.abbr).join('/');
-  tk+=`<div class="tki">${tkLogos(p)}<span class="tkt"><b>${p.name}</b> <span class="hl">${p.s.proj}</span> projected wins<span class="sub">${abbrs}</span></span></div><div class="tks">\u25C6</div>`;
-});
-// Leader callout with logos
-tk+=`<div class="tk-leader">${tkLogos(leader)}<span class="tkt">LEADER</span><span class="tk-stat">${leader.name} \u2022 ${leader.s.proj} wins</span></div><div class="tks">\u25C6</div>`;
-// Spread with context
-const last=R[R.length-1];
-tk+=`<div class="tk-leader"><span class="tkt">1ST TO LAST</span><span class="tk-stat">${spread.toFixed(0)} win gap</span></div><div class="tks">\u25C6</div>`;
-// Best/worst team — include owner name for context
-const bestT=sT[0],worstT=sT[sT.length-1];
-if(bestT){const own=POOL.players.find(p=>p.teams.some(t=>t.abbr===bestT.abbr));if(own)tk+=`<div class="tki"><span class="lbox mini" style="--acc:${bestC(TC[bestT.abbr]||["#333","#666"],bestT.abbr)}"><img src="${L(bestT.abbr)}"></span><span class="tkt"><b>${shortN(bestT.name)}</b> (${own.name}) leads all teams \u2022 <span class="hl">${bestT.pv}</span> pace</span></div><div class="tks">\u25C6</div>`}
-if(worstT){const own=POOL.players.find(p=>p.teams.some(t=>t.abbr===worstT.abbr));if(own)tk+=`<div class="tki"><span class="lbox mini" style="--acc:${bestC(TC[worstT.abbr]||["#333","#666"],worstT.abbr)}"><img src="${L(worstT.abbr)}"></span><span class="tkt"><b>${shortN(worstT.name)}</b> (${own.name}) trails \u2022 <span class="hl">${worstT.pv}</span> pace</span></div><div class="tks">\u25C6</div>`}
-const tkDur=Math.max(50,R.length*7);
-document.getElementById("bl-area").innerHTML=`<div class="bl-t"><div class="bl-tag">LIVE</div><div class="bl-sw"><div class="bl-s" style="--td1:${tkDur}s">${tk+tk}</div></div><div class="bl-break" id="bl-break"><div class="bl-break-tag">Breaking</div><div class="bl-break-text" id="bl-break-text"></div></div></div>`;
-
-// Breaking news takeover — flashes every 45s for 6s
-const breakingMsg=getBreaking();
+// Breaking news takeover — flashes every 45s for 8s
 function flashBreaking(){
   const el=document.getElementById('bl-break');
   const txt=document.getElementById('bl-break-text');
-  if(!el||!txt)return;
-  const sep=' \u25C6 ';
+  if(!el||!txt||!breakingMsg)return;
+  const sep=' ◆ ';
   txt.innerHTML=`<span>${breakingMsg}${sep}${breakingMsg}${sep}</span>`;
   el.classList.add('active');
   setTimeout(()=>{el.classList.remove('active')},8000);
-}
-// First flash after 8s, then every 45s
-setTimeout(()=>{flashBreaking();setInterval(flashBreaking,45000)},8000);
-
-// Init timers once
-initTimers();
 }
 
 function switchTab(idx){
@@ -1540,15 +1619,11 @@ function switchTab(idx){
     const el=document.getElementById(id);
     if(!el)return;
     el.classList.remove('active','wipe-in');
-    btns[i].classList.toggle("active",i===idx);
-    btns[i].setAttribute('aria-selected',i===idx);
-    btns[i].setAttribute('tabindex',i===idx?'0':'-1');
+    if(btns[i]){btns[i].classList.toggle("active",i===idx);btns[i].setAttribute('aria-selected',i===idx);btns[i].setAttribute('tabindex',i===idx?'0':'-1')}
     if(i===idx){el.classList.add('active','wipe-in')}
   });
-  if(idx===0)setTimeout(()=>{if(getRaceData().length>=1)drawRace();renderCompare(+document.getElementById('cmpA').value,+document.getElementById('cmpB').value)},100);
+  if(idx===0)setTimeout(()=>{if(getRaceData().length>=1)drawRace();const a=document.getElementById('cmpA'),b=document.getElementById('cmpB');if(a&&b)renderCompare(+a.value,+b.value)},100);
 }
-
-// Keyboard navigation for tabs (arrow keys)
 function navKeyboard(e,idx){
   const btns=document.querySelectorAll('.nav-btn');
   const len=btns.length;
@@ -1560,32 +1635,62 @@ function navKeyboard(e,idx){
   else return;
   switchTab(next);btns[next].focus();
 }
-// ═══ LIVE DATA: MLB STATS API (primary) + GOOGLE SHEETS (fallback) ═══
-const MLB_API=`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${POOL.season}&standingsTypes=regularSeason`;
+
+// ═══════════════════════════════════════════════════════════════
+// LIVE DATA LAYER
+//   MLB: MLB Stats API (standings + schedule) with Google Sheets fallback for standings
+//   NFL: ESPN public API (standings + weekly scoreboards)
+// ═══════════════════════════════════════════════════════════════
+const REFRESH_MS=5*60*1000; // Auto-refresh every 5 minutes
 const SHEET_ID='1rHrdTvle1XobwnHZTxRyS1aEJmbyZ5cMrslVv9QJyhY';
 const GVIZ=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Clean_MLB`;
-const REFRESH_MS=5*60*1000; // Auto-refresh every 5 minutes
+const MLB_API=`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${SPORTS.MLB.season}&standingsTypes=regularSeason`;
+const ESPN_NFL='https://site.api.espn.com/apis';
+const NFL_STANDINGS=`${ESPN_NFL}/v2/sports/football/nfl/standings?season=${SPORTS.NFL.season}&seasontype=2`;
+const NFL_SCOREBOARD=`${ESPN_NFL}/site/v2/sports/football/nfl/scoreboard`;
 
 // MLB Stats API team ID → abbreviation
-const MLB_ID_ABBR={108:"LAA",109:"ARI",110:"BAL",111:"BOS",112:"CHC",113:"CIN",114:"CLE",115:"COL",116:"DET",117:"HOU",118:"KC",119:"LAD",120:"WSH",121:"NYM",133:"OAK",134:"PIT",135:"SD",136:"SEA",137:"SF",138:"STL",139:"TB",140:"TEX",141:"TOR",142:"MIN",143:"PHI",144:"ATL",145:"CHW",146:"MIA",147:"NYY",158:"MIL"};
-
-// Abbreviation → team ID (reverse lookup)
+const MLB_ID_ABBR={108:"LAA",109:"ARI",110:"BAL",111:"BOS",112:"CHC",113:"CIN",114:"CLE",115:"COL",116:"DET",117:"HOU",118:"KC",119:"LAD",120:"WSH",121:"NYM",133:"ATH",134:"PIT",135:"SD",136:"SEA",137:"SF",138:"STL",139:"TB",140:"TEX",141:"TOR",142:"MIN",143:"PHI",144:"ATL",145:"CHW",146:"MIA",147:"NYY",158:"MIL"};
 const ABBR_MLB_ID={};Object.entries(MLB_ID_ABBR).forEach(([id,abbr])=>{ABBR_MLB_ID[abbr]=+id});
 
-// ═══ GAME DATA: RESULTS, LIVE, UPCOMING ═══
-const GAME_LOG={};  // abbr -> [{type,date,opp,home,w,rs,ra,inning,time}]
-let SCOREBOARD=[];  // [{state,away,home,awayS,homeS,inning,innHalf,time,day,awayP,homeP,poolAway,poolHome,gameDateRaw}]
+// Per-sport game logs + scoreboards (kept separately so switching sports is instant)
+const GAME_LOGS={MLB:{},NFL:{}};   // abbr -> [{type,gid,date,opp,home,w,rs,ra,inning,time,day}]
+const SCOREBOARDS={MLB:[],NFL:[]}; // [{state,away,home,awayS,homeS,inning,time,day,awayP,homeP,poolAway,poolHome,gameDateRaw}]
+const NFL_STATE={week:null,weekDone:false};
+const fmtDate=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const ctTime=(iso)=>{const gt=new Date(iso);const s=gt.toLocaleString('en-US',{timeZone:'America/Chicago',hour:'numeric',minute:'2-digit',hour12:true});return s.replace(' ','').replace('AM','a').replace('PM','p')+' CT'};
+const lsGet=(k)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const poolTeamMap=(sport)=>{const m={};SPORTS[sport].players.forEach(p=>p.teams.forEach(t=>{m[t.abbr]=p.name}));return m};
 
+// Build race snapshots from per-period team wins.
+// periods: [{game, date, wins:{abbr:cumWins}, gp:{abbr:cumGames}}] (cumulative)
+function buildRace(sport,periods){
+  const S=SPORTS[sport];
+  return periods.map(pd=>{
+    const data={};
+    S.players.forEach(p=>{data[p.name]=p.teams.reduce((s,t)=>s+(pd.wins[t.abbr]||0),0)});
+    return{game:pd.game,date:pd.date,data};
+  });
+}
+
+// ─────────────────────────── MLB ───────────────────────────
+function fetchMLBApi(){
+  return fetch(MLB_API).then(r=>r.json()).then(data=>{
+    const standings={};
+    (data.records||[]).forEach(div=>{(div.teamRecords||[]).forEach(tr=>{const abbr=MLB_ID_ABBR[tr.team.id];if(abbr)standings[abbr]={w:tr.wins||0,l:tr.losses||0,t:0}})});
+    return standings;
+  });
+}
 function fetchGameResults(){
-  const now=new Date();const fmt=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  const today=fmt(now);const start=fmt(new Date(now.getTime()-3*86400000));
-  const tomorrow=fmt(new Date(now.getTime()+86400000));
+  const now=new Date();
+  const today=fmtDate(now);const start=fmtDate(new Date(now.getTime()-3*86400000));
+  const tomorrow=fmtDate(new Date(now.getTime()+86400000));
   const url=`https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=${start}&endDate=${tomorrow}&hydrate=linescore,probablePitcher`;
   return fetch(url).then(r=>r.json()).then(data=>{
     const results={};const sbGames=[];
     const addEntry=(abbr,entry)=>{if(!results[abbr])results[abbr]=[];results[abbr].push(entry)};
-    // Build set of pool teams for ownership tagging
-    const poolTeams={};POOL.players.forEach(p=>p.teams.forEach(t=>{poolTeams[t.abbr]=p.name}));
+    const poolTeams=poolTeamMap('MLB');
     (data.dates||[]).forEach(d=>{
       const dateStr=new Date(d.date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
       const isToday=d.date===today;const isTomorrow=d.date===tomorrow;
@@ -1597,205 +1702,271 @@ function fetchGameResults(){
         const state=g.status.abstractGameState;// Preview, Live, Final
         const ls=g.linescore||{};
         const inn=ls.currentInning||'';const half=ls.inningHalf||'';
-        const innStr=inn?(half==='Top'?'\u25B2'+inn:half==='Bottom'?'\u25BC'+inn:inn+'th'):'';
-        // Probable pitchers
-        const awayPP=away.probablePitcher;const homePP=home.probablePitcher;
+        const innStr=inn?(half==='Top'?'▲'+inn:half==='Bottom'?'▼'+inn:inn+'th'):'';
         const fmtP=(pp)=>{if(!pp)return'TBD';if(pp.firstName&&pp.lastName)return pp.firstName.charAt(0)+'. '+pp.lastName;if(pp.fullName){const pts=pp.fullName.split(' ');return pts.length>1?pts[0].charAt(0)+'. '+pts.slice(1).join(' '):pp.fullName}return pp.lastName||'TBD'};
-        const awayPName=fmtP(awayPP);
-        const homePName=fmtP(homePP);
-
+        const awayPName=fmtP(away.probablePitcher),homePName=fmtP(home.probablePitcher);
+        const gid=g.gamePk;
         if(state==='Final'){
-          if(awayAbbr)addEntry(awayAbbr,{type:'final',date:dateStr,opp:homeAbbr,home:false,w:awayS>homeS,rs:awayS,ra:homeS});
-          if(homeAbbr)addEntry(homeAbbr,{type:'final',date:dateStr,opp:awayAbbr,home:true,w:homeS>awayS,rs:homeS,ra:awayS});
+          if(awayAbbr)addEntry(awayAbbr,{type:'final',gid,date:dateStr,opp:homeAbbr,home:false,w:awayS>homeS,rs:awayS,ra:homeS});
+          if(homeAbbr)addEntry(homeAbbr,{type:'final',gid,date:dateStr,opp:awayAbbr,home:true,w:homeS>awayS,rs:homeS,ra:awayS});
         } else if(state==='Live'){
-          if(awayAbbr)addEntry(awayAbbr,{type:'live',opp:homeAbbr,home:false,rs:awayS,ra:homeS,inning:innStr});
-          if(homeAbbr)addEntry(homeAbbr,{type:'live',opp:awayAbbr,home:true,rs:homeS,ra:awayS,inning:innStr});
+          if(awayAbbr)addEntry(awayAbbr,{type:'live',gid,opp:homeAbbr,home:false,rs:awayS,ra:homeS,inning:innStr});
+          if(homeAbbr)addEntry(homeAbbr,{type:'live',gid,opp:awayAbbr,home:true,rs:homeS,ra:awayS,inning:innStr});
         } else if(state==='Preview'){
-          const gt=new Date(g.gameDate);
-          const ctStr=gt.toLocaleString('en-US',{timeZone:'America/Chicago',hour:'numeric',minute:'2-digit',hour12:true});
-          const timeStr=ctStr.replace(' ','').replace('AM','a').replace('PM','p')+' CT';
+          const timeStr=ctTime(g.gameDate);
           const dayLabel=isToday?'':isTomorrow?'Tmr':'';
-          if(awayAbbr)addEntry(awayAbbr,{type:'upcoming',opp:homeAbbr,home:false,time:timeStr,day:dayLabel});
-          if(homeAbbr)addEntry(homeAbbr,{type:'upcoming',opp:awayAbbr,home:true,time:timeStr,day:dayLabel});
+          if(awayAbbr)addEntry(awayAbbr,{type:'upcoming',gid,opp:homeAbbr,home:false,time:timeStr,day:dayLabel});
+          if(homeAbbr)addEntry(homeAbbr,{type:'upcoming',gid,opp:awayAbbr,home:true,time:timeStr,day:dayLabel});
         }
-        // Scoreboard entry (today's + tomorrow's games only)
         if((isToday||isTomorrow)&&awayAbbr&&homeAbbr){
-          const gt=new Date(g.gameDate);
-          const ctStr2=gt.toLocaleString('en-US',{timeZone:'America/Chicago',hour:'numeric',minute:'2-digit',hour12:true});
-          const timeStr=ctStr2.replace(' ','').replace('AM','a').replace('PM','p')+' CT';
-          sbGames.push({
-            state,away:awayAbbr,home:homeAbbr,awayS,homeS,
-            inning:innStr,innNum:inn,innHalf:half,
-            time:timeStr,day:isToday?'Today':isTomorrow?'Tomorrow':'',
-            awayP:awayPName,homeP:homePName,
-            poolAway:poolTeams[awayAbbr]||null,poolHome:poolTeams[homeAbbr]||null,
-            gameDateRaw:g.gameDate
-          });
+          sbGames.push({state,away:awayAbbr,home:homeAbbr,awayS,homeS,inning:innStr,time:ctTime(g.gameDate),day:isToday?'Today':'Tomorrow',awayP:awayPName,homeP:homePName,poolAway:poolTeams[awayAbbr]||null,poolHome:poolTeams[homeAbbr]||null,gameDateRaw:g.gameDate});
         }
       });
     });
-    Object.keys(GAME_LOG).forEach(k=>delete GAME_LOG[k]);
-    Object.assign(GAME_LOG,results);
-    // Sort scoreboard: live first, then upcoming by time, then final
+    Object.keys(GAME_LOGS.MLB).forEach(k=>delete GAME_LOGS.MLB[k]);
+    Object.assign(GAME_LOGS.MLB,results);
     const stateOrd={Live:1,Preview:2,Final:3};
-    SCOREBOARD=sbGames.sort((a,b)=>(stateOrd[a.state]||9)-(stateOrd[b.state]||9)||new Date(a.gameDateRaw)-new Date(b.gameDateRaw));
-    renderScoreboard();
+    SCOREBOARDS.MLB=sbGames.sort((a,b)=>(stateOrd[a.state]||9)-(stateOrd[b.state]||9)||new Date(a.gameDateRaw)-new Date(b.gameDateRaw));
   }).catch(()=>{});
+}
+// Full-season results → race chart. Cached per device; only the last few days are re-fetched each load.
+function fetchMLBHistory(){
+  const S=SPORTS.MLB;const key='wp-mlb-hist-'+S.season;
+  const cache=lsGet(key)||{daily:{},through:null};
+  const now=new Date();const today=fmtDate(now);
+  let start=fmtDate(S.start);
+  if(cache.through){const d=new Date(cache.through+'T12:00:00');d.setDate(d.getDate()-3);const s=fmtDate(d);if(s>start)start=s}
+  if(start>today)return Promise.resolve(RACE.MLB=buildMLBRace(cache.daily));
+  const url=`https://statsapi.mlb.com/api/v1/schedule?sportId=1&season=${S.season}&gameType=R&startDate=${start}&endDate=${today}&fields=dates,date,games,gameType,status,abstractGameState,teams,away,home,team,id,isWinner`;
+  return fetch(url).then(r=>r.json()).then(data=>{
+    (data.dates||[]).forEach(d=>{
+      const day={};
+      (d.games||[]).forEach(g=>{
+        if(g.gameType!=='R'||g.status.abstractGameState!=='Final')return;
+        const a=MLB_ID_ABBR[g.teams.away.team.id],h=MLB_ID_ABBR[g.teams.home.team.id];
+        if(!a||!h)return;
+        if(!day[a])day[a]=[0,0];if(!day[h])day[h]=[0,0];
+        if(g.teams.away.isWinner){day[a][0]++;day[h][1]++}else if(g.teams.home.isWinner){day[h][0]++;day[a][1]++}
+      });
+      if(Object.keys(day).length)cache.daily[d.date]=day;else delete cache.daily[d.date];
+    });
+    cache.through=today;
+    lsSet(key,cache);
+    RACE.MLB=buildMLBRace(cache.daily);
+  }).catch(()=>{RACE.MLB=buildMLBRace(cache.daily)});
+}
+function buildMLBRace(daily){
+  const dates=Object.keys(daily).sort();
+  if(!dates.length)return null;
+  const pool=Object.keys(poolTeamMap('MLB'));
+  const cw={},cg={};const periods=[];
+  dates.forEach(date=>{
+    const day=daily[date];
+    Object.entries(day).forEach(([abbr,[w,l]])=>{cw[abbr]=(cw[abbr]||0)+w;cg[abbr]=(cg[abbr]||0)+w+l});
+    const game=Math.max(0,...pool.map(a=>cg[a]||0));
+    const label=new Date(date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    periods.push({game,date:label,wins:{...cw}});
+  });
+  // Thin to one point per game number (keeps ~162 points max)
+  const byGame={};periods.forEach(p=>{byGame[p.game]=p});
+  return buildRace('MLB',Object.values(byGame).sort((a,b)=>a.game-b.game));
+}
+// Google Sheets fallback (MLB standings only)
+const NAME_TO_ABBR={"Los Angeles Dodgers":"LAD","Toronto Blue Jays":"TOR","Tampa Bay Rays":"TB","Boston Red Sox":"BOS","Milwaukee Brewers":"MIL","Chicago White Sox":"CHW","Philadelphia Phillies":"PHI","Detroit Tigers":"DET","Oakland Athletics":"ATH","Athletics":"ATH","Sacramento Athletics":"ATH","Atlanta Braves":"ATL","San Diego Padres":"SD","Arizona Diamondbacks":"ARI","Seattle Mariners":"SEA","Kansas City Royals":"KC","Cleveland Guardians":"CLE","New York Yankees":"NYY","Texas Rangers":"TEX","Cincinnati Reds":"CIN","New York Mets":"NYM","Baltimore Orioles":"BAL","Pittsburgh Pirates":"PIT","Chicago Cubs":"CHC","Houston Astros":"HOU","San Francisco Giants":"SF","Colorado Rockies":"COL","Los Angeles Angels":"LAA","Miami Marlins":"MIA","Minnesota Twins":"MIN","St. Louis Cardinals":"STL","Washington Nationals":"WSH"};
+function parseCSV(text){
+  const rows=[];text.split('\n').forEach(line=>{
+    if(!line.trim())return;
+    const cols=[];let cur='',inQ=false;
+    for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){inQ=!inQ}else if(c===','&&!inQ){cols.push(cur.trim());cur=''}else{cur+=c}}
+    cols.push(cur.trim());rows.push(cols);
+  });
+  return rows;
+}
+function fetchGSheets(){
+  return fetch(GVIZ).then(r=>r.text()).then(csv=>{
+    const rows=parseCSV(csv);const standings={};
+    rows.forEach(r=>{
+      if(!r[0]||r[0]==='Team_Clean'||r[0]==='Tm')return;
+      const name=r[0],w=parseInt(r[2]),l=parseInt(r[3]);
+      if(isNaN(w)||isNaN(l))return;
+      const abbr=NAME_TO_ABBR[name];if(abbr)standings[abbr]={w,l,t:0};
+    });
+    // Sanity check: reject stale data (last year's full-season numbers)
+    const daysSinceOpen=Math.max(0,(new Date()-SPORTS.MLB.start)/86400000);
+    const maxReasonableWins=Math.ceil(daysSinceOpen*1.2)+5;
+    const vals=Object.values(standings);
+    const avgW=vals.length?vals.reduce((s,v)=>s+v.w,0)/vals.length:0;
+    if(avgW>maxReasonableWins){console.warn('GSheets data appears stale, skipping');return {}}
+    return standings;
+  });
+}
+
+// ─────────────────────────── NFL ───────────────────────────
+function fetchNFLStandings(){
+  return fetch(NFL_STANDINGS).then(r=>r.json()).then(data=>{
+    const standings={};
+    (data.children||[]).forEach(conf=>{((conf.standings||{}).entries||[]).forEach(e=>{
+      const abbr=e.team&&e.team.abbreviation;if(!abbr)return;
+      const st={};(e.stats||[]).forEach(s=>{st[s.name]=s.value});
+      standings[abbr]={w:st.wins||0,l:st.losses||0,t:st.ties||0};
+    })});
+    return standings;
+  });
+}
+// Parse an ESPN scoreboard payload into {week, done, games:[...]}
+function parseNFLScoreboard(data){
+  const week=(data.week&&data.week.number)||null;
+  const games=[];let allFinal=true;
+  (data.events||[]).forEach(ev=>{
+    const comp=(ev.competitions||[])[0];if(!comp)return;
+    const home=comp.competitors.find(c=>c.homeAway==='home'),away=comp.competitors.find(c=>c.homeAway==='away');
+    if(!home||!away)return;
+    const st=(ev.status||comp.status||{}).type||{};
+    const state=st.state==='post'?'Final':st.state==='in'?'Live':'Preview';
+    if(state!=='Final')allFinal=false;
+    const hs=+home.score||0,as=+away.score||0;
+    const period=(ev.status||comp.status||{}).period||0,clock=(ev.status||comp.status||{}).displayClock||'';
+    const qStr=state==='Live'?(period>4?'OT':'Q'+period)+(clock?' '+clock:''):(state==='Final'&&period>4?'F/OT':'');
+    games.push({gid:ev.id,date:ev.date,state,home:home.team.abbreviation,away:away.team.abbreviation,homeS:hs,awayS:as,homeWin:state==='Final'&&hs>as,awayWin:state==='Final'&&as>hs,tie:state==='Final'&&hs===as,qStr,name:ev.shortName||''});
+  });
+  return{week,done:games.length>0&&allFinal,games};
+}
+const NFL_DAY=(iso)=>new Date(iso).toLocaleDateString('en-US',{timeZone:'America/Chicago',weekday:'short'});
+// Current week → scoreboard ticker + live/upcoming badges
+function fetchNFLScoreboard(){
+  return fetch(NFL_SCOREBOARD).then(r=>r.json()).then(data=>{
+    const sb=parseNFLScoreboard(data);
+    NFL_STATE.week=sb.week;NFL_STATE.weekDone=sb.done;
+    const poolTeams=poolTeamMap('NFL');
+    const results={};
+    const addEntry=(abbr,entry)=>{if(!results[abbr])results[abbr]=[];results[abbr].push(entry)};
+    const sbGames=[];
+    sb.games.forEach(g=>{
+      const dayLbl=NFL_DAY(g.date),timeStr=dayLbl+' '+ctTime(g.date);
+      const dateStr=new Date(g.date).toLocaleDateString('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric'});
+      if(g.state==='Final'){
+        addEntry(g.away,{type:'final',gid:g.gid,date:dateStr,opp:g.home,home:false,w:g.awayWin,tie:g.tie,rs:g.awayS,ra:g.homeS});
+        addEntry(g.home,{type:'final',gid:g.gid,date:dateStr,opp:g.away,home:true,w:g.homeWin,tie:g.tie,rs:g.homeS,ra:g.awayS});
+      }else if(g.state==='Live'){
+        addEntry(g.away,{type:'live',gid:g.gid,opp:g.home,home:false,rs:g.awayS,ra:g.homeS,inning:g.qStr});
+        addEntry(g.home,{type:'live',gid:g.gid,opp:g.away,home:true,rs:g.homeS,ra:g.awayS,inning:g.qStr});
+      }else{
+        addEntry(g.away,{type:'upcoming',gid:g.gid,opp:g.home,home:false,time:ctTime(g.date),day:dayLbl});
+        addEntry(g.home,{type:'upcoming',gid:g.gid,opp:g.away,home:true,time:ctTime(g.date),day:dayLbl});
+      }
+      sbGames.push({state:g.state,away:g.away,home:g.home,awayS:g.awayS,homeS:g.homeS,inning:g.qStr,time:timeStr,day:dayLbl,awayP:'TBD',homeP:'TBD',poolAway:poolTeams[g.away]||null,poolHome:poolTeams[g.home]||null,gameDateRaw:g.date});
+    });
+    // Teams on bye / not yet listed: keep their most recent final from history
+    const lastWeek=RACE_NFL_LAST||{};
+    Object.entries(lastWeek).forEach(([abbr,e])=>{if(!results[abbr])results[abbr]=[e]});
+    Object.keys(GAME_LOGS.NFL).forEach(k=>delete GAME_LOGS.NFL[k]);
+    Object.assign(GAME_LOGS.NFL,results);
+    const stateOrd={Live:1,Preview:2,Final:3};
+    SCOREBOARDS.NFL=sbGames.sort((a,b)=>(stateOrd[a.state]||9)-(stateOrd[b.state]||9)||new Date(a.gameDateRaw)-new Date(b.gameDateRaw));
+    return sb;
+  }).catch(()=>null);
+}
+// Completed weeks → race chart. Each completed week is cached forever on the device.
+let RACE_NFL_LAST=null; // abbr -> last final entry from the most recent completed week
+function fetchNFLHistory(){
+  const S=SPORTS.NFL;
+  const cur=NFL_STATE.week||1;
+  const lastDone=NFL_STATE.weekDone?cur:cur-1;
+  if(lastDone<1){RACE.NFL=null;return Promise.resolve()}
+  const weeks=[];for(let w=1;w<=lastDone;w++)weeks.push(w);
+  return Promise.all(weeks.map(w=>{
+    const key=`wp-nfl-wk-${S.season}-${w}`;const c=lsGet(key);if(c)return Promise.resolve(c);
+    return fetch(`${NFL_SCOREBOARD}?dates=${S.season}&seasontype=2&week=${w}`).then(r=>r.json()).then(data=>{
+      const sb=parseNFLScoreboard(data);
+      const rec={};
+      sb.games.forEach(g=>{if(g.state!=='Final')return;
+        const dateStr=new Date(g.date).toLocaleDateString('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric'});
+        rec[g.away]={w:g.awayWin?1:0,l:g.homeWin?1:0,t:g.tie?1:0,last:{type:'final',gid:g.gid,date:dateStr,opp:g.home,home:false,w:g.awayWin,tie:g.tie,rs:g.awayS,ra:g.homeS}};
+        rec[g.home]={w:g.homeWin?1:0,l:g.awayWin?1:0,t:g.tie?1:0,last:{type:'final',gid:g.gid,date:dateStr,opp:g.away,home:true,w:g.homeWin,tie:g.tie,rs:g.homeS,ra:g.awayS}};
+      });
+      if(sb.done)lsSet(key,rec);
+      return rec;
+    }).catch(()=>null);
+  })).then(recs=>{
+    const cw={};const periods=[];let last=null;
+    recs.forEach((rec,i)=>{
+      if(!rec)return;
+      Object.entries(rec).forEach(([abbr,r])=>{cw[abbr]=(cw[abbr]||0)+r.w});
+      periods.push({game:i+1,date:'Wk '+(i+1),wins:{...cw}});
+      last=rec;
+    });
+    RACE.NFL=periods.length?buildRace('NFL',periods):null;
+    if(last){RACE_NFL_LAST={};Object.entries(last).forEach(([abbr,r])=>{RACE_NFL_LAST[abbr]=r.last})}
+  });
+}
+
+// ─────────────────────────── SHARED ───────────────────────────
+function applyStandings(sport,standings){
+  if(!standings||Object.keys(standings).length<20)return false;
+  const S=SPORTS[sport];
+  S.players.forEach(p=>p.teams.forEach(t=>{const s=standings[t.abbr];if(s){t.w=s.w;t.l=s.l;t.t=s.t||0}}));
+  S.undrafted.forEach(t=>{const s=standings[t.abbr];if(s){t.w=s.w;t.l=s.l;t.t=s.t||0}});
+  S.updated=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+  return true;
 }
 
 // ═══ LIVE SCOREBOARD TICKER ═══
 function renderScoreboard(){
   const el=document.getElementById('scoreboard');if(!el)return;
-  if(SCOREBOARD.length===0){el.classList.remove('has-games');return}
+  const SB=SCOREBOARDS[SPORT];
+  if(SB.length===0){el.classList.remove('has-games');el.innerHTML='';return}
   el.classList.add('has-games');
-  const liveCount=SCOREBOARD.filter(g=>g.state==='Live').length;
-  // Tag label
+  const liveCount=SB.filter(g=>g.state==='Live').length;
   let tagHtml='';
   if(liveCount>0){tagHtml=`<span class="sb-tag-dot"></span><span class="sb-tag-live">${liveCount} LIVE</span>`}
-  else{tagHtml=`SCORES`}
-  // Build game entries
+  else{tagHtml=SPORT==='NFL'&&NFL_STATE.week?`WK ${NFL_STATE.week}`:`SCORES`}
   let games='';
-  SCOREBOARD.forEach((g,i)=>{
+  SB.forEach((g,i)=>{
     const isLive=g.state==='Live',isFinal=g.state==='Final',isPreview=g.state==='Preview';
     const awayWin=isFinal&&g.awayS>g.homeS,homeWin=isFinal&&g.homeS>g.awayS;
-    const awayC=bestC(TC[g.away]||['#333','#666'],g.away);
-    const homeC=bestC(TC[g.home]||['#333','#666'],g.home);
+    const awayC=tcb(g.away),homeC=tcb(g.home);
     const poolA=g.poolAway?` <span class="sb-pool">(${g.poolAway})</span>`:'';
     const poolH=g.poolHome?` <span class="sb-pool">(${g.poolHome})</span>`:'';
-    // Status badge
     let st='';
     if(isLive){st=`<span class="sb-st sb-st-live"><span class="sb-pip"></span>${g.inning||'LIVE'}</span>`}
-    else if(isFinal){st=`<span class="sb-st sb-st-final">F</span>`}
+    else if(isFinal){st=`<span class="sb-st sb-st-final">${g.inning||'F'}</span>`}
     else{st=`<span class="sb-st sb-st-pre"><span class="sb-time">${g.time}</span></span>`}
-    // Pitcher info for upcoming
     const pit=isPreview&&g.awayP!=='TBD'&&g.homeP!=='TBD'?`<span class="sb-pit"><b>${g.awayP}</b> v <b>${g.homeP}</b></span>`:'';
     const gClass=isLive?' sb-g-live':isFinal?' sb-g-final':'';
     let entry=`<div class="sb-g${gClass}">`;
-    // Away team
-    entry+=`<span class="sb-tm${awayWin?' sb-win':''}"><span class="lbox xs" style="--acc:${awayC}"><img src="${L(g.away)}"></span><span class="sb-abbr">${g.away}</span>${poolA}`;
+    entry+=`<span class="sb-tm${awayWin?' sb-win':''}"><span class="lbox xs" style="--acc:${awayC}"><img src="${L(LOGOKEY(g.away))}"></span><span class="sb-abbr">${g.away}</span>${poolA}`;
     if(!isPreview) entry+=`<span class="sb-sc${isLive?' sb-sc-live':''}">${g.awayS}</span>`;
-    entry+=`</span>`;
-    entry+=`<span class="sb-at">${isPreview?'@':'—'}</span>`;
-    // Home team
-    entry+=`<span class="sb-tm${homeWin?' sb-win':''}"><span class="lbox xs" style="--acc:${homeC}"><img src="${L(g.home)}"></span><span class="sb-abbr">${g.home}</span>${poolH}`;
+    entry+=`</span><span class="sb-at">${isPreview?'@':'—'}</span>`;
+    entry+=`<span class="sb-tm${homeWin?' sb-win':''}"><span class="lbox xs" style="--acc:${homeC}"><img src="${L(LOGOKEY(g.home))}"></span><span class="sb-abbr">${g.home}</span>${poolH}`;
     if(!isPreview) entry+=`<span class="sb-sc${isLive?' sb-sc-live':''}">${g.homeS}</span>`;
-    entry+=`</span>`;
-    entry+=st+pit+`</div>`;
+    entry+=`</span>`+st+pit+`</div>`;
     games+=entry;
-    if(i<SCOREBOARD.length-1) games+=`<span class="sb-sep"></span>`;
+    if(i<SB.length-1) games+=`<span class="sb-sep"></span>`;
   });
-  // Duplicate for seamless scroll loop, calculate duration
-  const dur=Math.max(80,SCOREBOARD.length*10);
-  el.innerHTML=`<div class="sb-tag">${tagHtml}</div><div class="sb-sw"><div class="sb-s" style="--sb-dur:${dur}s">${games}${games.length>0?`<span class="sb-sep">\u25C6</span>${games}`:''}</div></div>`;
+  const dur=Math.max(80,SB.length*10);
+  el.innerHTML=`<div class="sb-tag">${tagHtml}</div><div class="sb-sw"><div class="sb-s" style="--sb-dur:${dur}s">${games}${games.length>0?`<span class="sb-sep">◆</span>${games}`:''}</div></div>`;
 }
 
-// Build game status badge for a team — prioritizes: LIVE > last final > upcoming
+// Game status badge for a team — prioritizes: LIVE > last final > upcoming
 function gameBadge(abbr){
-  const entries=GAME_LOG[abbr];
+  const entries=GAME_LOGS[SPORT][abbr];
   if(!entries||entries.length===0)return '';
-  // Check for live game first
   const live=entries.find(e=>e.type==='live');
-  if(live){
-    const loc=live.home?'vs':'@';
-    return `<div class="last-game glive"><span class="lg-live-dot"></span><span class="lg-score">${live.rs}-${live.ra}</span> <span class="lg-opp">${loc} ${live.opp}</span>${live.inning?` <span class="lg-inn">${live.inning}</span>`:''}</div>`;
-  }
-  // Check for most recent final
+  if(live){const loc=live.home?'vs':'@';return `<div class="last-game glive"><span class="lg-live-dot"></span><span class="lg-score">${live.rs}-${live.ra}</span> <span class="lg-opp">${loc} ${live.opp}</span>${live.inning?` <span class="lg-inn">${live.inning}</span>`:''}</div>`}
   const finals=entries.filter(e=>e.type==='final');
   if(finals.length>0){
     const g=finals[finals.length-1];
-    const wl=g.w?'W':'L';const cls=g.w?'gw':'gl';const loc=g.home?'vs':'@';
+    const wl=g.tie?'T':g.w?'W':'L';const cls=g.tie?'gt':g.w?'gw':'gl';const loc=g.home?'vs':'@';
     return `<div class="last-game ${cls}"><span class="lg-wl">${wl}</span> <span class="lg-score">${g.rs}-${g.ra}</span> <span class="lg-opp">${loc} ${g.opp}</span></div>`;
   }
-  // Check for upcoming
   const up=entries.find(e=>e.type==='upcoming');
-  if(up){
-    const loc=up.home?'vs':'@';
-    return `<div class="last-game gup">${up.day?'<span class="lg-day">'+up.day+'</span> ':''}<span class="lg-opp">${loc} ${up.opp}</span> <span class="lg-time">${up.time}</span></div>`;
-  }
+  if(up){const loc=up.home?'vs':'@';return `<div class="last-game gup">${up.day?'<span class="lg-day">'+up.day+'</span> ':''}<span class="lg-opp">${loc} ${up.opp}</span> <span class="lg-time">${up.time}</span></div>`}
   return '';
-}
-
-// Google Sheets fallback: team name → abbreviation
-const NAME_TO_ABBR={"Los Angeles Dodgers":"LAD","Toronto Blue Jays":"TOR","Tampa Bay Rays":"TB","Boston Red Sox":"BOS","Milwaukee Brewers":"MIL","Chicago White Sox":"CHW","Philadelphia Phillies":"PHI","Detroit Tigers":"DET","Oakland Athletics":"OAK","Athletics":"OAK","Atlanta Braves":"ATL","San Diego Padres":"SD","Arizona Diamondbacks":"ARI","Seattle Mariners":"SEA","Kansas City Royals":"KC","Cleveland Guardians":"CLE","New York Yankees":"NYY","Texas Rangers":"TEX","Cincinnati Reds":"CIN","New York Mets":"NYM","Baltimore Orioles":"BAL","Pittsburgh Pirates":"PIT","Chicago Cubs":"CHC","Houston Astros":"HOU","San Francisco Giants":"SF","Colorado Rockies":"COL","Los Angeles Angels":"LAA","Miami Marlins":"MIA","Minnesota Twins":"MIN","St. Louis Cardinals":"STL","Washington Nationals":"WSH"};
-
-function applyStandings(standings){
-  // standings = { abbr: {w,l}, ... }
-  if(Object.keys(standings).length<20)return false;
-  let anyGames=false;
-  POOL.players.forEach(p=>{
-    p.teams.forEach(t=>{
-      const s=standings[t.abbr];
-      if(s){t.w=s.w;t.l=s.l;if(s.w+s.l>0)anyGames=true}
-    });
-  });
-  if(UNDRAFTED&&UNDRAFTED.length){
-    UNDRAFTED.forEach(t=>{
-      const s=standings[t.abbr];
-      if(s){t.w=s.w;t.l=s.l}
-    });
-  }
-  const now=new Date();
-  POOL.updated=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-  return true;
-}
-
-// PRIMARY: MLB Stats API
-function fetchMLBApi(){
-  return fetch(MLB_API).then(r=>r.json()).then(data=>{
-    const standings={};
-    (data.records||[]).forEach(div=>{
-      (div.teamRecords||[]).forEach(tr=>{
-        const abbr=MLB_ID_ABBR[tr.team.id];
-        if(abbr)standings[abbr]={w:tr.wins||0,l:tr.losses||0};
-      });
-    });
-    return standings;
-  });
-}
-
-// FALLBACK: Google Sheets CSV
-function parseCSV(text){
-  const rows=[];const lines=text.split('\n');
-  lines.forEach(line=>{
-    if(!line.trim())return;
-    const cols=[];let cur='',inQ=false;
-    for(let i=0;i<line.length;i++){
-      const c=line[i];
-      if(c==='"'){inQ=!inQ}
-      else if(c===','&&!inQ){cols.push(cur.trim());cur=''}
-      else{cur+=c}
-    }
-    cols.push(cur.trim());
-    rows.push(cols);
-  });
-  return rows;
-}
-
-function fetchGSheets(){
-  return fetch(GVIZ).then(r=>r.text()).then(csv=>{
-    const rows=parseCSV(csv);
-    const standings={};
-    rows.forEach(r=>{
-      if(!r[0]||r[0]==='Team_Clean'||r[0]==='Tm')return;
-      const name=r[0],w=parseInt(r[2]),l=parseInt(r[3]);
-      if(isNaN(w)||isNaN(l))return;
-      const abbr=NAME_TO_ABBR[name];
-      if(abbr)standings[abbr]={w,l};
-    });
-    // Sanity check: reject stale data (if avg wins > games possible so far, data is from last year)
-    const now=new Date();const daysSinceOpen=Math.max(0,(now-POOL.openingDay)/(1000*60*60*24));
-    const maxReasonableWins=Math.ceil(daysSinceOpen*1.2)+5;// generous buffer
-    const vals=Object.values(standings);
-    const avgW=vals.reduce((s,v)=>s+v.w,0)/vals.length;
-    if(avgW>maxReasonableWins){console.warn('GSheets data appears stale (2025?), skipping');return {}}
-    return standings;
-  });
 }
 
 // ═══ DATA STATUS ═══
 let lastFetchOk=null; // null=pending, true=ok, false=error
 let lastFetchTime=null;
-
 function updateDataStatus(){
   const el=document.getElementById('data-status');
   if(!el)return;
@@ -1808,20 +1979,6 @@ function updateDataStatus(){
   }
 }
 
-// ═══ COUNT-UP ANIMATION ═══
-function animateValue(el,start,end,duration){
-  if(start===end||!el)return;
-  const range=end-start;const startTime=performance.now();
-  function step(ts){
-    const progress=Math.min((ts-startTime)/duration,1);
-    const current=Math.round(start+range*progress);
-    el.textContent=current;
-    if(progress<1)requestAnimationFrame(step);
-    else el.classList.add('num-change');
-  }
-  requestAnimationFrame(step);
-}
-
 // ═══ LOADING SCREEN ═══
 function dismissLoading(){
   const ls=document.getElementById('loading-screen');
@@ -1829,50 +1986,56 @@ function dismissLoading(){
   setTimeout(()=>{if(ls&&ls.parentNode)ls.parentNode.removeChild(ls)},700);
 }
 
-// Fetch with API primary, GSheets fallback
+// ═══ REFRESH — fetch the active sport, then render ═══
+let refreshing=false;
 function refreshData(isInitial){
-  const seasonStarted = new Date() >= POOL.openingDay;
-  if(!seasonStarted){
-    if(isInitial){render();dismissLoading()}
-    lastFetchOk=true;lastFetchTime=Date.now();updateDataStatus();
+  const sport=SPORT;const S=SPORTS[sport];
+  const seasonStarted=new Date()>=S.start;
+  const finish=(ok)=>{
+    if(ok!==null){lastFetchOk=ok;if(ok)lastFetchTime=Date.now()}
+    updateDataStatus();
+    if(sport===SPORT){render();if(isInitial)dismissLoading()}
+  };
+  if(sport==='MLB'){
+    if(!seasonStarted){finish(true);return}
+    Promise.all([fetchMLBApi().catch(()=>null),fetchGameResults(),fetchMLBHistory()]).then(([standings])=>{
+      if(applyStandings('MLB',standings)){finish(true);return}
+      fetchGSheets().then(gs=>finish(applyStandings('MLB',gs))).catch(()=>finish(false));
+    });
     return;
   }
-  // Fetch standings + game results in parallel
-  Promise.all([
-    fetchMLBApi().catch(()=>null),
-    fetchGameResults()
-  ]).then(([standings])=>{
-    if(standings&&applyStandings(standings)){
-      lastFetchOk=true;lastFetchTime=Date.now();updateDataStatus();
-      render();if(isInitial)dismissLoading();return;
-    }
-    // API returned no/little data — try GSheets fallback
-    fetchGSheets().then(gs=>{
-      const ok=applyStandings(gs);
-      lastFetchOk=ok;lastFetchTime=ok?Date.now():lastFetchTime;updateDataStatus();
-      render();if(isInitial)dismissLoading();
-    }).catch(()=>{
-      lastFetchOk=false;updateDataStatus();
-      if(isInitial){render();dismissLoading()}
+  // NFL: scoreboard first (gives us the current week), then standings + completed-week history
+  fetchNFLScoreboard().then(sb=>{
+    const tasks=[seasonStarted?fetchNFLStandings().catch(()=>null):Promise.resolve(null),fetchNFLHistory()];
+    return Promise.all(tasks).then(([standings])=>{
+      // Teams on bye this week: show their last result from the most recent completed week
+      if(RACE_NFL_LAST){Object.entries(RACE_NFL_LAST).forEach(([abbr,e])=>{if(!GAME_LOGS.NFL[abbr])GAME_LOGS.NFL[abbr]=[e]})}
+      if(!seasonStarted){finish(sb?true:null);return}
+      finish(applyStandings('NFL',standings));
     });
-  });
+  }).catch(()=>finish(false));
 }
 
-// ═══ TIMER INITIALIZATION (once, outside render) ═══
+// ═══ TIMERS (once) ═══
 let timersInitialized=false;
 function initTimers(){
   if(timersInitialized)return;
   timersInitialized=true;
-  updateCountdown();setInterval(updateCountdown,1000);
-  updateNFLCountdown();setInterval(updateNFLCountdown,60000);
+  setInterval(updateCountdown,1000);
+  updateSportBadges();setInterval(updateSportBadges,60000);
   setInterval(updateDataStatus,60000);
+  setTimeout(()=>{flashBreaking();setInterval(flashBreaking,45000)},8000);
+  window.addEventListener('resize',()=>drawRace());
 }
 
+// ═══ SPORT SWITCHER ═══
+document.querySelectorAll('.sport-btn img').forEach(i=>{i.src=L(i.dataset.logo)});
+document.querySelectorAll('.sport-btn').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.sport!==SPORT)setSport(b.dataset.sport)}));
+
 // Initial load + auto-refresh
+setSport(SPORT,true);
 refreshData(true);
 setInterval(()=>refreshData(false),REFRESH_MS);
-
-
 
 // PWA SERVICE WORKER REGISTRATION
 if('serviceWorker' in navigator){
@@ -1882,7 +2045,6 @@ if('serviceWorker' in navigator){
       .catch(err=>console.log('SW registration failed:',err));
   });
 }
-
 
 // PWA INSTALL BANNER
 (function(){
@@ -1906,11 +2068,11 @@ if('serviceWorker' in navigator){
     const banner=document.createElement('div');
     banner.className='install-banner';
     if(type==='ios'){
-      banner.innerHTML='<img class="install-banner-icon" src="/apple-touch-icon.png" alt="App"><div class="install-banner-text"><div class="install-banner-title">Add Wins Pool to Home Screen</div><div class="install-banner-sub">Tap the '+shareIconSVG+' <b>Share</b> button above, then <b>\u201cAdd to Home Screen\u201d</b></div></div><button class="install-banner-close" id="pwa-close-btn">&times;</button><div class="share-arrow-container"><div class="share-arrow-pulse"></div><svg class="share-arrow-svg" viewBox="0 0 40 80" xmlns="http://www.w3.org/2000/svg"><path d="M20 80 L20 15" stroke="#CC0000" stroke-width="3" fill="none"/><path d="M8 28 L20 12 L32 28" stroke="#CC0000" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
+      banner.innerHTML='<img class="install-banner-icon" src="/apple-touch-icon.png" alt="App"><div class="install-banner-text"><div class="install-banner-title">Add Wins Pool to Home Screen</div><div class="install-banner-sub">Tap the '+shareIconSVG+' <b>Share</b> button above, then <b>“Add to Home Screen”</b></div></div><button class="install-banner-close" id="pwa-close-btn">&times;</button><div class="share-arrow-container"><div class="share-arrow-pulse"></div><svg class="share-arrow-svg" viewBox="0 0 40 80" xmlns="http://www.w3.org/2000/svg"><path d="M20 80 L20 15" stroke="#CC0000" stroke-width="3" fill="none"/><path d="M8 28 L20 12 L32 28" stroke="#CC0000" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
     }else if(type==='chrome'){
       banner.innerHTML='<img class="install-banner-icon" src="/apple-touch-icon.png" alt="App"><div class="install-banner-text"><div class="install-banner-title">Add Wins Pool to Home Screen</div><div class="install-banner-sub">Get instant access like a native app</div></div><button class="install-banner-btn" id="pwa-install-btn">Install</button><button class="install-banner-close" id="pwa-close-btn">&times;</button>';
     }else{
-      banner.innerHTML='<img class="install-banner-icon" src="/apple-touch-icon.png" alt="App"><div class="install-banner-text"><div class="install-banner-title">Add Wins Pool to Home Screen</div><div class="install-banner-sub">Tap &#8942; menu then <b>\u201cAdd to Home Screen\u201d</b></div></div><button class="install-banner-close" id="pwa-close-btn">&times;</button>';
+      banner.innerHTML='<img class="install-banner-icon" src="/apple-touch-icon.png" alt="App"><div class="install-banner-text"><div class="install-banner-title">Add Wins Pool to Home Screen</div><div class="install-banner-sub">Tap &#8942; menu then <b>“Add to Home Screen”</b></div></div><button class="install-banner-close" id="pwa-close-btn">&times;</button>';
     }
     document.body.appendChild(banner);
     const closeBtn=document.getElementById('pwa-close-btn');
@@ -1927,5 +2089,6 @@ if('serviceWorker' in navigator){
     }
   }
 })();
+
 </script>
 </html>

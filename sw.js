@@ -1,7 +1,7 @@
 // Wins Pool 2026 — Service Worker
 // Strategy: Network-first for HTML/API, Cache-first for static assets
 
-const CACHE_NAME = 'wins-pool-v1';
+const CACHE_NAME = 'wins-pool-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
