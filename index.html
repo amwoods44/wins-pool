@@ -79,7 +79,8 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
 .rc-mode-btn:not(.active):hover{color:var(--t2);background:rgba(255,255,255,.03)}
 /* ═══ TITLE ODDS ═══ */
 .odds-wrap{background:var(--g2);border:1px solid var(--g5);border-radius:8px;padding:18px 20px}
-.odds-row{display:grid;grid-template-columns:90px 1fr 64px;align-items:center;gap:12px;padding:5px 0}
+.odds-row{display:grid;grid-template-columns:90px 76px 1fr 64px;align-items:center;gap:12px;padding:5px 0}
+.odds-logos{display:flex;gap:3px;align-items:center}
 .odds-name{font-family:var(--fd);font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .odds-track{height:14px;background:var(--g4);border-radius:7px;overflow:hidden}
 .odds-fill{height:100%;border-radius:7px;min-width:3px;transition:width .6s ease}
@@ -124,7 +125,8 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
   .dr-name{width:84px;font-size:13px}
   .dr-slot{min-width:0;flex:1;padding:6px 6px;gap:5px}
   .dr-slot .lbox{width:26px;height:26px}
-  .odds-row{grid-template-columns:74px 1fr 56px;gap:8px}
+  .odds-row{grid-template-columns:64px 1fr 52px;gap:8px}
+  .odds-logos{display:none}
   .odds-name{font-size:13px}
   .dp-grid{grid-template-columns:repeat(4,1fr)}
 }
@@ -1408,7 +1410,8 @@ function drawRace(){
     ctx.stroke();ctx.globalAlpha=1;
     const lastX=pad.left+(data[pts-1].game/maxG)*cw;
     ctx.fillStyle=PCOL[ni];ctx.font='bold 11px Oswald';ctx.textAlign='left';
-    ctx.fillText(rankMode?(ranks[pts-1][name]+'. '+name):name,lastX+8,labelY[name]+4);
+    if(rankMode){const rk=ranks[pts-1];const tied=names.some(n2=>n2!==name&&rk[n2]===rk[name]);ctx.fillText((tied?'T':'')+rk[name]+'. '+name,lastX+8,labelY[name]+4)}
+    else ctx.fillText(name,lastX+8,labelY[name]+4);
   });
   const showTip=(clientX,clientY,touch)=>{
     const br=canvas.getBoundingClientRect(),mx=clientX-br.left;
@@ -1498,12 +1501,12 @@ document.title=`Wins Pool ${POOL.season} — ${SPORT}`;
 // Hero
 const startStr=POOL.start.toLocaleDateString('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric'});
 const heroSub=started?sp.label:POOL.startLabel+' '+startStr;
-document.getElementById("hero-area").innerHTML=`<div class="hero-c"><div class="hero-ey">${SPORT} Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">${POOL.yr}</span></div><div class="hero-tag"><b>${nP()}</b> Players &bull; <b>${nT()}</b> Teams &bull; <b>${G()}</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${heroSub}</div></div>${POOL.draftPending?`<div class="draft-pending">🏈 Draft in progress — ${(SPORTS.NFL.effPicks||[]).length} of 30 picks in</div>`:''}</div>`;
+document.getElementById("hero-area").innerHTML=`<div class="hero-c"><div class="hero-ey">${SPORT} Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">${POOL.yr}</span></div><div class="hero-tag"><b>${nP()}</b> Players &bull; <b>${POOL.draftPending?nP()*3:nT()}</b> Teams &bull; <b>${G()}</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${heroSub}</div></div>${POOL.draftPending?`<div class="draft-pending">🏈 Draft in progress — ${(SPORTS.NFL.effPicks||[]).length} of 30 picks in</div>`:''}</div>`;
 updateCountdown();
 
 // Cast strip
 if(CAST.length>0&&!document.getElementById("cast-strip").innerHTML){
-  const castHTML=CAST.map(c=>`<div class="cast-fig" data-label="${c.label}"><img src="${REPO_IMG}${c.img}" alt="${c.label}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`).join('');
+  const castHTML=CAST.map(c=>`<div class="cast-fig" data-label="${c.label}"><img src="${REPO_IMG}${c.img}" alt="${c.label}" loading="lazy" onerror="this.parentElement.remove();if(!document.querySelector('.cast-fig'))document.getElementById('cast-strip').style.display='none'"></div>`).join('');
   document.getElementById("cast-strip").innerHTML=`<div class="cast-in">${castHTML}</div><div class="cast-line"></div>`;
 }
 
@@ -1612,7 +1615,7 @@ dFlow.forEach(f=>{
 t4+=`<div class="dbg dbt-row"><div class="dbr" style="color:var(--y);border-bottom:none">TOT</div>`;
 dNames.forEach(n=>{const p=POOL.players.find(pl=>pl.name===n);if(!p){t4+=`<div class="dbp">—</div>`;return}const s=pStats(p);t4+=`<div class="dbp"><div class="dbtv">${s.proj}</div><div class="dbts">O/U ${s.ou.toFixed(1)}</div></div>`});
 t4+=`</div></div>`;
-if(POOL.undrafted.length){t4+=`<div class="undrafted-strip"><span class="undrafted-strip-lbl">Undrafted</span>${POOL.undrafted.map(t=>`<span class="undrafted-strip-item">${LB(t.abbr,'xs')}<span>${t.abbr}</span><span class="dbou">${t.ou}</span></span>`).join('')}</div>`}
+if(POOL.undrafted.length){t4+=`<div class="undrafted-strip"><span class="undrafted-strip-lbl">${POOL.draftPending?'Available':'Undrafted'}</span>${POOL.undrafted.map(t=>`<span class="undrafted-strip-item">${LB(t.abbr,'xs')}<span>${t.abbr}</span><span class="dbou">${t.ou}</span></span>`).join('')}</div>`}
 document.getElementById("tab-draft").innerHTML=t4;
 
 // ═══ TAB 5: HISTORY ═══
@@ -2108,30 +2111,45 @@ function titleOdds(){
   const done=players.every(p=>p.teams.every(t=>t.rem===0));
   const wins=new Array(players.length).fill(0);
   if(done){
-    // Season over: current standings decide
-    let best=-1;players.forEach(p=>{if(p.base>best)best=p.base});
-    const tied=players.filter(p=>p.base===best).length;
-    players.forEach((p,i)=>{wins[i]=p.base===best?SIMS/tied:0});
+    // Season over: standings + official tiebreaker decide
+    const R=getRanked();
+    players.forEach((p,i)=>{wins[i]=p.name===R[0].name?SIMS:0});
   }else{
     const rand=mulberry32(0xC0FFEE^(players.reduce((s,p)=>s+p.base,0)));
     // Normal approximation of each team's remaining-wins distribution
     const gauss=()=>{let u=0,v=0;while(u===0)u=rand();while(v===0)v=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
     const totals=new Array(players.length);
+    const teamWins=players.map(p=>new Array(p.teams.length));
+    const src=POOL.players;
     for(let s=0;s<SIMS;s++){
       let best=-1;
       for(let i=0;i<players.length;i++){
         let tot=players[i].base;
-        players[i].teams.forEach(t=>{
-          if(t.rem===0)return;
-          const mu=t.rem*t.prob,sd=Math.sqrt(t.rem*t.prob*(1-t.prob));
-          let w=Math.round(mu+sd*gauss());
-          if(w<0)w=0;if(w>t.rem)w=t.rem;
-          tot+=w;
+        players[i].teams.forEach((t,ti)=>{
+          let w=src[i].teams[ti]?src[i].teams[ti].w:0;
+          if(t.rem>0){
+            const mu=t.rem*t.prob,sd=Math.sqrt(t.rem*t.prob*(1-t.prob));
+            let rw=Math.round(mu+sd*gauss());
+            if(rw<0)rw=0;if(rw>t.rem)rw=t.rem;
+            tot+=rw;w+=rw;
+          }
+          teamWins[i][ti]=w;
         });
         totals[i]=tot;if(tot>best)best=tot;
       }
-      let tied=0;for(let i=0;i<players.length;i++)if(totals[i]===best)tied++;
-      for(let i=0;i<players.length;i++)if(totals[i]===best)wins[i]+=1/tied;
+      // Official league tiebreaker: best single team, then next, then next
+      let winner=-1,wKey=null;
+      for(let i=0;i<players.length;i++){
+        if(totals[i]!==best)continue;
+        const key=[...teamWins[i]].sort((a,b)=>b-a);
+        if(winner<0){winner=i;wKey=key;continue}
+        for(let k=0;k<Math.max(key.length,wKey.length);k++){
+          const d=(key[k]||0)-(wKey[k]||0);
+          if(d>0){winner=i;wKey=key;break}
+          if(d<0)break;
+        }
+      }
+      if(winner>=0)wins[winner]+=1;
     }
   }
   return players.map((p,i)=>({name:p.name,pct:100*wins[i]/SIMS})).sort((a,b)=>b.pct-a.pct);
@@ -2144,9 +2162,12 @@ function renderOddsBlock(){
   odds.forEach(o=>{
     const ci=names.indexOf(o.name);
     const w=Math.max(0.6,o.pct);
-    rows+=`<div class="odds-row"><div class="odds-name">${o.name}</div><div class="odds-track"><div class="odds-fill" style="width:${w}%;background:${PCOL[ci]}"></div></div><div class="odds-pct">${fmt(o.pct)}</div></div>`;
+    const pl=POOL.players[ci];
+    const logos=pl?pl.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.abbr)}"><img src="${L(LOGOKEY(t.abbr))}"></span>`).join(''):'';
+    rows+=`<div class="odds-row"><div class="odds-name">${o.name}</div><div class="odds-logos">${logos}</div><div class="odds-track"><div class="odds-fill" style="width:${w}%;background:${PCOL[ci]}"></div></div><div class="odds-pct">${fmt(o.pct)}</div></div>`;
   });
-  return `<div class="bh" style="margin-top:36px"><div class="bh-tag">Title Odds</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SIMS.toLocaleString()} Season Simulations</span></div></div><div class="odds-wrap">${rows}<div class="odds-note">Each team's rest-of-season win rate blends its record with its Vegas line. Ties split the title. Recalculates with every score update.</div></div>`;
+  const note=POOL.draftPending?'Rosters fill in as the draft finishes — odds even out once everyone has 3 teams.':'Each team\'s rest-of-season win rate blends its record with its Vegas line. Tied finishes go to the official tiebreaker (best single team). Recalculates with every score update.';
+  return `<div class="bh" style="margin-top:36px"><div class="bh-tag">Title Odds</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SIMS.toLocaleString()} Season Simulations</span></div></div><div class="odds-wrap">${rows}<div class="odds-note">${note}</div></div>`;
 }
 
 // ═══════════════════════════════════════════════════════════════
