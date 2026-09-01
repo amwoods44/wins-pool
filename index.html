@@ -219,6 +219,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(1100px
 /* ═══ FEEDBACK: watermark moves off-center, bleeds off the right edge ═══ */
 .hero-wm{left:auto;right:-70px;top:50%;transform:translateY(-50%) rotate(-6deg);width:min(380px,42vw);opacity:.04;mask-image:linear-gradient(90deg,transparent,#000 35%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 35%)}
 @media(max-width:600px){.hero-wm{display:none}}
+.tb-chip{display:inline-block;margin-left:10px;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--y);background:rgba(255,204,0,.1);border:1px solid rgba(255,204,0,.35);border-radius:4px;padding:2px 7px;vertical-align:middle}
 
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
@@ -1623,14 +1624,16 @@ const featLabel=liveCount>0?'Games Live':started?'Pool Record':'Pool O/U Total';
 const featVal=liveCount>0?liveCount:started?totW+'-'+totL+(totT>0?'-'+totT:''):R.reduce((s,p)=>s+p.s.ou,0).toFixed(1);
 const featSub=liveCount>0?(finalCount>0?finalCount+' final • ':'')+upCount+' upcoming':started?totG+' games played':'Combined pre-season lines';
 const bestSub=bestT0?(started?recStr(bestT0)+' • '+bestTeamOwner:'O/U '+bestT0.ou+' • '+bestTeamOwner):'';
-document.getElementById("sstrip-area").innerHTML=`<div class="ss feat"><div class="ss-l">${featLabel}</div><div class="ss-v" style="color:var(--r)">${featVal}</div><div class="ss-sub">${featSub}</div></div><div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">${leader.name}</div><div class="ss-logos">${leader.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.abbr)}"><img src="${L(LOGOKEY(t.abbr))}"></span>`).join('')}</div><div class="ss-sub">${leader.s.wins} win${leader.s.wins===1?'':'s'}</div></div><div class="ss"><div class="ss-l">Best Team</div><div class="ss-v ss-team">${bestT0?LB(bestT0.abbr,'xs'):''}${bestTeamName}</div><div class="ss-sub">${bestSub}</div></div><div class="ss"><div class="ss-l">Projected Spread</div><div class="ss-v">${spread.toFixed(0)}</div><div class="ss-sub">1st to last</div></div><div class="ss"><div class="ss-l">Avg O/U</div><div class="ss-v">${avgOU}</div><div class="ss-sub">per player</div></div>`;
+document.getElementById("sstrip-area").innerHTML=`<div class="ss feat"><div class="ss-l">${featLabel}</div><div class="ss-v" style="color:var(--r)">${featVal}</div><div class="ss-sub">${featSub}</div></div>${(()=>{const co=started?R.filter(p=>p.s.wins===R[0].s.wins):[R[0]];
+if(co.length>1)return `<div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">TIED</div><div class="ss-sub" style="color:var(--t2);font-weight:600">${co.map(p=>p.name).join(' & ')} • ${leader.s.wins} wins</div><div class="ss-sub">${leader.name} holds tiebreaker</div></div>`;
+return `<div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">${leader.name}</div><div class="ss-logos">${leader.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.abbr)}"><img src="${L(LOGOKEY(t.abbr))}"></span>`).join('')}</div><div class="ss-sub">${leader.s.wins} win${leader.s.wins===1?'':'s'}</div></div>`})()}<div class="ss"><div class="ss-l">Best Team</div><div class="ss-v ss-team">${bestT0?LB(bestT0.abbr,'xs'):''}${bestTeamName}</div><div class="ss-sub">${bestSub}</div></div><div class="ss"><div class="ss-l">Projected Spread</div><div class="ss-v">${spread.toFixed(0)}</div><div class="ss-sub">1st to last</div></div><div class="ss"><div class="ss-l">Avg O/U</div><div class="ss-v">${avgOU}</div><div class="ss-sub">per player</div></div>`;
 
 // ═══ TAB 1: STANDINGS ═══
 const ranks=[];
 R.forEach((p,i)=>{
   if(i===0){ranks.push({rk:1,tied:false})}
   else{
-    const sameWins=started?(R[i].s.wins===R[i-1].s.wins&&tbCmp(R[i],R[i-1])===0):R[i].s.proj===R[i-1].s.proj;
+    const sameWins=started?R[i].s.wins===R[i-1].s.wins:R[i].s.proj===R[i-1].s.proj;
     if(sameWins){ranks.push({rk:ranks[i-1].rk,tied:true});ranks[i-1].tied=true}
     else{ranks.push({rk:i+1,tied:false})}
   }
@@ -1642,7 +1645,7 @@ R.forEach((p,i)=>{
   let cards='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),d=tp-t.ou,earlyS=tg<earlyCut,ds=earlyS?'':d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=earlyS?'ev':d>0?'ov':d<0?'un':'ev',rec=recStr(t),lgb=gameBadge(t.abbr);cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${tcb(t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec}${ds?' <span class="dbadge '+dc+'">'+ds+'</span>':''}</div><div class="ptc-pace">${earlyS?'':'Pace: '+tp}</div></div></div>`});
   const grad=p.teams.length>1?`linear-gradient(180deg,${p.teams.map(t=>tc(t.abbr)).join(',')})`:(p.teams[0]?tc(p.teams[0].abbr):'#333');
   const isOpen=openCards.has(p.name);
-  t1+=`<div class="pcard${rk===1?' r1':''}${isOpen?' open':''}" data-pn="${p.name}" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${fmtN(p.s.ou)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
+  t1+=`<div class="pcard${rk===1?' r1':''}${isOpen?' open':''}" data-pn="${p.name}" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}${started&&i===0&&rkInfo.tied?'<span class="tb-chip" title="Best single team: official tiebreaker">TB ✓</span>':''}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${fmtN(p.s.ou)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
 });
 t1+=`</div>`;
 
@@ -1717,7 +1720,10 @@ const tkLogos=(p)=>p.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.
 const sep='<div class="tks">◆</div>';
 const gt=buildGamesTicker();
 let tk='';
-const leaderItem=`<div class="tk-leader">${tkLogos(leader)}<span class="tkt">LEADER</span><span class="tk-stat">${leader.name} • ${started?leader.s.wins+' wins':leader.s.proj+' proj'}</span></div>${sep}`;
+const coL=started?R.filter(p=>p.s.wins===R[0].s.wins):[R[0]];
+const leaderItem=coL.length>1
+  ?`<div class="tk-leader"><span class="tkt">CO-LEADERS</span><span class="tk-stat">${coL.map(p=>p.name).join(' & ')} • ${leader.s.wins} wins • ${leader.name} holds TB</span></div>${sep}`
+  :`<div class="tk-leader">${tkLogos(leader)}<span class="tkt">LEADER</span><span class="tk-stat">${leader.name} • ${started?leader.s.wins+' wins':leader.s.proj+' proj'}</span></div>${sep}`;
 const bestT=sT[0];
 const bestItem=bestT?`<div class="tki"><span class="lbox mini" style="--acc:${tcb(bestT.abbr)}"><img src="${L(LOGOKEY(bestT.abbr))}"></span><span class="tkt"><b>${shortN(bestT.name)}</b> (${bestT.owner}) leads all teams • <span class="hl">${started?recStr(bestT):'O/U '+bestT.ou}</span></span></div>${sep}`:'';
 if(gt.count>0){
