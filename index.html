@@ -141,6 +141,22 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
 .bl .sb-g-final{opacity:.65}
 .bl .sb-tag{display:none}
 @media(max-width:600px){.bl-t{height:34px!important}.bl .sb-g{height:24px!important;padding:2px 8px!important}}
+/* ═══ LOGO PRESENCE PASS ═══ */
+.hero-wm{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:min(520px,78vw);opacity:.05;filter:grayscale(1) brightness(2.4);pointer-events:none;z-index:0}
+.pch-wm{position:absolute;right:-16px;bottom:-22px;width:112px;height:112px;object-fit:contain;opacity:.12;filter:grayscale(1) brightness(2.4);pointer-events:none;transform:rotate(-8deg);z-index:0}
+.pch>*:not(.pch-wm){position:relative;z-index:1}
+.ss-team{display:flex;align-items:center;justify-content:center;gap:9px}
+.ss-team .lbox.xs{width:30px;height:30px}
+.ss-logos{display:flex;justify-content:center;gap:4px;margin-top:7px}
+@media(min-width:769px){
+  .plogos .lbox.md{width:52px;height:52px;padding:4px}
+  .plogos .lbox.md img{width:42px;height:42px}
+  .odds-logos .lbox.mini{width:26px;height:26px;border-radius:5px}
+  .odds-logos .lbox.mini img{width:21px;height:21px}
+  .ttc .lbox.xs{width:34px;height:34px}
+  .ttc .lbox.xs img{width:27px;height:27px}
+}
+@media(max-width:600px){.hero-wm{width:78vw;opacity:.06}.ss-logos .lbox.mini{width:18px;height:18px}.ss-logos .lbox.mini img{width:14px;height:14px}}
 
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
@@ -1509,7 +1525,7 @@ document.title=`Wins Pool ${POOL.season} — ${SPORT}`;
 // Hero
 const startStr=POOL.start.toLocaleDateString('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric'});
 const heroSub=started?sp.label:POOL.startLabel+' '+startStr;
-document.getElementById("hero-area").innerHTML=`<div class="hero-c"><div class="hero-ey">${SPORT} Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">${POOL.yr}</span></div><div class="hero-tag"><b>${nP()}</b> Players &bull; <b>${POOL.draftPending?nP()*3:nT()}</b> Teams &bull; <b>${G()}</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${heroSub}</div></div>${POOL.draftPending?`<div class="draft-pending">🏈 Draft in progress — ${(SPORTS.NFL.effPicks||[]).length} of 30 picks in</div>`:''}</div>`;
+document.getElementById("hero-area").innerHTML=`<img class="hero-wm" src="${L(SPORT==='NFL'?'NFL_SHIELD':'MLB_SHIELD')}" alt="" aria-hidden="true"><div class="hero-c"><div class="hero-ey">${SPORT} Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">${POOL.yr}</span></div><div class="hero-tag"><b>${nP()}</b> Players &bull; <b>${POOL.draftPending?nP()*3:nT()}</b> Teams &bull; <b>${G()}</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${heroSub}</div></div>${POOL.draftPending?`<div class="draft-pending">🏈 Draft in progress — ${(SPORTS.NFL.effPicks||[]).length} of 30 picks in</div>`:''}</div>`;
 updateCountdown();
 
 // Cast strip
@@ -1542,7 +1558,7 @@ const featLabel=liveCount>0?'Games Live':started?'Pool Record':'Pool O/U Total';
 const featVal=liveCount>0?liveCount:started?totW+'-'+totL+(totT>0?'-'+totT:''):R.reduce((s,p)=>s+p.s.ou,0).toFixed(1);
 const featSub=liveCount>0?(finalCount>0?finalCount+' final • ':'')+upCount+' upcoming':started?totG+' games played':'Combined pre-season lines';
 const bestSub=bestT0?(started?recStr(bestT0)+' • '+bestTeamOwner:'O/U '+bestT0.ou+' • '+bestTeamOwner):'';
-document.getElementById("sstrip-area").innerHTML=`<div class="ss feat"><div class="ss-l">${featLabel}</div><div class="ss-v" style="color:var(--r)">${featVal}</div><div class="ss-sub">${featSub}</div></div><div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">${leader.name}</div><div class="ss-sub">${leader.s.wins} win${leader.s.wins===1?'':'s'}</div></div><div class="ss"><div class="ss-l">Best Team</div><div class="ss-v">${bestTeamName}</div><div class="ss-sub">${bestSub}</div></div><div class="ss"><div class="ss-l">Projected Spread</div><div class="ss-v">${spread.toFixed(0)}</div><div class="ss-sub">1st to last</div></div><div class="ss"><div class="ss-l">Avg O/U</div><div class="ss-v">${avgOU}</div><div class="ss-sub">per player</div></div>`;
+document.getElementById("sstrip-area").innerHTML=`<div class="ss feat"><div class="ss-l">${featLabel}</div><div class="ss-v" style="color:var(--r)">${featVal}</div><div class="ss-sub">${featSub}</div></div><div class="ss"><div class="ss-l">Leader</div><div class="ss-v" style="color:var(--y)">${leader.name}</div><div class="ss-logos">${leader.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.abbr)}"><img src="${L(LOGOKEY(t.abbr))}"></span>`).join('')}</div><div class="ss-sub">${leader.s.wins} win${leader.s.wins===1?'':'s'}</div></div><div class="ss"><div class="ss-l">Best Team</div><div class="ss-v ss-team">${bestT0?LB(bestT0.abbr,'xs'):''}${bestTeamName}</div><div class="ss-sub">${bestSub}</div></div><div class="ss"><div class="ss-l">Projected Spread</div><div class="ss-v">${spread.toFixed(0)}</div><div class="ss-sub">1st to last</div></div><div class="ss"><div class="ss-l">Avg O/U</div><div class="ss-v">${avgOU}</div><div class="ss-sub">per player</div></div>`;
 
 // ═══ TAB 1: STANDINGS ═══
 const ranks=[];
@@ -1596,7 +1612,7 @@ const waeVal=p.s.gp>0?p.s.wae:null;
 const waeStr=waeVal!==null?(waeVal>=0?'+':'')+waeVal.toFixed(1):'—';
 const waeColor=waeVal===null?'var(--t4)':waeVal>=0?'var(--grn)':'var(--red-t)';
 const waeLbl=p.s.gp>0?'vs Expected':'vs O/U';
-t2+=`<div class="pc"><div class="pch" style="background:linear-gradient(135deg,${p.teams[0]?tc(p.teams[0].abbr):'#333'}15,var(--g2))"><div class="pch-rk ${rC}">${ordinal(rk)} Place${rkInfo.tied?' (Tied)':''}</div><div class="pch-t"><div class="pch-nm">${p.name}</div><div style="text-align:right"><div class="pch-pl">Projected</div><div class="pch-pv">${p.s.proj}</div><div class="pch-gb">${gb>0?gb+' back':'Leader'}</div></div></div></div><div class="pc-sr"><div class="pc-sc"><div class="pc-sv">${p.s.wins}</div><div class="pc-sl">Wins</div></div><div class="pc-sc"><div class="pc-sv">${fmtN(p.s.ou)}</div><div class="pc-sl">O/U Total</div></div><div class="pc-sc"><div class="pc-sv" style="color:${waeColor}">${waeStr}</div><div class="pc-sl">${waeLbl}</div></div></div>${tR}</div>`});
+t2+=`<div class="pc"><div class="pch" style="background:linear-gradient(135deg,${p.teams[0]?tc(p.teams[0].abbr):'#333'}15,var(--g2))">${p.teams[0]?`<img class="pch-wm" src="${L(LOGOKEY(p.teams[0].abbr))}" alt="" aria-hidden="true">`:''}<div class="pch-rk ${rC}">${ordinal(rk)} Place${rkInfo.tied?' (Tied)':''}</div><div class="pch-t"><div class="pch-nm">${p.name}</div><div style="text-align:right"><div class="pch-pl">Projected</div><div class="pch-pv">${p.s.proj}</div><div class="pch-gb">${gb>0?gb+' back':'Leader'}</div></div></div></div><div class="pc-sr"><div class="pc-sc"><div class="pc-sv">${p.s.wins}</div><div class="pc-sl">Wins</div></div><div class="pc-sc"><div class="pc-sv">${fmtN(p.s.ou)}</div><div class="pc-sl">O/U Total</div></div><div class="pc-sc"><div class="pc-sv" style="color:${waeColor}">${waeStr}</div><div class="pc-sl">${waeLbl}</div></div></div>${tR}</div>`});
 t2+=`</div>`;document.getElementById("tab-players").innerHTML=t2;
 
 // ═══ TAB 3: TEAMS ═══
