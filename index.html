@@ -157,6 +157,62 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
   .ttc .lbox.xs img{width:27px;height:27px}
 }
 @media(max-width:600px){.hero-wm{width:78vw;opacity:.06}.ss-logos .lbox.mini{width:18px;height:18px}.ss-logos .lbox.mini img{width:14px;height:14px}}
+/* ═══════════════ ELEVATION PASS ═══════════════ */
+/* Broadcast-italic hero title with depth */
+.hero-h{transform:skewX(-5deg);text-shadow:0 3px 0 rgba(0,0,0,.45),0 14px 40px rgba(204,0,0,.28);letter-spacing:-2px}
+.hero-h .acc{text-shadow:0 3px 0 rgba(0,0,0,.45),0 10px 34px rgba(255,204,0,.35)}
+.hero-ey{text-shadow:0 0 18px rgba(204,0,0,.5)}
+/* Depth vignette behind the whole app */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(1100px 520px at 50% -140px,rgba(204,0,0,.05),transparent 70%);pointer-events:none;z-index:0}
+/* Tabular numerals so columns of numbers sit perfectly */
+.pnv,.ss-v,.ttm,.odds-pct,.dbtv,.pc-sv,.pch-pv,.hist-stat,.cd-num{font-variant-numeric:tabular-nums}
+/* Cards get hover physics */
+.pcard:hover{transform:translateY(-2px);border-color:var(--g6);box-shadow:0 10px 28px rgba(0,0,0,.45)}
+.pc:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.45);border-color:var(--g6)}
+.ss{transition:background .2s}
+.ss:hover{background:var(--g3)}
+/* First place gets the champagne treatment: gold-kissed border + slow shine sweep */
+.pcard.r1{border-color:rgba(255,204,0,.35);box-shadow:0 0 0 1px rgba(255,204,0,.12),0 6px 24px rgba(0,0,0,.35);position:relative}
+.pcard.r1::after{content:'';position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.045),transparent);animation:r1shine 6s ease-in-out infinite;pointer-events:none}
+@keyframes r1shine{0%,60%{left:-60%}90%,100%{left:120%}}
+.pcard.r1 .prk{background:linear-gradient(180deg,var(--r),#8f0000)}
+.pcard.r1 .prk-n{text-shadow:0 0 14px rgba(255,255,255,.4)}
+/* Zebra + hover on every stats table */
+.ttbl tbody tr{transition:background .15s}
+.ttbl tbody tr:nth-child(even){background:rgba(255,255,255,.016)}
+.ttbl tbody tr:hover{background:rgba(255,255,255,.045)}
+/* Nav underline slides in instead of popping */
+.nav-btn{border-bottom:none}
+.nav-btn::after{content:'';position:absolute;left:50%;bottom:0;height:3px;width:0;background:var(--r);transition:width .22s ease,left .22s ease}
+.nav-btn.active::after{left:0;width:100%}
+.nav-btn.active{color:#fff}
+/* Odds bars glow in their player color and shimmer on the favorite */
+.odds-fill{box-shadow:0 0 14px -2px currentColor;position:relative;overflow:hidden}
+.odds-row:first-child .odds-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);transform:translateX(-100%);animation:oddsShimmer 3.2s ease-in-out infinite}
+@keyframes oddsShimmer{0%,55%{transform:translateX(-100%)}85%,100%{transform:translateX(100%)}}
+.odds-row:first-child .odds-name{color:#fff}
+.odds-row:first-child .odds-pct{color:var(--y)}
+/* Sport switch + tab wipe feel snappier */
+.panel.wipe-in{animation-duration:.28s}
+/* Slim dark scrollbars on scrolling regions */
+.tw::-webkit-scrollbar,.dp-grid::-webkit-scrollbar,.db::-webkit-scrollbar{height:8px;width:8px}
+.tw::-webkit-scrollbar-thumb,.dp-grid::-webkit-scrollbar-thumb,.db::-webkit-scrollbar-thumb{background:var(--g5);border-radius:4px}
+.tw::-webkit-scrollbar-track,.dp-grid::-webkit-scrollbar-track,.db::-webkit-scrollbar-track{background:transparent}
+/* Selection color on brand */
+::selection{background:rgba(204,0,0,.5);color:#fff}
+/* Headlines rows breathe + separate */
+.nar-item{transition:background .15s;border-radius:6px}
+.nar-item:hover{background:rgba(255,255,255,.03)}
+/* Stat tiles: thin brand accent across the top */
+.ss::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent)}
+.ss.feat::before{background:linear-gradient(90deg,transparent,rgba(204,0,0,.6),transparent)}
+@media(max-width:600px){
+  .hero-h{transform:skewX(-4deg);letter-spacing:-1px}
+  .pcard:hover,.pc:hover{transform:none;box-shadow:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .pcard.r1::after,.odds-row:first-child .odds-fill::after{animation:none}
+}
 
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
@@ -1425,13 +1481,16 @@ function drawRace(){
   const yMaxL=pad.top+ch;
   if(ends.length&&ends[ends.length-1].y>yMaxL){ends[ends.length-1].y=yMaxL;for(let i=ends.length-2;i>=0;i--){if(ends[i+1].y-ends[i].y<minGap)ends[i].y=ends[i+1].y-minGap}}
   const labelY={};ends.forEach(e=>labelY[e.n]=e.y);
+  const curLeader=rankMode?Object.entries(ranks[pts-1]).sort((a,b)=>a[1]-b[1])[0][0]:null;
   names.forEach((name,ni)=>{
     if(raceHidden[name])return;
-    ctx.strokeStyle=PCOL[ni];ctx.lineWidth=rankMode?3:2.5;ctx.lineJoin='round';ctx.lineCap='round';
-    if(rankMode)ctx.globalAlpha=0.9;
+    const isLeader=rankMode&&name===curLeader;
+    ctx.strokeStyle=PCOL[ni];ctx.lineWidth=rankMode?(isLeader?3.5:2.6):2.5;ctx.lineJoin='round';ctx.lineCap='round';
+    ctx.shadowColor=PCOL[ni];ctx.shadowBlur=isLeader?8:4;
+    if(rankMode&&!isLeader)ctx.globalAlpha=0.85;
     ctx.beginPath();
     for(let i=0;i<pts;i++){const x=pad.left+(data[i].game/maxG)*cw;const y=yOf(name,i);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
-    ctx.stroke();ctx.globalAlpha=1;
+    ctx.stroke();ctx.globalAlpha=1;ctx.shadowBlur=0;
     const lastX=pad.left+(data[pts-1].game/maxG)*cw;
     ctx.fillStyle=PCOL[ni];ctx.font='bold 11px Oswald';ctx.textAlign='left';
     if(rankMode){const rk=ranks[pts-1];const tied=names.some(n2=>n2!==name&&rk[n2]===rk[name]);ctx.fillText((tied?'T':'')+rk[name]+'. '+name,lastX+8,labelY[name]+4)}
@@ -2188,7 +2247,7 @@ function renderOddsBlock(){
     const w=Math.max(0.6,o.pct);
     const pl=POOL.players[ci];
     const logos=pl?pl.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.abbr)}"><img src="${L(LOGOKEY(t.abbr))}"></span>`).join(''):'';
-    rows+=`<div class="odds-row"><div class="odds-name">${o.name}</div><div class="odds-logos">${logos}</div><div class="odds-track"><div class="odds-fill" style="width:${w}%;background:${PCOL[ci]}"></div></div><div class="odds-pct">${fmt(o.pct)}</div></div>`;
+    rows+=`<div class="odds-row"><div class="odds-name">${o.name}</div><div class="odds-logos">${logos}</div><div class="odds-track"><div class="odds-fill" style="width:${w}%;background:${PCOL[ci]};color:${PCOL[ci]}"></div></div><div class="odds-pct">${fmt(o.pct)}</div></div>`;
   });
   const note=POOL.draftPending?'Rosters fill in as the draft finishes — odds even out once everyone has 3 teams.':'Each team\'s rest-of-season win rate blends its record with its Vegas line. Tied finishes go to the official tiebreaker (best single team). Recalculates with every score update.';
   return `<div class="bh" style="margin-top:36px"><div class="bh-tag">Title Odds</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${SIMS.toLocaleString()} Season Simulations</span></div></div><div class="odds-wrap">${rows}<div class="odds-note">${note}</div></div>`;
