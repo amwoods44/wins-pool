@@ -213,6 +213,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(1100px
 @media(prefers-reduced-motion:reduce){
   .pcard.r1::after,.odds-row:first-child .odds-fill::after{animation:none}
 }
+/* ═══ FEEDBACK: no duplicate logos on expanded cards ═══ */
+.plogos{max-width:220px;overflow:hidden;transition:max-width .28s ease,opacity .18s ease,margin .28s ease}
+.pcard.open .plogos{max-width:0;opacity:0;margin-right:-12px}
+/* ═══ FEEDBACK: watermark moves off-center, bleeds off the right edge ═══ */
+.hero-wm{left:auto;right:-70px;top:50%;transform:translateY(-50%) rotate(-6deg);width:min(380px,42vw);opacity:.04;mask-image:linear-gradient(90deg,transparent,#000 35%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 35%)}
+@media(max-width:600px){.hero-wm{display:none}}
 
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
