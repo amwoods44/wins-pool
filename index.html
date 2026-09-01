@@ -529,6 +529,7 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
   /* GLOBAL */
   html,body{overflow-x:hidden!important;max-width:100vw!important}
 
+  .nav-bar{top:51px!important}
   .sport-in{padding:0!important}.sport-btn{flex:1 1 0!important;min-width:0!important;padding:9px 10px!important;font-size:14px!important;letter-spacing:2px!important;gap:7px!important}.sport-btn img{width:22px!important;height:22px!important}.sport-badge{font-size:9px!important;padding:1px 5px!important}
   /* HEADER — clean, compact */
   .hdr-in{padding:0 12px!important;height:48px!important}
@@ -834,7 +835,7 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
   <section class="panel" id="tab-history" role="tabpanel" aria-label="League History"></section>
 </main>
 <div class="sb-wrap" id="scoreboard" role="region" aria-label="Live Scoreboard"></div>
-<div class="bl" id="bl-area" role="marquee" aria-label="Live ticker"></div>
+<div class="bl" id="bl-area" aria-label="Live ticker"></div>
 <script>
 
 const LOGO_DATA = {
@@ -1043,7 +1044,7 @@ const PAST_SEASONS=[
 const SPORTS={
   MLB:{
     key:'MLB', label:'MLB', season:2026, games:162, yr:"'26",
-    start:new Date("2026-03-25T00:00:00"), end:new Date("2026-09-28T00:00:00"), startLabel:'Opening Day',
+    start:new Date("2026-03-25T00:00:00-05:00"), end:new Date("2026-09-28T00:00:00-05:00"), startLabel:'Opening Day',
     priorGames:50,           // how many games of evidence the Vegas line is worth in projections
     raceMax:162, raceTicks:[0,20,40,60,80,100,120,140,162], raceUnit:'G',
     unit:(n)=>'Game '+n, unitPlural:'Games', totalLabel:'162 Games',
@@ -1165,13 +1166,13 @@ function rankedTeams(includeUndrafted){
   return all.sort((a,b)=>b.ou-a.ou);
 }
 const gpAll=()=>Math.max(0,...POOL.players.flatMap(p=>p.teams.map(gpOf)));
-const seasonProgress=()=>{ // {gp, label, pct}
-  const R=getRanked();
+const seasonProgress=()=>{ // {gp, label, pct, unit}
   if(SPORT==='NFL'){
-    const wk=NFL_STATE.week||0,done=NFL_STATE.weekDone;
     const gp=gpAll();
+    const wk=NFL_STATE.week||0,done=NFL_STATE.weekDone,began=NFL_STATE.weekBegan;
     if(gp===0&&!wk)return{gp:0,pct:0,label:''};
-    const cur=wk||1;
+    // "Through Week N": the current week only counts once a game in it has been played
+    const cur=Math.max(1,Math.min(POOL.weeks,(done||began)?(wk||1):(wk||1)-1));
     const pct=Math.min(100,((done?cur:Math.max(0,cur-1))/POOL.weeks)*100);
     return{gp,pct:+pct.toFixed(1),label:'Week '+cur+' of '+POOL.weeks,unit:cur};
   }
@@ -1207,7 +1208,7 @@ function updateSportBadges(){
 // ═══ BREAKING NEWS ═══
 function getBreaking(){
   const R=getRanked();
-  const gp=R[0].s.gp;
+  const gp=gpAll();
   if(gp===0){
     const high=R[0],low=R[R.length-1];
     const spread=(high.s.proj-low.s.proj).toFixed(0);
@@ -1226,7 +1227,7 @@ function getHighlights(){
   const R=getRanked();
   const sT=rankedTeams(false);
   const items=[];
-  const gp=R[0].s.gp;
+  const gp=gpAll();
   const seasonStarted=gp>0;
   const th=thru();
 
@@ -1277,7 +1278,8 @@ function getRaceData(){
   const R=getRanked();
   const gp=gpAll();
   let hist=RACE[SPORT]?[...RACE[SPORT]]:[...POOL.history];
-  if(gp>0){
+  const skipLive=SPORT==='NFL'&&!NFL_STATE.weekBegan&&!NFL_STATE.weekDone;
+  if(gp>0&&!skipLive){
     const sp=seasonProgress();
     const livePoint={game:SPORT==='NFL'?(sp.unit||1):gp,date:'Now',data:{}};
     R.forEach(p=>{livePoint.data[p.name]=p.s.wins});
@@ -1316,6 +1318,8 @@ function drawRace(){
   // Label placement: spread end labels apart so they don't overlap
   const ends=names.filter(n=>!raceHidden[n]).map(n=>({n,y:pad.top+ch-((data[pts-1].data[n]||0)/maxY)*ch})).sort((a,b)=>a.y-b.y);
   for(let i=1;i<ends.length;i++){if(ends[i].y-ends[i-1].y<12)ends[i].y=ends[i-1].y+12}
+  const yMax=pad.top+ch;
+  if(ends.length&&ends[ends.length-1].y>yMax){ends[ends.length-1].y=yMax;for(let i=ends.length-2;i>=0;i--){if(ends[i+1].y-ends[i].y<12)ends[i].y=ends[i+1].y-12}}
   const labelY={};ends.forEach(e=>labelY[e.n]=e.y);
   names.forEach((name,ni)=>{
     if(raceHidden[name])return;
@@ -1395,7 +1399,11 @@ const CAST = [
 // ═══ RENDER ═══
 let breakingMsg='';
 function render(){
-const R=getRanked();const gp=R[0].s.gp;const sp=seasonProgress();const pct=sp.pct;
+const R=getRanked();const gp=gpAll();const sp=seasonProgress();const pct=sp.pct;
+// Preserve user state across re-renders (auto-refresh every 5 min)
+const openCards=new Set([...document.querySelectorAll('.pcard.open[data-pn]')].map(e=>e.getAttribute('data-pn')));
+const prevA=document.getElementById('cmpA'),prevB=document.getElementById('cmpB');
+const keepA=prevA?+prevA.value:0,keepB=prevB?+prevB.value:1;
 const leader=R[0];
 const sT=rankedTeams(false);
 const totW=sT.reduce((s,t)=>s+t.w,0);const totL=sT.reduce((s,t)=>s+t.l,0);const totT=sT.reduce((s,t)=>s+(t.t||0),0);const totG=totW+totL+totT;
@@ -1428,7 +1436,7 @@ document.getElementById("nav-area").innerHTML=tabNames.map((t,i)=>`<button class
 const bestT0=sT[0];
 const bestTeamName=bestT0?shortN(bestT0.name):'';
 const bestTeamOwner=bestT0?bestT0.owner:'';
-const allEntries=Object.values(GAME_LOGS[SPORT]).flat();
+const allEntries=Object.values(GAME_LOGS[SPORT]).flat().filter(e=>!e.carry);
 const liveGames=new Set();const finalGames=new Set();const upcomingGames=new Set();
 allEntries.forEach(e=>{
   const key=e.gid||(e.opp+(e.home?'H':'A'));
@@ -1459,7 +1467,8 @@ R.forEach((p,i)=>{
   const rkInfo=ranks[i],rk=rkInfo.rk,rkLabel=rkInfo.tied?'T'+rk:String(rk),gb=leader.s.wins-p.s.wins;
   let cards='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),d=tp-t.ou,earlyS=tg<earlyCut,ds=earlyS?'':d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=earlyS?'ev':d>0?'ov':d<0?'un':'ev',rec=recStr(t),lgb=gameBadge(t.abbr);cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${tcb(t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec}${ds?' <span class="dbadge '+dc+'">'+ds+'</span>':''}</div><div class="ptc-pace">${earlyS?'':'Pace: '+tp}</div></div></div>`});
   const grad=`linear-gradient(180deg,${p.teams.map(t=>tc(t.abbr)).join(',')})`;
-  t1+=`<div class="pcard${rk===1?' r1':''}" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${p.s.ou.toFixed(1)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
+  const isOpen=openCards.has(p.name);
+  t1+=`<div class="pcard${rk===1?' r1':''}${isOpen?' open':''}" data-pn="${p.name}" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${p.s.ou.toFixed(1)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
 });
 t1+=`</div>`;
 
@@ -1479,12 +1488,11 @@ else{t1+=`<div class="rc-empty"><b>Chart Activates Once Games Begin</b>Builds it
 t1+=`</div>`;
 
 // Comparison tool
-const opts=POOL.players.map((p,i)=>`<option value="${i}">${p.name}</option>`).join('');
 t1+=`<div class="bh" style="margin-top:36px"><div class="bh-tag">Compare</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">Head to Head</span></div></div>`;
-t1+=`<div class="compare-wrap"><div class="cmp-hdr"><div class="cmp-label">Player</div><select class="cmp-select" id="cmpA" onchange="renderCompare(+this.value,+document.getElementById('cmpB').value)">${opts}</select><div class="cmp-vs">VS</div><select class="cmp-select" id="cmpB" onchange="renderCompare(+document.getElementById('cmpA').value,+this.value)">${POOL.players.map((p,i)=>`<option value="${i}"${i===1?' selected':''}>${p.name}</option>`).join('')}</select></div><div class="cmp-body"><div style="display:grid;grid-template-columns:1fr 80px 1fr;margin-bottom:8px"><div class="cmp-col-name" id="cmp-name-a"></div><div></div><div class="cmp-col-name" id="cmp-name-b"></div></div><div id="cmp-body"></div></div></div>`;
+t1+=`<div class="compare-wrap"><div class="cmp-hdr"><div class="cmp-label">Player</div><select class="cmp-select" id="cmpA" onchange="renderCompare(+this.value,+document.getElementById('cmpB').value)">${POOL.players.map((p,i)=>`<option value="${i}"${i===(keepA<POOL.players.length?keepA:0)?' selected':''}>${p.name}</option>`).join('')}</select><div class="cmp-vs">VS</div><select class="cmp-select" id="cmpB" onchange="renderCompare(+document.getElementById('cmpA').value,+this.value)">${POOL.players.map((p,i)=>`<option value="${i}"${i===(keepB<POOL.players.length?keepB:1)?' selected':''}>${p.name}</option>`).join('')}</select></div><div class="cmp-body"><div style="display:grid;grid-template-columns:1fr 80px 1fr;margin-bottom:8px"><div class="cmp-col-name" id="cmp-name-a"></div><div></div><div class="cmp-col-name" id="cmp-name-b"></div></div><div id="cmp-body"></div></div></div>`;
 
 document.getElementById("tab-standings").innerHTML=t1;
-setTimeout(()=>{if(hasHistory){drawRace()}renderCompare(0,1)},50);
+setTimeout(()=>{if(hasHistory){drawRace()}renderCompare(keepA<POOL.players.length?keepA:0,keepB<POOL.players.length?keepB:1)},50);
 
 // ═══ TAB 2: PLAYERS ═══
 let t2=`<div class="bh"><div class="bh-tag">Player Cards</div><div class="bh-acc"></div><div class="bh-line"></div></div><div class="cg">`;
@@ -1559,7 +1567,7 @@ PAST_SEASONS.forEach(season=>{
     if(p.rank===1){const yr="'"+String(season.year).slice(-2);if(season.sport==='MLB'){a.mlbTitles++;a.mlbYears.push(yr)}else{a.nflTitles++;a.nflYears.push(yr)}}
   });
 });
-const atRanked=Object.entries(atMap).map(([name,d])=>({name,...d,delta:d.wins-d.ou,totalTitles:d.mlbTitles+d.nflTitles})).sort((a,b)=>b.totalTitles-a.totalTitles||b.delta-a.delta);
+const atRanked=Object.entries(atMap).map(([name,d])=>({name,...d,delta:d.wins-d.ou,deltaPct:d.ou>0?(d.wins-d.ou)/d.ou:0,totalTitles:d.mlbTitles+d.nflTitles})).sort((a,b)=>b.totalTitles-a.totalTitles||b.deltaPct-a.deltaPct);
 if(atRanked.length>0){
   t5+=`<div class="hist-section"><div class="hist-section-title">All-Time Leaderboard <span style="font-size:11px;font-weight:400;color:var(--t4);letter-spacing:1px;margin-left:8px;text-transform:none">Titles, then +/- vs Vegas</span></div><div class="tw"><table class="ttbl"><thead><tr><th style="width:36px;text-align:center">#</th><th>Player</th><th class="r">Titles</th><th class="r">MLB W</th><th class="r">NFL W</th><th class="r">+/- Vegas</th><th class="r">Seasons</th></tr></thead><tbody>`;
   atRanked.forEach((p,i)=>{
@@ -1656,7 +1664,8 @@ const ABBR_MLB_ID={};Object.entries(MLB_ID_ABBR).forEach(([id,abbr])=>{ABBR_MLB_
 // Per-sport game logs + scoreboards (kept separately so switching sports is instant)
 const GAME_LOGS={MLB:{},NFL:{}};   // abbr -> [{type,gid,date,opp,home,w,rs,ra,inning,time,day}]
 const SCOREBOARDS={MLB:[],NFL:[]}; // [{state,away,home,awayS,homeS,inning,time,day,awayP,homeP,poolAway,poolHome,gameDateRaw}]
-const NFL_STATE={week:null,weekDone:false};
+const NFL_STATE={week:null,weekDone:false,weekBegan:false};
+const fetchT=(url,ms=12000)=>fetch(url,typeof AbortSignal!=='undefined'&&AbortSignal.timeout?{signal:AbortSignal.timeout(ms)}:undefined);
 const fmtDate=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const ctTime=(iso)=>{const gt=new Date(iso);const s=gt.toLocaleString('en-US',{timeZone:'America/Chicago',hour:'numeric',minute:'2-digit',hour12:true});return s.replace(' ','').replace('AM','a').replace('PM','p')+' CT'};
 const lsGet=(k)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}};
@@ -1676,7 +1685,7 @@ function buildRace(sport,periods){
 
 // ─────────────────────────── MLB ───────────────────────────
 function fetchMLBApi(){
-  return fetch(MLB_API).then(r=>r.json()).then(data=>{
+  return fetchT(MLB_API).then(r=>r.json()).then(data=>{
     const standings={};
     (data.records||[]).forEach(div=>{(div.teamRecords||[]).forEach(tr=>{const abbr=MLB_ID_ABBR[tr.team.id];if(abbr)standings[abbr]={w:tr.wins||0,l:tr.losses||0,t:0}})});
     return standings;
@@ -1687,7 +1696,7 @@ function fetchGameResults(){
   const today=fmtDate(now);const start=fmtDate(new Date(now.getTime()-3*86400000));
   const tomorrow=fmtDate(new Date(now.getTime()+86400000));
   const url=`https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=${start}&endDate=${tomorrow}&hydrate=linescore,probablePitcher`;
-  return fetch(url).then(r=>r.json()).then(data=>{
+  return fetchT(url).then(r=>r.json()).then(data=>{
     const results={};const sbGames=[];
     const addEntry=(abbr,entry)=>{if(!results[abbr])results[abbr]=[];results[abbr].push(entry)};
     const poolTeams=poolTeamMap('MLB');
@@ -1700,6 +1709,9 @@ function fetchGameResults(){
         const awayAbbr=MLB_ID_ABBR[away.team.id],homeAbbr=MLB_ID_ABBR[home.team.id];
         const awayS=away.score||0,homeS=home.score||0;
         const state=g.status.abstractGameState;// Preview, Live, Final
+        const det=g.status.detailedState||'';
+        if(det==='Postponed'||det==='Cancelled'||g.status.codedGameState==='D')return; // no result — skip entirely
+        if(state==='Final'&&away.isWinner===undefined&&home.isWinner===undefined)return; // no decision recorded
         const ls=g.linescore||{};
         const inn=ls.currentInning||'';const half=ls.inningHalf||'';
         const innStr=inn?(half==='Top'?'▲'+inn:half==='Bottom'?'▼'+inn:inn+'th'):'';
@@ -1738,8 +1750,10 @@ function fetchMLBHistory(){
   if(cache.through){const d=new Date(cache.through+'T12:00:00');d.setDate(d.getDate()-3);const s=fmtDate(d);if(s>start)start=s}
   if(start>today)return Promise.resolve(RACE.MLB=buildMLBRace(cache.daily));
   const url=`https://statsapi.mlb.com/api/v1/schedule?sportId=1&season=${S.season}&gameType=R&startDate=${start}&endDate=${today}&fields=dates,date,games,gameType,status,abstractGameState,teams,away,home,team,id,isWinner`;
-  return fetch(url).then(r=>r.json()).then(data=>{
-    (data.dates||[]).forEach(d=>{
+  return fetchT(url,20000).then(r=>{if(!r.ok)throw new Error('history http '+r.status);return r.json()}).then(data=>{
+    if(!Array.isArray(data.dates))throw new Error('history: no dates');
+    let lastDate=null;
+    data.dates.forEach(d=>{
       const day={};
       (d.games||[]).forEach(g=>{
         if(g.gameType!=='R'||g.status.abstractGameState!=='Final')return;
@@ -1748,9 +1762,9 @@ function fetchMLBHistory(){
         if(!day[a])day[a]=[0,0];if(!day[h])day[h]=[0,0];
         if(g.teams.away.isWinner){day[a][0]++;day[h][1]++}else if(g.teams.home.isWinner){day[h][0]++;day[a][1]++}
       });
-      if(Object.keys(day).length)cache.daily[d.date]=day;else delete cache.daily[d.date];
+      if(Object.keys(day).length){cache.daily[d.date]=day;lastDate=d.date}else delete cache.daily[d.date];
     });
-    cache.through=today;
+    cache.through=lastDate||cache.through||start; // only advance to data actually received
     lsSet(key,cache);
     RACE.MLB=buildMLBRace(cache.daily);
   }).catch(()=>{RACE.MLB=buildMLBRace(cache.daily)});
@@ -1783,7 +1797,7 @@ function parseCSV(text){
   return rows;
 }
 function fetchGSheets(){
-  return fetch(GVIZ).then(r=>r.text()).then(csv=>{
+  return fetchT(GVIZ).then(r=>r.text()).then(csv=>{
     const rows=parseCSV(csv);const standings={};
     rows.forEach(r=>{
       if(!r[0]||r[0]==='Team_Clean'||r[0]==='Tm')return;
@@ -1803,7 +1817,7 @@ function fetchGSheets(){
 
 // ─────────────────────────── NFL ───────────────────────────
 function fetchNFLStandings(){
-  return fetch(NFL_STANDINGS).then(r=>r.json()).then(data=>{
+  return fetchT(NFL_STANDINGS).then(r=>r.json()).then(data=>{
     const standings={};
     (data.children||[]).forEach(conf=>{((conf.standings||{}).entries||[]).forEach(e=>{
       const abbr=e.team&&e.team.abbreviation;if(!abbr)return;
@@ -1816,27 +1830,41 @@ function fetchNFLStandings(){
 // Parse an ESPN scoreboard payload into {week, done, games:[...]}
 function parseNFLScoreboard(data){
   const week=(data.week&&data.week.number)||null;
-  const games=[];let allFinal=true;
+  const seasonType=(data.season&&(data.season.type||data.season.seasonType))||2; // 1=pre, 2=regular, 3=post
+  const games=[];let allFinal=true;let anyBegun=false;
   (data.events||[]).forEach(ev=>{
     const comp=(ev.competitions||[])[0];if(!comp)return;
+    if(ev.season&&ev.season.type&&ev.season.type!==2)return; // only regular-season games count
     const home=comp.competitors.find(c=>c.homeAway==='home'),away=comp.competitors.find(c=>c.homeAway==='away');
     if(!home||!away)return;
     const st=(ev.status||comp.status||{}).type||{};
+    if(st.name==='STATUS_CANCELED'||st.name==='STATUS_POSTPONED')return; // no result — skip entirely
     const state=st.state==='post'?'Final':st.state==='in'?'Live':'Preview';
     if(state!=='Final')allFinal=false;
+    if(state!=='Preview')anyBegun=true;
     const hs=+home.score||0,as=+away.score||0;
     const period=(ev.status||comp.status||{}).period||0,clock=(ev.status||comp.status||{}).displayClock||'';
-    const qStr=state==='Live'?(period>4?'OT':'Q'+period)+(clock?' '+clock:''):(state==='Final'&&period>4?'F/OT':'');
+    const qStr=state==='Live'?(st.name==='STATUS_HALFTIME'?'HALF':(period>4?'OT':'Q'+period)+(clock?' '+clock:'')):(state==='Final'&&period>4?'F/OT':'');
     games.push({gid:ev.id,date:ev.date,state,home:home.team.abbreviation,away:away.team.abbreviation,homeS:hs,awayS:as,homeWin:state==='Final'&&hs>as,awayWin:state==='Final'&&as>hs,tie:state==='Final'&&hs===as,qStr,name:ev.shortName||''});
   });
-  return{week,done:games.length>0&&allFinal,games};
+  return{week,seasonType,done:games.length>0&&allFinal,began:anyBegun,games};
 }
 const NFL_DAY=(iso)=>new Date(iso).toLocaleDateString('en-US',{timeZone:'America/Chicago',weekday:'short'});
 // Current week → scoreboard ticker + live/upcoming badges
 function fetchNFLScoreboard(){
-  return fetch(NFL_SCOREBOARD).then(r=>r.json()).then(data=>{
+  return fetchT(NFL_SCOREBOARD).then(r=>r.json()).then(data=>{
     const sb=parseNFLScoreboard(data);
-    NFL_STATE.week=sb.week;NFL_STATE.weekDone=sb.done;
+    if(sb.seasonType===1){ // NFL preseason — nothing counts yet
+      NFL_STATE.week=null;NFL_STATE.weekDone=false;NFL_STATE.weekBegan=false;
+      Object.keys(GAME_LOGS.NFL).forEach(k=>delete GAME_LOGS.NFL[k]);SCOREBOARDS.NFL=[];
+      return sb;
+    }
+    if(sb.seasonType>=3){ // playoffs — regular season is over; show final state
+      NFL_STATE.week=SPORTS.NFL.weeks;NFL_STATE.weekDone=true;NFL_STATE.weekBegan=true;
+      Object.keys(GAME_LOGS.NFL).forEach(k=>delete GAME_LOGS.NFL[k]);SCOREBOARDS.NFL=[];
+      return sb;
+    }
+    NFL_STATE.week=sb.week;NFL_STATE.weekDone=sb.done;NFL_STATE.weekBegan=sb.began;
     const poolTeams=poolTeamMap('NFL');
     const results={};
     const addEntry=(abbr,entry)=>{if(!results[abbr])results[abbr]=[];results[abbr].push(entry)};
@@ -1858,7 +1886,7 @@ function fetchNFLScoreboard(){
     });
     // Teams on bye / not yet listed: keep their most recent final from history
     const lastWeek=RACE_NFL_LAST||{};
-    Object.entries(lastWeek).forEach(([abbr,e])=>{if(!results[abbr])results[abbr]=[e]});
+    Object.entries(lastWeek).forEach(([abbr,e])=>{if(!results[abbr])results[abbr]=[{...e,carry:true}]});
     Object.keys(GAME_LOGS.NFL).forEach(k=>delete GAME_LOGS.NFL[k]);
     Object.assign(GAME_LOGS.NFL,results);
     const stateOrd={Live:1,Preview:2,Final:3};
@@ -1870,14 +1898,15 @@ function fetchNFLScoreboard(){
 let RACE_NFL_LAST=null; // abbr -> last final entry from the most recent completed week
 function fetchNFLHistory(){
   const S=SPORTS.NFL;
-  const cur=NFL_STATE.week||1;
+  const cur=Math.min(NFL_STATE.week||1,S.weeks);
   const lastDone=NFL_STATE.weekDone?cur:cur-1;
   if(lastDone<1){RACE.NFL=null;return Promise.resolve()}
   const weeks=[];for(let w=1;w<=lastDone;w++)weeks.push(w);
   return Promise.all(weeks.map(w=>{
     const key=`wp-nfl-wk-${S.season}-${w}`;const c=lsGet(key);if(c)return Promise.resolve(c);
-    return fetch(`${NFL_SCOREBOARD}?dates=${S.season}&seasontype=2&week=${w}`).then(r=>r.json()).then(data=>{
+    return fetchT(`${NFL_SCOREBOARD}?dates=${S.season}&seasontype=2&week=${w}`).then(r=>r.json()).then(data=>{
       const sb=parseNFLScoreboard(data);
+      if(sb.seasonType!==2)return null;
       const rec={};
       sb.games.forEach(g=>{if(g.state!=='Final')return;
         const dateStr=new Date(g.date).toLocaleDateString('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric'});
@@ -1901,13 +1930,21 @@ function fetchNFLHistory(){
 }
 
 // ─────────────────────────── SHARED ───────────────────────────
-function applyStandings(sport,standings){
+function applyStandings(sport,standings,cachedLabel){
   if(!standings||Object.keys(standings).length<20)return false;
   const S=SPORTS[sport];
   S.players.forEach(p=>p.teams.forEach(t=>{const s=standings[t.abbr];if(s){t.w=s.w;t.l=s.l;t.t=s.t||0}}));
   S.undrafted.forEach(t=>{const s=standings[t.abbr];if(s){t.w=s.w;t.l=s.l;t.t=s.t||0}});
-  S.updated=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+  S.updated=cachedLabel||new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+  if(!cachedLabel)lsSet('wp-standings-'+sport+'-'+S.season,{updated:S.updated,standings});
   return true;
+}
+// Offline resilience: seed each sport from the last successful fetch on this device
+function hydrateFromCache(){
+  ['MLB','NFL'].forEach(sp=>{
+    const c=lsGet('wp-standings-'+sp+'-'+SPORTS[sp].season);
+    if(c&&c.standings)applyStandings(sp,c.standings,(c.updated||'')+' (cached)');
+  });
 }
 
 // ═══ LIVE SCOREBOARD TICKER ═══
@@ -1989,9 +2026,11 @@ function dismissLoading(){
 // ═══ REFRESH — fetch the active sport, then render ═══
 let refreshing=false;
 function refreshData(isInitial){
+  if(refreshing)return;refreshing=true;
   const sport=SPORT;const S=SPORTS[sport];
   const seasonStarted=new Date()>=S.start;
   const finish=(ok)=>{
+    refreshing=false;
     if(ok!==null){lastFetchOk=ok;if(ok)lastFetchTime=Date.now()}
     updateDataStatus();
     if(sport===SPORT){render();if(isInitial)dismissLoading()}
@@ -2010,7 +2049,7 @@ function refreshData(isInitial){
     return Promise.all(tasks).then(([standings])=>{
       // Teams on bye this week: show their last result from the most recent completed week
       if(RACE_NFL_LAST){Object.entries(RACE_NFL_LAST).forEach(([abbr,e])=>{if(!GAME_LOGS.NFL[abbr])GAME_LOGS.NFL[abbr]=[e]})}
-      if(!seasonStarted){finish(sb?true:null);return}
+      if(!seasonStarted){finish(!!sb);return}
       finish(applyStandings('NFL',standings));
     });
   }).catch(()=>finish(false));
@@ -2033,8 +2072,11 @@ document.querySelectorAll('.sport-btn img').forEach(i=>{i.src=L(i.dataset.logo)}
 document.querySelectorAll('.sport-btn').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.sport!==SPORT)setSport(b.dataset.sport)}));
 
 // Initial load + auto-refresh
+hydrateFromCache();
 setSport(SPORT,true);
 refreshData(true);
+// Safety net: never leave the loading screen up more than 8s even if every fetch hangs
+setTimeout(()=>{if(document.getElementById('loading-screen')){render();dismissLoading()}},8000);
 setInterval(()=>refreshData(false),REFRESH_MS);
 
 // PWA SERVICE WORKER REGISTRATION
@@ -2050,7 +2092,7 @@ if('serviceWorker' in navigator){
 (function(){
   const isStandalone=window.matchMedia('(display-mode:standalone)').matches||window.navigator.standalone;
   if(isStandalone)return;
-  const dismissed=sessionStorage.getItem('install-dismissed');
+  let dismissed=null;try{dismissed=sessionStorage.getItem('install-dismissed')}catch(e){}
   if(dismissed)return;
   let deferredPrompt=null;
   window.addEventListener('beforeinstallprompt',e=>{
@@ -2076,7 +2118,7 @@ if('serviceWorker' in navigator){
     }
     document.body.appendChild(banner);
     const closeBtn=document.getElementById('pwa-close-btn');
-    if(closeBtn)closeBtn.onclick=()=>{banner.remove();sessionStorage.setItem('install-dismissed','1')};
+    if(closeBtn)closeBtn.onclick=()=>{banner.remove();try{sessionStorage.setItem('install-dismissed','1')}catch(e){}};
     if(type==='chrome'){
       const installBtn=document.getElementById('pwa-install-btn');
       if(installBtn)installBtn.onclick=async()=>{
