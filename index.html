@@ -51,7 +51,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh;overflow-x:hidden;padding-bottom:100px}
+body{font-family:var(--fb);background:var(--g1);color:var(--t1);min-height:100vh;overflow-x:hidden;padding-bottom:64px}
 
 
 /* ═══ SPORT SWITCHER ═══ */
@@ -133,6 +133,14 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
 .dr-slot.locked{border-color:rgba(255,204,0,.35);background:var(--g4);cursor:default;opacity:1}
 .dr-row.on-clock{background:rgba(255,204,0,.05);border-radius:6px;margin:0 -8px;padding-left:8px;padding-right:8px}
 .dr-otc{display:block;font-size:9px;letter-spacing:1.5px;color:var(--y);margin-top:2px}
+/* ═══ CONSOLIDATED BOTTOMLINE ═══ */
+.bl-t{height:40px}
+.bl-live-dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:sbPulse 1.5s ease-in-out infinite;display:inline-block;margin-right:7px;vertical-align:middle}
+.bl .sb-g{border-color:var(--g5);background:rgba(255,255,255,.03);height:28px;margin:0 4px}
+.bl .sb-g-live{border-color:rgba(255,80,80,.45);background:rgba(255,51,51,.08)}
+.bl .sb-g-final{opacity:.65}
+.bl .sb-tag{display:none}
+@media(max-width:600px){.bl-t{height:34px!important}.bl .sb-g{height:24px!important;padding:2px 8px!important}}
 
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
@@ -607,7 +615,7 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
   .live-txt{font-size:11px!important;letter-spacing:1.5px!important}
   .live-dot{width:5px!important;height:5px!important}
   .espn-date{display:none!important}
-  .data-status{top:auto!important;bottom:80px!important;right:8px!important;font-size:9px!important;padding:2px 6px!important;z-index:1999!important}
+  .data-status{top:auto!important;bottom:40px!important;right:8px!important;font-size:9px!important;padding:2px 6px!important;z-index:1999!important}
 
   /* SCOREBOARD TICKER — mobile */
   .sb-wrap{height:34px!important;bottom:32px!important}
@@ -818,7 +826,7 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
   .tks{padding:0 2px!important}
   .tk-leader{padding:0 14px!important;margin:0 2px!important}
   .tk-leader .tk-stat{font-size:13px!important}
-  body{padding-bottom:80px!important}
+  body{padding-bottom:46px!important}
 }
 
 /* ═══ SMALL PHONE (380px) ═══ */
@@ -895,7 +903,6 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
   <section class="panel" id="tab-draft" role="tabpanel" aria-label="Draft Board"></section>
   <section class="panel" id="tab-history" role="tabpanel" aria-label="League History"></section>
 </main>
-<div class="sb-wrap" id="scoreboard" role="region" aria-label="Live Scoreboard"></div>
 <div class="bl" id="bl-area" aria-label="Live ticker"></div>
 <script>
 
@@ -1621,22 +1628,30 @@ document.getElementById("tab-draft").innerHTML=t4;
 // ═══ TAB 5: HISTORY ═══
 renderHistory();
 
-// ═══ BOTTOMLINE — SINGLE PREMIUM TICKER ═══
+// ═══ BOTTOMLINE — ONE TICKER FOR EVERYTHING ═══
+// Game days: live scores (the good stuff) + leader & best team.
+// No games: the stat rundown. Breaking news flashes over either.
 const tkLogos=(p)=>p.teams.map(t=>`<span class="lbox mini" style="--acc:${tcb(t.abbr)}"><img src="${L(LOGOKEY(t.abbr))}"></span>`).join('');
+const sep='<div class="tks">◆</div>';
+const gt=buildGamesTicker();
 let tk='';
-R.forEach((p,i)=>{
-  const abbrs=p.teams.map(t=>t.abbr).join('/');
-  tk+=`<div class="tki">${tkLogos(p)}<span class="tkt"><b>${p.name}</b> <span class="hl">${started?p.s.wins:p.s.proj}</span> ${started?'wins &bull; proj '+p.s.proj:'projected wins'}<span class="sub">${abbrs}</span></span></div><div class="tks">◆</div>`;
-});
-tk+=`<div class="tk-leader">${tkLogos(leader)}<span class="tkt">LEADER</span><span class="tk-stat">${leader.name} • ${started?leader.s.wins+' wins':leader.s.proj+' proj'}</span></div><div class="tks">◆</div>`;
-tk+=`<div class="tk-leader"><span class="tkt">1ST TO LAST</span><span class="tk-stat">${spread.toFixed(0)} win gap (proj)</span></div><div class="tks">◆</div>`;
-const bestT=sT[0],worstT=sT[sT.length-1];
-if(bestT)tk+=`<div class="tki"><span class="lbox mini" style="--acc:${tcb(bestT.abbr)}"><img src="${L(LOGOKEY(bestT.abbr))}"></span><span class="tkt"><b>${shortN(bestT.name)}</b> (${bestT.owner}) leads all teams • <span class="hl">${started?recStr(bestT):'O/U '+bestT.ou}</span></span></div><div class="tks">◆</div>`;
-if(worstT)tk+=`<div class="tki"><span class="lbox mini" style="--acc:${tcb(worstT.abbr)}"><img src="${L(LOGOKEY(worstT.abbr))}"></span><span class="tkt"><b>${shortN(worstT.name)}</b> (${worstT.owner}) trails • <span class="hl">${started?recStr(worstT):'O/U '+worstT.ou}</span></span></div><div class="tks">◆</div>`;
-const tkDur=Math.max(50,R.length*7);
-document.getElementById("bl-area").innerHTML=`<div class="bl-t"><div class="bl-tag">LIVE</div><div class="bl-sw"><div class="bl-s" style="--td1:${tkDur}s">${tk+tk}</div></div><div class="bl-break" id="bl-break"><div class="bl-break-tag">Breaking</div><div class="bl-break-text" id="bl-break-text"></div></div></div>`;
+const leaderItem=`<div class="tk-leader">${tkLogos(leader)}<span class="tkt">LEADER</span><span class="tk-stat">${leader.name} • ${started?leader.s.wins+' wins':leader.s.proj+' proj'}</span></div>${sep}`;
+const bestT=sT[0];
+const bestItem=bestT?`<div class="tki"><span class="lbox mini" style="--acc:${tcb(bestT.abbr)}"><img src="${L(LOGOKEY(bestT.abbr))}"></span><span class="tkt"><b>${shortN(bestT.name)}</b> (${bestT.owner}) leads all teams • <span class="hl">${started?recStr(bestT):'O/U '+bestT.ou}</span></span></div>${sep}`:'';
+if(gt.count>0){
+  tk=leaderItem+gt.html+sep+bestItem;
+}else{
+  R.forEach(p=>{
+    const abbrs=p.teams.map(t=>t.abbr).join('/');
+    tk+=`<div class="tki">${tkLogos(p)}<span class="tkt"><b>${p.name}</b> <span class="hl">${started?p.s.wins:p.s.proj}</span> ${started?'wins • proj '+p.s.proj:'projected wins'}<span class="sub">${abbrs}</span></span></div>${sep}`;
+  });
+  tk+=leaderItem+bestItem;
+  tk+=`<div class="tk-leader"><span class="tkt">1ST TO LAST</span><span class="tk-stat">${spread.toFixed(0)} win gap (proj)</span></div>${sep}`;
+}
+const tkTag=gt.live>0?`<span class="bl-live-dot"></span>${gt.live} LIVE`:(gt.count>0?(SPORT==='NFL'&&NFL_STATE.week?'WK '+NFL_STATE.week:'SCORES'):'LIVE');
+const tkDur=Math.max(50,(gt.count>0?gt.count*9:R.length*7));
+document.getElementById("bl-area").innerHTML=`<div class="bl-t"><div class="bl-tag">${tkTag}</div><div class="bl-sw"><div class="bl-s" style="--td1:${tkDur}s">${tk+tk}</div></div><div class="bl-break" id="bl-break"><div class="bl-break-tag">Breaking</div><div class="bl-break-text" id="bl-break-text"></div></div></div>`;
 breakingMsg=getBreaking();
-renderScoreboard();
 initTimers();
 }
 
@@ -2035,16 +2050,10 @@ function hydrateFromCache(){
   });
 }
 
-// ═══ LIVE SCOREBOARD TICKER ═══
-function renderScoreboard(){
-  const el=document.getElementById('scoreboard');if(!el)return;
+// ═══ GAMES FOR THE BOTTOMLINE TICKER ═══
+function buildGamesTicker(){
   const SB=SCOREBOARDS[SPORT];
-  if(SB.length===0){el.classList.remove('has-games');el.innerHTML='';return}
-  el.classList.add('has-games');
-  const liveCount=SB.filter(g=>g.state==='Live').length;
-  let tagHtml='';
-  if(liveCount>0){tagHtml=`<span class="sb-tag-dot"></span><span class="sb-tag-live">${liveCount} LIVE</span>`}
-  else{tagHtml=SPORT==='NFL'&&NFL_STATE.week?`WK ${NFL_STATE.week}`:`SCORES`}
+  if(!SB.length)return{html:'',live:0,count:0};
   let games='';
   SB.forEach((g,i)=>{
     const isLive=g.state==='Live',isFinal=g.state==='Final',isPreview=g.state==='Preview';
@@ -2055,21 +2064,19 @@ function renderScoreboard(){
     let st='';
     if(isLive){st=`<span class="sb-st sb-st-live"><span class="sb-pip"></span>${g.inning||'LIVE'}</span>`}
     else if(isFinal){st=`<span class="sb-st sb-st-final">${g.inning||'F'}</span>`}
-    else{st=`<span class="sb-st sb-st-pre"><span class="sb-time">${g.time}</span></span>`}
-    const pit=isPreview&&g.awayP!=='TBD'&&g.homeP!=='TBD'?`<span class="sb-pit"><b>${g.awayP}</b> v <b>${g.homeP}</b></span>`:'';
+    else{st=`<span class="sb-st sb-st-pre"><span class="sb-time">${SPORT==='NFL'?g.time:(g.day==='Tomorrow'?'Tmr ':'')+g.time}</span></span>`}
+    const pit=isPreview&&g.awayP&&g.awayP!=='TBD'&&g.homeP!=='TBD'?`<span class="sb-pit"><b>${g.awayP}</b> v <b>${g.homeP}</b></span>`:'';
     const gClass=isLive?' sb-g-live':isFinal?' sb-g-final':'';
     let entry=`<div class="sb-g${gClass}">`;
-    entry+=`<span class="sb-tm${awayWin?' sb-win':''}"><span class="lbox xs" style="--acc:${awayC}"><img src="${L(LOGOKEY(g.away))}"></span><span class="sb-abbr">${g.away}</span>${poolA}`;
+    entry+=`<span class="sb-tm${awayWin?' sb-win':''}"><span class="lbox mini" style="--acc:${awayC}"><img src="${L(LOGOKEY(g.away))}"></span><span class="sb-abbr">${g.away}</span>${poolA}`;
     if(!isPreview) entry+=`<span class="sb-sc${isLive?' sb-sc-live':''}">${g.awayS}</span>`;
     entry+=`</span><span class="sb-at">${isPreview?'@':'—'}</span>`;
-    entry+=`<span class="sb-tm${homeWin?' sb-win':''}"><span class="lbox xs" style="--acc:${homeC}"><img src="${L(LOGOKEY(g.home))}"></span><span class="sb-abbr">${g.home}</span>${poolH}`;
+    entry+=`<span class="sb-tm${homeWin?' sb-win':''}"><span class="lbox mini" style="--acc:${homeC}"><img src="${L(LOGOKEY(g.home))}"></span><span class="sb-abbr">${g.home}</span>${poolH}`;
     if(!isPreview) entry+=`<span class="sb-sc${isLive?' sb-sc-live':''}">${g.homeS}</span>`;
     entry+=`</span>`+st+pit+`</div>`;
     games+=entry;
-    if(i<SB.length-1) games+=`<span class="sb-sep"></span>`;
   });
-  const dur=Math.max(80,SB.length*10);
-  el.innerHTML=`<div class="sb-tag">${tagHtml}</div><div class="sb-sw"><div class="sb-s" style="--sb-dur:${dur}s">${games}${games.length>0?`<span class="sb-sep">◆</span>${games}`:''}</div></div>`;
+  return{html:games,live:SB.filter(g=>g.state==='Live').length,count:SB.length};
 }
 
 // Game status badge for a team — prioritizes: LIVE > last final > upcoming
