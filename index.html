@@ -1202,6 +1202,7 @@ function pStats(p){
   return{wins:w,losses:ls,ties,ou,proj,gp,live,delta:proj-ou,wae}
 }
 const shortN=(n)=>n.replace(/^(Los Angeles|New York|San Diego|San Francisco|Kansas City|Tampa Bay|St\. Louis|Toronto|Chicago|Boston|Detroit|Oakland|Sacramento|Atlanta|Arizona|Seattle|Cleveland|Cincinnati|Baltimore|Pittsburgh|Houston|Colorado|Milwaukee|Minnesota|Washington|Philadelphia|Miami|Texas|Buffalo|Carolina|Denver|Green Bay|Indianapolis|Jacksonville|Las Vegas|New England|New Orleans|Tennessee|Dallas) /,"");
+const fmtN=(v)=>v%1?(+v).toFixed(1):String(v); // 21.0 → 21, 26.5 stays 26.5
 const ordinal=(n)=>{const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
 // League tiebreaker (per Chuck's rules): tied total wins → whoever has the single team
 // with the most wins; still tied → compare 2nd teams, then 3rd. Returns <0 if a wins.
@@ -1560,7 +1561,7 @@ R.forEach((p,i)=>{
   let cards='';p.teams.forEach(t=>{const tg=gpOf(t),tp=pOU(t),d=tp-t.ou,earlyS=tg<earlyCut,ds=earlyS?'':d>0?'+'+d.toFixed(0):d<0?d.toFixed(0):'E',dc=earlyS?'ev':d>0?'ov':d<0?'un':'ev',rec=recStr(t),lgb=gameBadge(t.abbr);cards+=`<div class="ptc"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${tcb(t.abbr)}"></div>${LB(t.abbr,'lg')}<div style="flex:1;min-width:0"><div class="ptc-name">${shortN(t.name)}</div><div class="ptc-meta">Rd ${t.round} &bull; O/U ${t.ou}${lgb?' &bull; '+lgb:''}</div></div><div style="text-align:right;flex-shrink:0"><div class="ptc-rec">${rec}${ds?' <span class="dbadge '+dc+'">'+ds+'</span>':''}</div><div class="ptc-pace">${earlyS?'':'Pace: '+tp}</div></div></div>`});
   const grad=p.teams.length>1?`linear-gradient(180deg,${p.teams.map(t=>tc(t.abbr)).join(',')})`:(p.teams[0]?tc(p.teams[0].abbr):'#333');
   const isOpen=openCards.has(p.name);
-  t1+=`<div class="pcard${rk===1?' r1':''}${isOpen?' open':''}" data-pn="${p.name}" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${p.s.ou.toFixed(1)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
+  t1+=`<div class="pcard${rk===1?' r1':''}${isOpen?' open':''}" data-pn="${p.name}" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="this.classList.toggle('open');this.setAttribute('aria-expanded',this.classList.contains('open'))" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}"><div class="prk"><div class="prk-n">${rkLabel}</div></div><div class="pcbar" style="background:${grad}"></div><div class="pinfo"><div class="plogos">${p.teams.map(t=>LB(t.abbr,'md')).join('')}</div><div><div class="pname">${p.name}</div><div class="psub">${p.teams.map(t=>t.abbr).join(' / ')}${gb>0?' • '+gb+' GB':''}</div></div></div><div class="pnums"><div class="pnb"><div class="pnv w">${p.s.wins}</div><div class="pnl">Wins</div></div><div class="pnb"><div class="pnv p">${p.s.proj}</div><div class="pnl">Proj</div></div><div class="pnb hx"><div class="pnv o">${fmtN(p.s.ou)}</div><div class="pnl">O/U</div></div><div class="parr">&#9662;</div></div><div class="pdet"><div class="pdet-in">${cards}</div></div></div>`;
 });
 t1+=`</div>`;
 
@@ -1595,7 +1596,7 @@ const waeVal=p.s.gp>0?p.s.wae:null;
 const waeStr=waeVal!==null?(waeVal>=0?'+':'')+waeVal.toFixed(1):'—';
 const waeColor=waeVal===null?'var(--t4)':waeVal>=0?'var(--grn)':'var(--red-t)';
 const waeLbl=p.s.gp>0?'vs Expected':'vs O/U';
-t2+=`<div class="pc"><div class="pch" style="background:linear-gradient(135deg,${p.teams[0]?tc(p.teams[0].abbr):'#333'}15,var(--g2))"><div class="pch-rk ${rC}">${ordinal(rk)} Place${rkInfo.tied?' (Tied)':''}</div><div class="pch-t"><div class="pch-nm">${p.name}</div><div style="text-align:right"><div class="pch-pl">Projected</div><div class="pch-pv">${p.s.proj}</div><div class="pch-gb">${gb>0?gb+' back':'Leader'}</div></div></div></div><div class="pc-sr"><div class="pc-sc"><div class="pc-sv">${p.s.wins}</div><div class="pc-sl">Wins</div></div><div class="pc-sc"><div class="pc-sv">${p.s.ou.toFixed(1)}</div><div class="pc-sl">O/U Total</div></div><div class="pc-sc"><div class="pc-sv" style="color:${waeColor}">${waeStr}</div><div class="pc-sl">${waeLbl}</div></div></div>${tR}</div>`});
+t2+=`<div class="pc"><div class="pch" style="background:linear-gradient(135deg,${p.teams[0]?tc(p.teams[0].abbr):'#333'}15,var(--g2))"><div class="pch-rk ${rC}">${ordinal(rk)} Place${rkInfo.tied?' (Tied)':''}</div><div class="pch-t"><div class="pch-nm">${p.name}</div><div style="text-align:right"><div class="pch-pl">Projected</div><div class="pch-pv">${p.s.proj}</div><div class="pch-gb">${gb>0?gb+' back':'Leader'}</div></div></div></div><div class="pc-sr"><div class="pc-sc"><div class="pc-sv">${p.s.wins}</div><div class="pc-sl">Wins</div></div><div class="pc-sc"><div class="pc-sv">${fmtN(p.s.ou)}</div><div class="pc-sl">O/U Total</div></div><div class="pc-sc"><div class="pc-sv" style="color:${waeColor}">${waeStr}</div><div class="pc-sl">${waeLbl}</div></div></div>${tR}</div>`});
 t2+=`</div>`;document.getElementById("tab-players").innerHTML=t2;
 
 // ═══ TAB 3: TEAMS ═══
@@ -1620,7 +1621,7 @@ dFlow.forEach(f=>{
   t4+=`</div>`;
 });
 t4+=`<div class="dbg dbt-row"><div class="dbr" style="color:var(--y);border-bottom:none">TOT</div>`;
-dNames.forEach(n=>{const p=POOL.players.find(pl=>pl.name===n);if(!p){t4+=`<div class="dbp">—</div>`;return}const s=pStats(p);t4+=`<div class="dbp"><div class="dbtv">${s.proj}</div><div class="dbts">O/U ${s.ou.toFixed(1)}</div></div>`});
+dNames.forEach(n=>{const p=POOL.players.find(pl=>pl.name===n);if(!p){t4+=`<div class="dbp">—</div>`;return}const s=pStats(p);t4+=`<div class="dbp"><div class="dbtv">${s.proj}</div><div class="dbts">O/U ${fmtN(s.ou)}</div></div>`});
 t4+=`</div></div>`;
 if(POOL.undrafted.length){t4+=`<div class="undrafted-strip"><span class="undrafted-strip-lbl">${POOL.draftPending?'Available':'Undrafted'}</span>${POOL.undrafted.map(t=>`<span class="undrafted-strip-item">${LB(t.abbr,'xs')}<span>${t.abbr}</span><span class="dbou">${t.ou}</span></span>`).join('')}</div>`}
 document.getElementById("tab-draft").innerHTML=t4;
@@ -2206,8 +2207,13 @@ const NFL_BASE_PICKS=[
   {player:"Brady",slot:1,abbr:"LAC"},   // #16 Chargers — Brady
   {player:"Troy",slot:1,abbr:"JAX"},    // #17 Jags — Troy
   {player:"Max",slot:1,abbr:"PIT"},     // #18 Steelers — Max
-  {player:"Winnie",slot:1,abbr:"TB"}    // #19 Bucs — Winnie (Winfield)
+  {player:"Winnie",slot:1,abbr:"TB"},   // #19 Bucs — Winnie (Winfield)
+  {player:"Landon",slot:1,abbr:"MIN"},  // #20 Vikings — Landon ("brutal spot")
+  {player:"Landon",slot:2,abbr:"IND"},  // #21 Colts — Landon (snake back-to-back)
+  {player:"Winnie",slot:2,abbr:"NO"}    // #22 Saints — Winnie
 ];
+// Draft completes itself: once all 30 picks are here, rosters lock and the Draft Room retires
+SPORTS.NFL.draftPending=NFL_BASE_PICKS.length<30;
 const DRAFT_KEY='wp-nfl-draft-'+SPORTS.NFL.season+'-v2';
 // {order:[{player,slot,abbr}], names:{oldName:newName}}
 function draftState(){return lsGet(DRAFT_KEY)||{order:[],names:{}}}
@@ -2216,8 +2222,7 @@ function draftTaken(){const m={};(SPORTS.NFL.effPicks||[]).forEach(o=>{m[o.abbr]
 // Rebuild SPORTS.NFL.players/undrafted from the saved draft (only while draftPending)
 function applyDraft(){
   const S=SPORTS.NFL;
-  if(!S.draftPending)return;
-  const st=draftState();
+  const st=S.draftPending?draftState():{order:[],names:{}};
   S.draftOrder=S.baseDraftOrder.map(n=>st.names[n]||n);
   // Effective pick list: official picks first, then this device's Draft Room additions
   const taken=new Set();const slotUsed=new Set();const eff=[];
