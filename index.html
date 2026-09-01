@@ -128,6 +128,9 @@ body[data-sport="NFL"] .hero::before{background:radial-gradient(ellipse 600px 25
   .odds-name{font-size:13px}
   .dp-grid{grid-template-columns:repeat(4,1fr)}
 }
+.dr-slot.locked{border-color:rgba(255,204,0,.35);background:var(--g4);cursor:default;opacity:1}
+.dr-row.on-clock{background:rgba(255,204,0,.05);border-radius:6px;margin:0 -8px;padding-left:8px;padding-right:8px}
+.dr-otc{display:block;font-size:9px;letter-spacing:1.5px;color:var(--y);margin-top:2px}
 
 /* ═══ HEADER ═══ */
 .hdr{background:linear-gradient(180deg,#1a1a1a,#111);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
@@ -1132,35 +1135,18 @@ const SPORTS={
     priorGames:5,            // Vegas line worth ~5 games of evidence in a 17-game season
     raceMax:18, raceTicks:[0,2,4,6,8,10,12,14,16,18], raceUnit:'Wk',
     unit:(n)=>'Week '+n, unitPlural:'Weeks', totalLabel:'17 Games',
-    // ⚠ DRAFT PENDING — rosters below are PLACEHOLDERS (teams assigned by Vegas O/U rank in draft order).
-    // Replace players[] with the real draft, rename "Player A"/"Player B", then set draftPending:false.
+    // ⚠ DRAFT IN PROGRESS — official picks live in NFL_BASE_PICKS (below, near NFL_LINES).
+    // As picks come in from the group text, add them there (or via the Draft Room + COPY SETUP).
+    // When all 30 are in, set draftPending:false.
     draftPending:true,
-    draftOrder:["Woods","Chuck","Kyle","Hayden","Nash","Max","Winnie","Landon","Player A","Player B"],
+    draftOrder:["Hayden","Woods","Chuck","Kyle","Nash","Brady","Troy","Max","Winnie","Landon"],
     draftFlow:[{rd:1,label:"RD 1",note:"LINEAR"},{rd:2,label:"RD 2",note:"LINEAR"},{rd:3,label:"RD 3",note:"SNAKE"}],
     history:[],
-    // O/U lines: DraftKings, Jul 23 2026 (via FOX Sports)
-    undrafted:[
-      {name:"Miami Dolphins",abbr:"MIA",w:0,l:0,t:0,ou:4.5},
-      {name:"Arizona Cardinals",abbr:"ARI",w:0,l:0,t:0,ou:3.5}
-    ],
-    players:[
-      {name:"Woods",teams:[{pick:1,round:1,name:"Baltimore Ravens",abbr:"BAL",w:0,l:0,t:0,ou:11.5},{pick:11,round:2,name:"Dallas Cowboys",abbr:"DAL",w:0,l:0,t:0,ou:9.5},{pick:30,round:3,name:"New York Jets",abbr:"NYJ",w:0,l:0,t:0,ou:5.5}]},
-      {name:"Chuck",teams:[{pick:2,round:1,name:"Los Angeles Rams",abbr:"LAR",w:0,l:0,t:0,ou:11.5},{pick:12,round:2,name:"Denver Broncos",abbr:"DEN",w:0,l:0,t:0,ou:9.5},{pick:29,round:3,name:"Las Vegas Raiders",abbr:"LV",w:0,l:0,t:0,ou:5.5}]},
-      {name:"Kyle",teams:[{pick:3,round:1,name:"Buffalo Bills",abbr:"BUF",w:0,l:0,t:0,ou:10.5},{pick:13,round:2,name:"Green Bay Packers",abbr:"GB",w:0,l:0,t:0,ou:9.5},{pick:28,round:3,name:"Cleveland Browns",abbr:"CLE",w:0,l:0,t:0,ou:5.5}]},
-      {name:"Hayden",teams:[{pick:4,round:1,name:"Cincinnati Bengals",abbr:"CIN",w:0,l:0,t:0,ou:10.5},{pick:14,round:2,name:"Houston Texans",abbr:"HOU",w:0,l:0,t:0,ou:9.5},{pick:27,round:3,name:"Tennessee Titans",abbr:"TEN",w:0,l:0,t:0,ou:6.5}]},
-      {name:"Nash",teams:[{pick:5,round:1,name:"Detroit Lions",abbr:"DET",w:0,l:0,t:0,ou:10.5},{pick:15,round:2,name:"Los Angeles Chargers",abbr:"LAC",w:0,l:0,t:0,ou:9.5},{pick:26,round:3,name:"Atlanta Falcons",abbr:"ATL",w:0,l:0,t:0,ou:6.5}]},
-      {name:"Max",teams:[{pick:6,round:1,name:"Kansas City Chiefs",abbr:"KC",w:0,l:0,t:0,ou:10.5},{pick:16,round:2,name:"San Francisco 49ers",abbr:"SF",w:0,l:0,t:0,ou:9.5},{pick:25,round:3,name:"Washington Commanders",abbr:"WSH",w:0,l:0,t:0,ou:7.5}]},
-      {name:"Winnie",teams:[{pick:7,round:1,name:"New England Patriots",abbr:"NE",w:0,l:0,t:0,ou:10.5},{pick:17,round:2,name:"Jacksonville Jaguars",abbr:"JAX",w:0,l:0,t:0,ou:8.5},{pick:24,round:3,name:"New York Giants",abbr:"NYG",w:0,l:0,t:0,ou:7.5}]},
-      {name:"Landon",teams:[{pick:8,round:1,name:"Philadelphia Eagles",abbr:"PHI",w:0,l:0,t:0,ou:10.5},{pick:18,round:2,name:"Minnesota Vikings",abbr:"MIN",w:0,l:0,t:0,ou:8.5},{pick:23,round:3,name:"New Orleans Saints",abbr:"NO",w:0,l:0,t:0,ou:7.5}]},
-      {name:"Player A",teams:[{pick:9,round:1,name:"Seattle Seahawks",abbr:"SEA",w:0,l:0,t:0,ou:10.5},{pick:19,round:2,name:"Pittsburgh Steelers",abbr:"PIT",w:0,l:0,t:0,ou:8.5},{pick:22,round:3,name:"Indianapolis Colts",abbr:"IND",w:0,l:0,t:0,ou:7.5}]},
-      {name:"Player B",teams:[{pick:10,round:1,name:"Chicago Bears",abbr:"CHI",w:0,l:0,t:0,ou:9.5},{pick:20,round:2,name:"Tampa Bay Buccaneers",abbr:"TB",w:0,l:0,t:0,ou:8.5},{pick:21,round:3,name:"Carolina Panthers",abbr:"CAR",w:0,l:0,t:0,ou:7.5}]}
-    ]
+    undrafted:[], // computed from NFL_BASE_PICKS + Draft Room picks
+    players:["Hayden","Woods","Chuck","Kyle","Nash","Brady","Troy","Max","Winnie","Landon"].map(n=>({name:n,teams:[]}))
   }
 };
 Object.values(SPORTS).forEach(s=>{s.updated="—";s.players.forEach(p=>p.teams.forEach(t=>{if(t.t===undefined)t.t=0}));s.undrafted.forEach(t=>{if(t.t===undefined)t.t=0})});
-// Snapshots of the placeholder NFL setup — the Draft Room rebuilds from these
-SPORTS.NFL.basePlayers=SPORTS.NFL.players;
-SPORTS.NFL.baseUndrafted=SPORTS.NFL.undrafted;
 SPORTS.NFL.baseDraftOrder=[...SPORTS.NFL.draftOrder];
 
 // ═══ ACTIVE SPORT ═══
@@ -1504,7 +1490,7 @@ document.title=`Wins Pool ${POOL.season} — ${SPORT}`;
 // Hero
 const startStr=POOL.start.toLocaleDateString('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric'});
 const heroSub=started?sp.label:POOL.startLabel+' '+startStr;
-document.getElementById("hero-area").innerHTML=`<div class="hero-c"><div class="hero-ey">${SPORT} Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">${POOL.yr}</span></div><div class="hero-tag"><b>${nP()}</b> Players &bull; <b>${nT()}</b> Teams &bull; <b>${G()}</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${heroSub}</div></div>${POOL.draftPending?'<div class="draft-pending">⚠ Placeholder rosters — draft results coming soon</div>':''}</div>`;
+document.getElementById("hero-area").innerHTML=`<div class="hero-c"><div class="hero-ey">${SPORT} Season Tracker</div><div class="hero-h">WINS POOL <span class="acc">${POOL.yr}</span></div><div class="hero-tag"><b>${nP()}</b> Players &bull; <b>${nT()}</b> Teams &bull; <b>${G()}</b> Games</div><div class="hero-bar"></div><div id="countdown"></div><div class="hp-wrap"><div class="hp-lbl">Season Progress</div><div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div><div class="hp-pct">${pct}%</div><div class="hp-games">${heroSub}</div></div>${POOL.draftPending?`<div class="draft-pending">🏈 Draft in progress — ${(SPORTS.NFL.effPicks||[]).length} of 30 picks in</div>`:''}</div>`;
 updateCountdown();
 
 // Cast strip
@@ -2162,38 +2148,69 @@ function renderOddsBlock(){
 // ═══════════════════════════════════════════════════════════════
 // 2026 Vegas win totals (DraftKings, Jul 23 2026 via FOX Sports)
 const NFL_LINES={ARI:["Arizona Cardinals",3.5],ATL:["Atlanta Falcons",6.5],BAL:["Baltimore Ravens",11.5],BUF:["Buffalo Bills",10.5],CAR:["Carolina Panthers",7.5],CHI:["Chicago Bears",9.5],CIN:["Cincinnati Bengals",10.5],CLE:["Cleveland Browns",5.5],DAL:["Dallas Cowboys",9.5],DEN:["Denver Broncos",9.5],DET:["Detroit Lions",10.5],GB:["Green Bay Packers",9.5],HOU:["Houston Texans",9.5],IND:["Indianapolis Colts",7.5],JAX:["Jacksonville Jaguars",8.5],KC:["Kansas City Chiefs",10.5],LV:["Las Vegas Raiders",5.5],LAC:["Los Angeles Chargers",9.5],LAR:["Los Angeles Rams",11.5],MIA:["Miami Dolphins",4.5],MIN:["Minnesota Vikings",8.5],NE:["New England Patriots",10.5],NO:["New Orleans Saints",7.5],NYG:["New York Giants",7.5],NYJ:["New York Jets",5.5],PHI:["Philadelphia Eagles",10.5],PIT:["Pittsburgh Steelers",8.5],SF:["San Francisco 49ers",9.5],SEA:["Seattle Seahawks",10.5],TB:["Tampa Bay Buccaneers",8.5],TEN:["Tennessee Titans",6.5],WSH:["Washington Commanders",7.5]};
-const DRAFT_KEY='wp-nfl-draft-'+SPORTS.NFL.season;
+// ═══ OFFICIAL DRAFT PICKS (from the group text) ═══
+// Order matters — index+1 is the pick number. slot = round-1.
+// Add new picks here as they come in, or use the Draft Room + COPY SETUP.
+const NFL_BASE_PICKS=[
+  {player:"Hayden",slot:0,abbr:"BUF"},  // #1  Bills — Hayden
+  {player:"Woods",slot:0,abbr:"LAR"},   // #2  Rams — Woodsy
+  {player:"Chuck",slot:0,abbr:"CIN"},   // #3  Bengals — Chuck
+  {player:"Kyle",slot:0,abbr:"BAL"},    // #4  Ravens — Kyle
+  {player:"Nash",slot:0,abbr:"SEA"},    // #5  Seahawks — Nash
+  {player:"Brady",slot:0,abbr:"DET"},   // #6  Lions — Brady
+  {player:"Troy",slot:0,abbr:"SF"},     // #7  Niners — Troy (Sweeney)
+  {player:"Max",slot:0,abbr:"HOU"},     // #8  Texans — Max
+  {player:"Winnie",slot:0,abbr:"KC"}    // #9  Chiefs — Winnie
+];
+const DRAFT_KEY='wp-nfl-draft-'+SPORTS.NFL.season+'-v2';
 // {order:[{player,slot,abbr}], names:{oldName:newName}}
 function draftState(){return lsGet(DRAFT_KEY)||{order:[],names:{}}}
 function draftSave(st){lsSet(DRAFT_KEY,st);applyDraft();render();switchTab(3)}
-function draftTaken(st){const m={};st.order.forEach(o=>{m[o.abbr]=o.player});return m}
+function draftTaken(){const m={};(SPORTS.NFL.effPicks||[]).forEach(o=>{m[o.abbr]=o.player});return m}
 // Rebuild SPORTS.NFL.players/undrafted from the saved draft (only while draftPending)
 function applyDraft(){
   const S=SPORTS.NFL;
   if(!S.draftPending)return;
   const st=draftState();
-  // player display names (rename support)
   S.draftOrder=S.baseDraftOrder.map(n=>st.names[n]||n);
-  if(st.order.length===0){S.players=S.basePlayers;S.undrafted=S.baseUndrafted;return}
-  const taken=new Set();
+  // Effective pick list: official picks first, then this device's Draft Room additions
+  const taken=new Set();const slotUsed=new Set();const eff=[];
+  const consider=(o,locked)=>{
+    if(!S.baseDraftOrder.includes(o.player))return;
+    if(!NFL_LINES[o.abbr])return;
+    if(taken.has(o.abbr)||slotUsed.has(o.player+'#'+o.slot))return;
+    taken.add(o.abbr);slotUsed.add(o.player+'#'+o.slot);
+    eff.push({...o,locked});
+  };
+  NFL_BASE_PICKS.forEach(o=>consider(o,true));
+  st.order.forEach(o=>consider(o,false));
+  S.effPicks=eff;
   S.players=S.baseDraftOrder.map(base=>{
     const nm=st.names[base]||base;
     const teams=[];
     for(let slot=0;slot<3;slot++){
-      const entry=st.order.find(o=>o.player===base&&o.slot===slot);
-      if(entry){
-        const pick=st.order.indexOf(entry)+1;
-        const [name,ou]=NFL_LINES[entry.abbr];
-        taken.add(entry.abbr);
-        teams.push({pick,round:slot+1,name,abbr:entry.abbr,w:0,l:0,t:0,ou});
+      const idx=eff.findIndex(o=>o.player===base&&o.slot===slot);
+      if(idx>=0){
+        const o=eff[idx];
+        const [name,ou]=NFL_LINES[o.abbr];
+        teams.push({pick:idx+1,round:slot+1,name,abbr:o.abbr,w:0,l:0,t:0,ou,locked:o.locked});
       }
     }
     return{name:nm,teams};
   });
   S.undrafted=Object.keys(NFL_LINES).filter(a=>!taken.has(a)).map(a=>({name:NFL_LINES[a][0],abbr:a,w:0,l:0,t:0,ou:NFL_LINES[a][1]}));
-  // re-apply any cached/live standings to the fresh team objects
   const c=lsGet('wp-standings-NFL-'+S.season);
   if(c&&c.standings)applyStandings('NFL',c.standings,S.updated);
+}
+// Who's on the clock, given linear/linear/snake over 10 players
+function draftOnClock(){
+  const n=(SPORTS.NFL.effPicks||[]).length;
+  if(n>=30)return null;
+  const round=Math.floor(n/10),idx=n%10;
+  const order=SPORTS.NFL.baseDraftOrder;
+  const base=round===2?order[9-idx]:order[idx];
+  const st=draftState();
+  return{pick:n+1,round:round+1,player:st.names[base]||base,base};
 }
 function draftAssign(player,slot,abbr){
   const st=draftState();
@@ -2203,6 +2220,7 @@ function draftAssign(player,slot,abbr){
 }
 function draftRemove(player,slot,ev){
   if(ev)ev.stopPropagation();
+  if(NFL_BASE_PICKS.some(o=>o.player===player&&o.slot===slot))return; // official picks are locked
   const st=draftState();
   st.order=st.order.filter(o=>!(o.player===player&&o.slot===slot));
   draftSave(st);
@@ -2215,7 +2233,7 @@ function draftRename(base,ev){
   if(nm&&nm.trim()){st.names[base]=nm.trim();draftSave(st)}
 }
 function draftReset(){
-  if(!window.confirm('Clear all draft picks on this device?'))return;
+  if(!window.confirm('Clear the picks you added on this device? (Official picks stay.)'))return;
   try{localStorage.removeItem(DRAFT_KEY)}catch(e){}
   applyDraft();render();switchTab(3);
 }
@@ -2229,8 +2247,9 @@ function draftCopy(){
 }
 let pickerTarget=null;
 function openDraftPicker(player,slot){
+  if(NFL_BASE_PICKS.some(o=>o.player===player&&o.slot===slot))return; // official picks are locked
   pickerTarget={player,slot};
-  const st=draftState();const taken=draftTaken(st);
+  const st=draftState();const taken=draftTaken();
   const cur=st.order.find(o=>o.player===player&&o.slot===slot);
   let grid='';
   Object.entries(NFL_LINES).sort((a,b)=>b[1][1]-a[1][1]).forEach(([abbr,[name,ou]])=>{
@@ -2251,23 +2270,26 @@ function closeDraftPicker(){const ov=document.getElementById('dp-overlay');if(ov
 function renderDraftRoom(){
   if(SPORT!=='NFL'||!POOL.draftPending)return '';
   const st=draftState();
-  const filled=st.order.length;
+  const eff=SPORTS.NFL.effPicks||[];
+  const otc=draftOnClock();
   let rows='';
   SPORTS.NFL.baseDraftOrder.forEach(base=>{
     const nm=st.names[base]||base;
+    const onClock=otc&&otc.base===base;
     let slots='';
     for(let slot=0;slot<3;slot++){
-      const entry=st.order.find(o=>o.player===base&&o.slot===slot);
-      if(entry){
-        const pick=st.order.indexOf(entry)+1;
-        slots+=`<button class="dr-slot filled" onclick="openDraftPicker('${base}',${slot})">${SLB('NFL',entry.abbr,'sm')}<span class="dr-abbr">${entry.abbr}</span><span class="dr-pick">#${pick}</span><span class="dr-x" onclick="draftRemove('${base}',${slot},event)" role="button" aria-label="Remove">&times;</span></button>`;
+      const idx=eff.findIndex(o=>o.player===base&&o.slot===slot);
+      if(idx>=0){
+        const o=eff[idx];
+        slots+=`<button class="dr-slot filled${o.locked?' locked':''}" ${o.locked?'disabled':`onclick="openDraftPicker('${base}',${slot})"`}>${SLB('NFL',o.abbr,'sm')}<span class="dr-abbr">${o.abbr}</span><span class="dr-pick">#${idx+1}</span>${o.locked?'':`<span class="dr-x" onclick="draftRemove('${base}',${slot},event)" role="button" aria-label="Remove">&times;</span>`}</button>`;
       }else{
         slots+=`<button class="dr-slot" onclick="openDraftPicker('${base}',${slot})"><span class="dr-plus">+</span><span class="dr-rd">Rd ${slot+1}</span></button>`;
       }
     }
-    rows+=`<div class="dr-row"><button class="dr-name" onclick="draftRename('${base}',event)" title="Tap to rename">${nm}</button><div class="dr-slots">${slots}</div></div>`;
+    rows+=`<div class="dr-row${onClock?' on-clock':''}"><button class="dr-name" onclick="draftRename('${base}',event)" title="Tap to rename">${nm}${onClock?'<span class="dr-otc">ON THE CLOCK</span>':''}</button><div class="dr-slots">${slots}</div></div>`;
   });
-  return `<div class="bh"><div class="bh-tag">Draft Room</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${filled} of 30 picks in &bull; Tap a slot to assign</span></div></div><div class="dr-wrap">${rows}<div class="dr-actions"><button class="dr-btn" id="draft-copy-btn" onclick="draftCopy()">COPY SETUP</button><button class="dr-btn ghost" onclick="draftReset()">RESET</button><div class="dr-hint">Picks save on this device and update every tab instantly. When the real draft is done, hit COPY SETUP and send it to lock the rosters in for everyone.</div></div></div>`;
+  const sub=otc?`Pick ${otc.pick} of 30 &bull; <b style="color:var(--y)">${otc.player}</b> on the clock (Rd ${otc.round})`:`All 30 picks in`;
+  return `<div class="bh"><div class="bh-tag">Draft Room</div><div class="bh-acc"></div><div class="bh-line"><span class="bh-sub">${sub}</span></div></div><div class="dr-wrap">${rows}<div class="dr-actions"><button class="dr-btn" id="draft-copy-btn" onclick="draftCopy()">COPY SETUP</button><button class="dr-btn ghost" onclick="draftReset()">RESET MY PICKS</button><div class="dr-hint">Official picks from the group text are locked in for everyone. Tap an open slot to add picks as they happen — those save on this device until they're made official.</div></div></div>`;
 }
 
 // ═══ DATA STATUS ═══
