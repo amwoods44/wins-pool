@@ -2125,6 +2125,7 @@ function fetchNFLHistory(){
       return rec;
     }).catch(()=>null);
   })).then(recs=>{
+    NFL_WEEK_RECS=recs;
     const cw={};const periods=[];let last=null;
     recs.forEach((rec,i)=>{
       if(!rec)return;
@@ -2138,14 +2139,49 @@ function fetchNFLHistory(){
 }
 
 // ─────────────────────────── SHARED ───────────────────────────
+const totalGames=(standings)=>Object.values(standings).reduce((n,s)=>n+(s.w||0)+(s.l||0)+(s.t||0),0);
+// A live payload is only trusted if it moves the season FORWARD. Standings never lose games,
+// so a payload with fewer total games than the last good one (or all zeros a week into the
+// season) is a lagging/blank feed — keep what we have and say so, rather than show wrong numbers.
+let STANDINGS_REJECTED=null;
+function saneStandings(sport,standings){
+  const S=SPORTS[sport];const total=totalGames(standings);
+  const daysIn=(Date.now()-S.start.getTime())/86400000;
+  if(daysIn>7&&total===0){STANDINGS_REJECTED='blank';return false}
+  const c=lsGet('wp-standings-'+sport+'-'+S.season);
+  if(c&&c.standings&&c.ts&&Date.now()-c.ts<7*86400000&&total<totalGames(c.standings)){STANDINGS_REJECTED='regressed';return false}
+  STANDINGS_REJECTED=null;return true;
+}
 function applyStandings(sport,standings,cachedLabel){
   if(!standings||Object.keys(standings).length<20)return false;
+  if(!cachedLabel&&!saneStandings(sport,standings)){console.warn('[wins-pool] '+sport+' standings rejected ('+STANDINGS_REJECTED+') — keeping last good data');return false}
   const S=SPORTS[sport];
   S.players.forEach(p=>p.teams.forEach(t=>{const s=standings[t.abbr];if(s){t.w=s.w;t.l=s.l;t.t=s.t||0}}));
   S.undrafted.forEach(t=>{const s=standings[t.abbr];if(s){t.w=s.w;t.l=s.l;t.t=s.t||0}});
   S.updated=cachedLabel||new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-  if(!cachedLabel)lsSet('wp-standings-'+sport+'-'+S.season,{updated:S.updated,standings});
+  if(!cachedLabel)lsSet('wp-standings-'+sport+'-'+S.season,{updated:S.updated,ts:Date.now(),standings});
   return true;
+}
+// NFL: the standings endpoint can lag the scoreboard by hours after a game ends. Rebuild each
+// team's record from the finals we already have (completed weeks + this week) and, wherever the
+// finals show MORE games than the standings do, the finals win. If standings are down entirely,
+// the finals carry the whole record.
+let NFL_WEEK_RECS=[];let NFL_RECONCILED=0;
+function reconcileNFL(standings){
+  const S=SPORTS.NFL;const derived={};const seen={};
+  const add=(abbr,r,gid)=>{if(!abbr)return;const k=abbr+':'+gid;if(seen[k])return;seen[k]=1;
+    const d=derived[abbr]||(derived[abbr]={w:0,l:0,t:0});d.w+=r.w?1:0;d.l+=r.l?1:0;d.t+=r.t?1:0};
+  NFL_WEEK_RECS.forEach(rec=>{if(rec)Object.entries(rec).forEach(([abbr,r])=>add(abbr,r,r.last&&r.last.gid))});
+  Object.entries(GAME_LOGS.NFL).forEach(([abbr,log])=>log.forEach(e=>{if(e.type==='final'&&!e.carry)add(abbr,{w:e.w,l:!e.w&&!e.tie,t:e.tie},e.gid)}));
+  if(!Object.keys(derived).length)return standings;
+  const out={};NFL_RECONCILED=0;
+  [...S.players.flatMap(p=>p.teams),...S.undrafted].forEach(t=>{
+    const s=standings&&standings[t.abbr],d=derived[t.abbr]||{w:0,l:0,t:0};
+    const sg=s?s.w+s.l+s.t:-1,dg=d.w+d.l+d.t;
+    if(dg>sg){out[t.abbr]={...d};if(s)NFL_RECONCILED++}else out[t.abbr]={...s};
+  });
+  if(NFL_RECONCILED)console.warn('[wins-pool] NFL standings lagging for '+NFL_RECONCILED+' team(s) — using game finals');
+  return out;
 }
 // Offline resilience: seed each sport from the last successful fetch on this device
 function hydrateFromCache(){
@@ -2523,7 +2559,7 @@ function refreshData(isInitial){
         if(!cur.some(x=>x.type==='final'&&x.gid===e.gid))GAME_LOGS.NFL[abbr]=[{...e,carry:true},...cur];
       })}
       if(!seasonStarted){finish(!!sb);return}
-      finish(applyStandings('NFL',standings));
+      finish(applyStandings('NFL',reconcileNFL(standings)));
     });
   }).catch(()=>finish(false));
 }
