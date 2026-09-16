@@ -1311,7 +1311,9 @@ function rankedTeams(includeUndrafted){
   const und=includeUndrafted?POOL.undrafted.map(t=>({...t,owner:"Undrafted"})):[];
   const all=[...drafted,...und].map(t=>({...t,pv:projWins(t),dv:projWins(t)-t.ou,wae:waeOf(t),pct:winPct(t),gp:gpOf(t)}));
   const started=all.some(t=>t.gp>0);
-  if(started) return all.sort((a,b)=>b.pct-a.pct||b.w-a.w||(b.wae||0)-(a.wae||0)||b.pv-a.pv);
+  // Record first; among equal records the STRONGER team (projected wins, then Vegas line) —
+  // never "most surprising", which is how a 5.5-line team ends up crowned after one win.
+  if(started) return all.sort((a,b)=>b.pct-a.pct||b.w-a.w||b.pv-a.pv||b.ou-a.ou);
   return all.sort((a,b)=>b.ou-a.ou);
 }
 const gpAll=()=>Math.max(0,...POOL.players.flatMap(p=>p.teams.map(gpOf)));
@@ -1389,19 +1391,20 @@ function getHighlights(){
       if(minGap===0) items.push({icon:"\u{1F525}",text:"Closest matchup: <b>"+closeA.name+"</b> and <b>"+closeB.name+"</b> are tied at <b>"+closeA.s.wins+"</b> win"+(closeA.s.wins===1?"":"s")+" "+th+"."});
       else items.push({icon:"\u{1F525}",text:"Closest matchup: <b>"+closeA.name+"</b> vs <b>"+closeB.name+"</b> separated by just <b>"+minGap+"</b> win"+(minGap===1?"":"s")+" "+th+"."});
     }
+    const minG=SPORT==='NFL'?3:10; // games before "vs expected" stats mean anything
     // Best team by RECORD
     const best=sT[0];
-    const bestWaeStr=best.wae!==null?" — <b>"+(best.wae>=0?"+":"")+best.wae.toFixed(1)+"</b> vs expected":"";
+    const bestWaeStr=best.wae!==null&&best.gp>=minG?" — <b>"+(best.wae>=0?"+":"")+best.wae.toFixed(1)+"</b> vs expected":"";
     items.push({icon:"\u{1F3C6}",text:"Top team: <b>"+shortN(best.name)+"</b> ("+best.owner+") at <b>"+recStr(best)+"</b>, pacing for <b>"+best.pv+"</b> wins"+bestWaeStr+"."});
     // Anchor watch — worst record
     const worst=sT[sT.length-1];
-    const worstWaeStr=worst.wae!==null?" — <b class=\"red\">"+(worst.wae>=0?"+":"")+worst.wae.toFixed(1)+"</b> vs expected":"";
+    const worstWaeStr=worst.wae!==null&&worst.gp>=minG?" — <b class=\"red\">"+(worst.wae>=0?"+":"")+worst.wae.toFixed(1)+"</b> vs expected":"";
     items.push({icon:"\u{1F4C9}",text:"Anchor watch: <b>"+shortN(worst.name)+"</b> ("+worst.owner+") at <b>"+recStr(worst)+"</b>, pacing for <b>"+worst.pv+"</b> wins"+worstWaeStr+"."});
     // Biggest WAE overperformer
-    const overT=sT.filter(t=>t.wae!==null&&t.wae>0).sort((a,b)=>b.wae-a.wae)[0];
+    const overT=sT.filter(t=>t.wae!==null&&t.wae>0&&t.gp>=minG).sort((a,b)=>b.wae-a.wae)[0];
     if(overT) items.push({icon:"\u{1F4C8}",text:"Biggest value: <b>"+shortN(overT.name)+"</b> is <b>+"+overT.wae.toFixed(1)+"</b> wins above expected through "+overT.gp+" games — huge for <b>"+overT.owner+"</b>."});
     // Biggest WAE underperformer
-    const underT=sT.filter(t=>t.wae!==null&&t.wae<0).sort((a,b)=>a.wae-b.wae)[0];
+    const underT=sT.filter(t=>t.wae!==null&&t.wae<0&&t.gp>=minG).sort((a,b)=>a.wae-b.wae)[0];
     if(underT) items.push({icon:"⚠️",text:"Biggest drag: <b>"+shortN(underT.name)+"</b> is <b class=\"red\">"+underT.wae.toFixed(1)+"</b> wins below expected through "+underT.gp+" games — costing <b>"+underT.owner+"</b>."});
   } else {
     const high=R[0],low=R[R.length-1];
