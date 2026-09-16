@@ -1,26 +1,26 @@
 // Wins Pool 2026 — Service Worker
-// Strategy: Network-first for HTML/API, Cache-first for static assets
+// Strategy: network-first for the app shell; cache-first ONLY for same-origin static assets + Google Fonts.
+// Every cross-origin API (MLB Stats API, ESPN, Google Sheets) is NETWORK ONLY — never cached.
 
-const CACHE_NAME = 'wins-pool-v2';
+const CACHE_NAME = 'wins-pool-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
   '/icon-192.png',
-  '/icon-512.png',
-  'https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap'
+  '/icon-512.png'
 ];
 
 // Install: pre-cache static shell
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(STATIC_ASSETS))
+      .then(cache => cache.addAll(STATIC_ASSETS).catch(() => {}))
       .then(() => self.skipWaiting())
   );
 });
 
-// Activate: clean old caches
+// Activate: purge every old cache (including any that trapped API responses)
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -29,18 +29,18 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch: network-first for navigation & API, cache-first for static
 self.addEventListener('fetch', event => {
   const { request } = event;
+  if (request.method !== 'GET') return;
   const url = new URL(request.url);
 
-  // Skip non-GET and cross-origin API calls (MLB stats)
-  if (request.method !== 'GET') return;
+  const isFont = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
+  const sameOrigin = url.origin === self.location.origin;
 
-  // MLB Stats API — network only, don't cache stale scores
-  if (url.hostname.includes('statsapi.mlb.com')) return;
+  // Anything cross-origin that isn't a font is live data — let it go straight to the network, untouched.
+  if (!sameOrigin && !isFont) return;
 
-  // Navigation requests (HTML) — network first, fall back to cache
+  // Navigation (the app shell) — network first, cache fallback for offline
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -54,7 +54,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Static assets (fonts, icons) — cache first
+  // Same-origin static assets + fonts — cache first
   event.respondWith(
     caches.match(request).then(cached => {
       if (cached) return cached;
