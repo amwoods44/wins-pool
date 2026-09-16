@@ -1322,7 +1322,8 @@ const seasonProgress=()=>{ // {gp, label, pct, unit}
     if(gp===0&&!wk)return{gp:0,pct:0,label:''};
     // "Through Week N": the current week only counts once a game in it has been played
     const cur=Math.max(1,Math.min(POOL.weeks,(done||began)?(wk||1):(wk||1)-1));
-    const pct=Math.min(100,((done?cur:Math.max(0,cur-1))/POOL.weeks)*100);
+    const completed=Math.max(0,Math.min(POOL.weeks,done?(wk||0):(wk||1)-1)); // whole weeks in the books
+    const pct=Math.min(100,(completed/POOL.weeks)*100);
     return{gp,pct:+pct.toFixed(1),label:'Week '+cur+' of '+POOL.weeks,unit:cur};
   }
   const gp=gpAll();
@@ -1862,7 +1863,14 @@ const ABBR_MLB_ID={};Object.entries(MLB_ID_ABBR).forEach(([id,abbr])=>{ABBR_MLB_
 const GAME_LOGS={MLB:{},NFL:{}};   // abbr -> [{type,gid,date,opp,home,w,rs,ra,inning,time,day}]
 const SCOREBOARDS={MLB:[],NFL:[]}; // [{state,away,home,awayS,homeS,inning,time,day,awayP,homeP,poolAway,poolHome,gameDateRaw}]
 const NFL_STATE={week:null,weekDone:false,weekBegan:false};
-const fetchT=(url,ms=12000)=>fetch(url,typeof AbortSignal!=='undefined'&&AbortSignal.timeout?{signal:AbortSignal.timeout(ms)}:undefined);
+// Live-data fetch: timeout + cache-busting + no-store, so neither the browser nor any
+// (old) service worker can ever hand back a stale API response.
+const fetchT=(url,ms=12000)=>{
+  const bust=url+(url.includes('?')?'&':'?')+'_t='+Date.now();
+  const opts={cache:'no-store'};
+  if(typeof AbortSignal!=='undefined'&&AbortSignal.timeout)opts.signal=AbortSignal.timeout(ms);
+  return fetch(bust,opts);
+};
 const fmtDate=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const ctTime=(iso)=>{const gt=new Date(iso);const s=gt.toLocaleString('en-US',{timeZone:'America/Chicago',hour:'numeric',minute:'2-digit',hour12:true});return s.replace(' ','').replace('AM','a').replace('PM','p')+' CT'};
 const lsGet=(k)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}};
@@ -2505,8 +2513,12 @@ function refreshData(isInitial){
   fetchNFLScoreboard().then(sb=>{
     const tasks=[seasonStarted?fetchNFLStandings().catch(()=>null):Promise.resolve(null),fetchNFLHistory()];
     return Promise.all(tasks).then(([standings])=>{
-      // Teams on bye this week: show their last result from the most recent completed week
-      if(RACE_NFL_LAST){Object.entries(RACE_NFL_LAST).forEach(([abbr,e])=>{if(!GAME_LOGS.NFL[abbr])GAME_LOGS.NFL[abbr]=[e]})}
+      // Every team keeps its most recent final in front of this week's game, so the
+      // "Last" badge shows the result until the next game actually kicks off.
+      if(RACE_NFL_LAST){Object.entries(RACE_NFL_LAST).forEach(([abbr,e])=>{
+        const cur=GAME_LOGS.NFL[abbr]||[];
+        if(!cur.some(x=>x.type==='final'&&x.gid===e.gid))GAME_LOGS.NFL[abbr]=[{...e,carry:true},...cur];
+      })}
       if(!seasonStarted){finish(!!sb);return}
       finish(applyStandings('NFL',standings));
     });
