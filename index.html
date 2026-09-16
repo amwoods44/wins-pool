@@ -2476,7 +2476,7 @@ function updateDataStatus(){
   if(lastFetchOk===null){el.className='data-status stale';el.textContent='LOADING...';return}
   if(lastFetchOk){
     const ago=lastFetchTime?Math.round((Date.now()-lastFetchTime)/60000):0;
-    el.className='data-status ok';el.textContent=ago<1?'LIVE DATA':'Updated '+ago+'m ago';
+    el.className=ago>=10?'data-status stale':'data-status ok';el.textContent=ago<1?'LIVE DATA':'Updated '+ago+'m ago';
   } else {
     el.className='data-status err';el.textContent='DATA UNAVAILABLE';
   }
@@ -2549,6 +2549,13 @@ refreshData(true);
 // Safety net: never leave the loading screen up more than 8s even if every fetch hangs
 setTimeout(()=>{if(document.getElementById('loading-screen')){render();dismissLoading()}},8000);
 setInterval(()=>refreshData(false),REFRESH_MS);
+// Phones freeze timers while the app is backgrounded. The moment it comes back into view
+// (or regains focus / comes back online), refetch if the data is more than a minute old.
+const wakeRefresh=()=>{if(document.hidden)return;if(!lastFetchTime||Date.now()-lastFetchTime>60000)refreshData(false);else updateDataStatus()};
+document.addEventListener('visibilitychange',wakeRefresh);
+window.addEventListener('focus',wakeRefresh);
+window.addEventListener('online',wakeRefresh);
+window.addEventListener('pageshow',e=>{if(e.persisted)wakeRefresh()});
 
 // PWA SERVICE WORKER REGISTRATION
 if('serviceWorker' in navigator){
